@@ -1,0 +1,45 @@
+{% extends "base_psapca.html" %}{% block title %}Preproject Opportunity | SolArc{% endblock %}{% block content %}
+<div class="uk-container">
+    <table class="uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
+    <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
+    <!-- <caption>PSA {{ list.count }}</caption> -->
+        <thead>
+            <tr>
+                <th class="uk-table-middle">No</th>
+                <th class="uk-table-middle">Customer Name</th>
+                <th class="uk-table-middle">Project Name</th>
+                <th class="uk-table-middle">SA</th>
+                <th class="uk-table-middle">PSS</th>
+                <th class="uk-table-middle">SALES</th>
+                <th class="uk-table-middle">Project Status</th>
+                <th class="uk-table-middle">Solution Criteria</th>
+                <th class="uk-table-middle">Progress</th>
+                <th class="uk-table-middle">Taxsonomi</th>
+                <th class="uk-table-middle">Payment Type</th>
+                <th class="uk-table-middle">PCA Date</th>
+                <th class="uk-table-middle">HO Date</th>
+            </tr>
+        </thead>
+
+        <tbody>{% for preproject in list %} 
+            <tr> 
+            	<td>{{ forloop.counter }}</td> 
+                <td>{% for customer in preproject.oppty.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
+            	<td>{{preproject.oppty.project_name}}</td> 
+                <td>{% for sa in preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> 
+                <td>{% for pss in preproject.pss_lintasarta.all %}{{ pss.name }}{% endfor %}</td> 
+                <td>{{preproject.sales_lintasarta.name}}</td> 
+            	<td>{% if preproject.project_status == 'c' %}Create{% elif preproject.project_status == 'o' %}Open{% else %}Break{%endif%}</td> 
+                <td>{% if preproject.solution_criteria == 's' %}Standard{% elif preproject.solution_criteria == 'm' %}Multiservice{% elif preproject.solution_criteria == 'cm' %}Complex MRC > 150{% elif preproject.solution_criteria == 'co' %}Complex OTC > 5M{% elif preproject.solution_criteria == 'cn' %}Complex Non Product{% elif preproject.solution_criteria == 'cc' %}Complex Costum Product{% else %}-{%endif%}</td> 
+                <td>{% if preproject.progress == 'w' %}Close Won{% elif preproject.progress == 'l' %}Close Lost{% elif preproject.progress == 'p' %}Progress - Internal SA{% elif preproject.progress == 's' %}Progress - Submited{% elif preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
+                <td>{% for taxsonomi in preproject.taxsonomi.all %}{% if taxsonomi.product_name == '0' %}Datacom{% elif taxsonomi.product_name == '1' %}Cloud{% elif taxsonomi.product_name == '2' %}Data Center{% elif taxsonomi.product_name == '3' %}Sec & Col{% elif taxsonomi.product_name == '4' %}ITO{% elif taxsonomi.product_name == '5' %}InSol{% elif taxsonomi.product_name == '6' %}Digital Ads{% else %}|{% endif %}{% endfor %}</td> 
+                <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td> 
+                <!-- <td>{% for pca in preproject.psa_set.all %}{{pca.pca_date}}{% endfor %}</td> -->
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.pca_date}}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date}}{% endfor %}{% endfor %}{% endfor %}</td>
+                <!-- <td>{% for ho in preproject.psa.pca.handover_set.all %}{{ho.po_known_date}}{% endfor %}</td>  -->
+            </tr>
+        </tbody>{% endfor %}
+    </table>
+</div>
+{% endblock %}

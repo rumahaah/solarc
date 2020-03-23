@@ -1,0 +1,32 @@
+{% extends "base_psapca.html" %}{% block content %}
+<table class="uk-table uk-text-small uk-table-small">
+    <!-- <caption>Table Caption</caption> -->
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Customer Name</th>
+            <th>Project Name</th>
+            <th>PSA Date</th>
+            <th>PSS HO Date</th>
+            <th>PCA Date</th>
+        </tr>
+    </thead>
+<!--     <tfoot>
+        <tr>
+            <td>Table Footer</td>
+            <td>Table Footer</td>
+            <td>Table Footer</td>
+        </tr>
+    </tfoot> -->
+    <tbody>{% for psa in list %} 
+        <tr> 
+        	<td>{{ forloop.counter }}</td> 
+        	<td>{{psa.preproject.oppty.customer.all.0}}</td> 
+        	<td>{{psa.preproject.oppty.project_name}}</td> 
+        	<td>{{psa.psa_date}}</td> 
+        	<td>{{psa.pss_ho_date}}</td> 
+        	<td>{% for pca in psa.pca_set.all %}{{pca.pca_date}}{% endfor %}</td> 
+        </tr>
+    </tbody>{% endfor %}
+</table>
+{% endblock %}

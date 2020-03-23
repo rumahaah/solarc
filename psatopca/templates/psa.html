@@ -1,0 +1,71 @@
+{% extends "base_psapca.html" %}{% load widget_tweaks %}{% block title %}PSA | SolArc{% endblock %}
+{% block filter %}{% endblock %}
+{% block content %}
+<div class="uk-container">
+    <table class="uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
+    <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider uk-margin-remove"> -->
+    <!-- <table class="uk-table uk-table-small uk-table-divider" style="font-size: 70%;"> -->
+        <!-- <caption>PSA {{ list.count }}</caption> -->
+        <thead>
+            <tr>
+                <th class="uk-table-middle">No</th>
+                <th class="uk-table-middle">Customer Name</th>
+                <th class="uk-table-middle">Project Name</th>
+                <th class="uk-table-middle">Preproject Status</th>
+                <th class="uk-table-middle">PSA Date</th>
+                <th class="uk-table-middle">PSS HO Date</th>
+                <th class="uk-table-middle">PSA Status</th>
+                <th class="uk-table-middle">PSS</th>
+                <th class="uk-table-middle">SALES</th>
+                <th class="uk-table-middle">SA</th>
+                <th class="uk-table-middle">RISK</th>
+                <th class="uk-table-middle">PCA</th>
+                {% if request.user.is_staff %}<th class="uk-table-middle">Edit</th>{% endif %}
+            </tr>
+            <tr>
+                <form method="get" class="">
+                    <th class="uk-table-middle"></th>
+                    <!-- <th class="uk-table-middle"></th> -->
+                    <th class="uk-table-middle">{% render_field list.form.preproject__oppty__customer__customer_name class="uk-input uk-form-width-small uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.preproject__oppty__project_name class="uk-input uk-form-width-small uk-form-small" %}</th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle">{% render_field list.form.preproject__pss_lintasarta__name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.preproject__sales_lintasarta__name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.preproject__sa_lintasarta__name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.risk_category class="uk-select uk-form-small" %}</th>
+                    <th class="uk-table-middle"></th>
+                    {% if request.user.is_staff %}<th class="uk-table-middle"></th>{% endif %}
+                    <button type="submit" hidden="">Search</button>
+                </form>
+            </tr>
+        </thead>
+    <!--     <tfoot>
+            <tr>
+                <td>Table Footer</td>
+                <td>Table Footer</td>
+                <td>Table Footer</td>
+            </tr>
+        </tfoot> -->
+        <tbody>{% for psa in list.qs %} 
+            <tr> 
+            	<td>{{ forloop.counter }}</td> 
+                <td>{% for customer in psa.preproject.oppty.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
+            	<td>{{psa.preproject.oppty.project_name}}</td>
+                <td>{% if psa.preproject.progress == 'w' %}Close Won{% elif psa.preproject.progress == 'l' %}Close Lost{% elif psa.preproject.progress == 'p' %}Progress - Internal SA{% elif psa.preproject.progress == 's' %}Progress - Submited{% elif psa.preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
+            	<td>{{psa.psa_date}}</td> 
+            	<td>{{psa.pss_ho_date}}</td> 
+                <td>{% if psa.status_psa == 'g' %}GO{% elif psa.status_psa == 'h' %}HOLD{% else %}NOT GO{% endif %}</td>
+                <td>{% for pss in psa.preproject.pss_lintasarta.all %}{{ pss.name }}{% endfor %}</td> 
+                <td>{{psa.preproject.sales_lintasarta.name}} </td> 
+                <td>{% for sa in psa.preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> 
+                {% if psa.risk_category == 'm' %}<td class="uk-text-bold uk-text-primary">M</td>{% elif psa.risk_category == 'h' %}<td class="uk-text-bold uk-text-danger">H</td>{% elif psa.risk_category == 'l' %}<td class="uk-text-bold uk-text-success">L</td>{% else %}<td class="uk-text-bold">n/a</td>{% endif %}
+                <td>{% for pca in psa.pca_set.all %}{{pca.pca_date}}{% endfor %}</td> 
+                {% if request.user.is_staff %}<td><a href="/admin/psatopca/psa/{{psa.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a>{% endif %} </td> 
+            </tr>
+        </tbody>{% endfor %}
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base_psapca.html" %}{% block title %}Preproject Customer | SolArc{% endblock %}{% block content %}
+<table class="uk-table uk-text-small uk-table-small uk-table-divider">
+    <!-- <caption>PSA {{ list.count }}</caption> -->
+    <thead>
+        <tr>
+            <th class="uk-table-middle">No</th>
+            <th class="uk-table-middle">Customer Name</th>
+            <th class="uk-table-middle">Customer Segment</th>
+            <th class="uk-table-middle">Customer Criteria</th>
+        </tr>
+    </thead>
+<!-- 
+            ('0', 'Banking 1'),
+            ('1', 'Banking 2'),
+            ('2', 'Finance Non-Bank'),
+            ('3', 'Supply Chain'),
+            ('4', 'Public Sector 1'),
+            ('5', 'Public Sector 2'),
+            ('6', 'Resources'),
+            ('7', 'Telco'),
+
+            ('0', 'Key Strategic Account'),
+            ('1', 'Emerging Account'),
+            ('2', 'Strategic Account'),
+            ('3', 'New Customer & Not EA'),
+            ('4', 'Regular'), -->
+
+    <tbody>{% for customer in list %} 
+        <tr> 
+        	<td>{{forloop.counter}}</td> 
+        	<td>{{customer.customer_name}}</td> 
+            <td>{% if customer.customer_segment == '0' %}BANKING 1{% elif customer.customer_segment == '1' %}BANKING 2{% elif customer.customer_segment == '2' %}FINANCE NON-BANK{% elif customer.customer_segment == '3' %}SUPPLY CHAIN{% elif customer.customer_segment == '4' %}PUBLIC SECTOR 1{% elif customer.customer_segment == '5' %}PUBLIC SECTOR 2{% elif customer.customer_segment == '6' %}RESOURCES{% elif customer.customer_segment == '7' %}TELCO{%else%}N/A{% endif %}</td> 
+            <td>{% if customer.customer_criteria == '0' %}KEY STRATEGIC ACCOUNT{% elif customer.customer_criteria == '1' %}EMERGING ACCOUNT{% elif customer.customer_criteria == '2' %}STRATEGIC ACCOUNT{% else %}REGULAR{% endif %}</td> 
+            <!-- <td>{{customer.customer_criteria}}</td>  -->
+        </tr>
+    </tbody>{% endfor %}
+</table>
+{% endblock %}

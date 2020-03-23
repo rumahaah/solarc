@@ -1,0 +1,47 @@
+{% extends "base_psapca.html" %}{% load psapca_extras %}{% load humanize %}{% load l10n %}{% block title %}PCA | SolArc{% endblock %}{% block content %}
+<table class="uk-table uk-table-small uk-text-small uk-table-divider">
+    <!-- <caption>Table Caption</caption> -->
+    <thead>
+        <tr>
+            <th class="uk-table-middle">No</th>
+            <th class="uk-table-middle">Customer Name</th>
+            <th class="uk-table-middle">Project Name</th>
+            <th class="uk-table-middle">PSA Date</th>
+            <th class="uk-table-middle">PSS HO Date</th>
+            <th class="uk-table-middle">PCA Date</th>
+            <th class="uk-table-middle">PCA Status</th>
+            <th class="uk-table-middle">Ebitda</th>
+            <th class="uk-table-middle">IRR</th>
+            <th class="uk-table-middle">TCV</th>
+            <th class="uk-table-middle">ACV</th>
+            <th class="uk-table-middle">Progress</th>
+            <th class="uk-table-middle">Customer Criteria</th>
+        </tr>
+    </thead>
+<!--     <tfoot>
+        <tr>
+            <td>Table Footer</td>
+            <td>Table Footer</td>
+            <td>Table Footer</td>
+        </tr>
+    </tfoot> -->
+    <tbody>{% for pca in list %} 
+        <tr> 
+        	<td>{{ forloop.counter }}</td> 
+            <td>{% for customer in pca.psa.preproject.oppty.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
+        	<td>{{pca.psa.preproject.oppty.project_name}}</td> 
+        	<td>{{pca.psa.psa_date}}</td> 
+        	<td>{{pca.psa.pss_ho_date}}</td> 
+            <td>{{pca.pca_date}}</td> 
+            <td>{% if pca.status_pca == 'g' %}APPROVED{% elif pca.status_pca == 'h' %}HOLD{% else %}NOT GO{% endif %}</td>
+            <td>{{pca.ebitda}}%</td> 
+            <td>{{pca.irr}}%</td> 
+            <td>{% totalcontracvalue pca.mrc pca.otc pca.duration %}</td> 
+            <td>{% annualcontracvalue pca.mrc pca.otc %}</td> 
+            <td>{% if pca.psa.preproject.progress == 'w' %}Close Won{% elif pca.psa.preproject.progress == 'l' %}Close Lost{% elif pca.psa.preproject.progress == 'p' %}Progress - Internal SA{% elif pca.psa.preproject.progress == 's' %}Progress - Submited{% elif pca.psa.preproject.progress == 'c' %}Cacncelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
+            <td>{% for customer in pca.psa.preproject.oppty.customer.all %}{% if customer.customer_criteria == '0' %}KSA{% elif customer.customer_criteria == '1' %}EA{% elif customer.customer_criteria == '2' %}SA{% elif customer.customer_criteria == '3' %}NEW{% else %}REG{% endif %}{% endfor %}</td> 
+
+        </tr>
+    </tbody>{% endfor %}
+</table>
+{% endblock %}

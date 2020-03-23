@@ -1,0 +1,35 @@
+{% extends "baselogin.html" %}
+{% block head_title %}Login - SolArc{% endblock %}
+{% block style_css %}{% endblock %}
+{% block style_js %}{% endblock %}
+{% block content %}
+		<div class="uk-text-center">
+			<div class="uk-text-small uk-text-light uk-margin-small-top">
+			{% if form.errors %}
+				<span class="uk-text-danger">Your username and password didn't match. Please try again.</span>
+			{% endif %}
+			{% if next %}
+				{% if user.is_authenticated %}
+				<p class="uk-text-danger">Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+				{% else %}
+				<p class="">Please login to see this page.</p>
+				{% endif %}
+			{% endif %}
+			</div>
+		</div>
+		<div class="uk-container uk-position-top-center uk-margin-large-top">
+			
+			<!-- <div class=""> -->
+				<div class="uk-panel uk-border-rounded uk-margin-small-top uk-text-center uk-button-primary" style="background: linear-gradient(to right, #444444 0%, #888888 100%);padding:9px 9px 9px 9px;"><u>S</u>ol<u>A</u>rc | Solution Architect</div>
+				<form class="" method="post" action="{% url 'login' %}">{% csrf_token %}
+					<!-- <fieldset class="uk-fsieldset"> -->
+					<p><span class="" data-uk-icon="icon: user"></span> user {{ form.username }}</p>
+					<p><span class="" data-uk-icon="icon: lock"></span> pass {{ form.password }}</p>
+					<input class="uk-width-1-1 uk-button uk-button-secondary" type="submit" value="login" style="background: linear-gradient(to left, #444444 0%, #888888 100%); border-radius: 5px;">
+					<input type="hidden" name="next" value="{{ next }}">
+					<!-- </fieldset> -->
+				</form>
+			<!-- </div> -->
+
+		</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% load static %}<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/uikit.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+	<title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+	<!--HEADER-->
+	<header>
+		<div class="uk-container">
+			<nav class="uk-navbar-transparent" data-uk-navbar>
+				<div class="uk-navbar-left">
+					<a class="uk-navbar-item uk-logo" href="/">HOME</a>
+				</div>
+				<div class="uk-navbar-center uk-visible@m">
+					<ul class="uk-navbar-nav">
+						<li><a href="{% url 'dashboard_home' %}">Dashboard</a></li>
+						<li >
+							<a href="#">PSA<span data-uk-icon="icon: triangle-down"></span></a>
+							<div class="uk-navbar-dropdown">
+								<ul class="uk-nav uk-navbar-dropdown-nav">
+									<li {% url 'psa' as psa_url %}{% if request.get_full_path == psa_url %} class="uk-active" {% endif %}><a href="{% url 'psa'%}">PSA ALL</a></li>
+									<li><a href="{% url 'psa'%}/go">PSA GO</a></li>
+									<!-- <li><a href="{% url 'psa'%}/go-satbc">PSA GO SA N/A</a></li> -->
+									<li><a href="{% url 'psa'%}/not">PSA NOT GO & HOLD</a></li>
+									<li><a href="{% url 'psa'%}/psa5wd">PSA 5WD</a></li>
+									<li><a href="{% url 'psa'%}/psa5wdpssho">PSA 5WD PSSHO</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#">PCA<span data-uk-icon="icon: triangle-down"></span></a>
+							<div class="uk-navbar-dropdown">
+								<ul class="uk-nav uk-navbar-dropdown-nav">
+									<li><a href="{% url 'pca'%}">PCA ALL</a></li>
+									<li><a href="{% url 'pca'%}/go">PCA GO/APPROVE</a></li>
+									<li><a href="{% url 'pca'%}/not">PCA NOT GO & HOLD</a></li>
+									<li><a href="{% url 'pca'%}/pca21wd">PCA 21WD</a></li>
+								</ul>
+							</div>
+						</li>
+						{% block filter %}{% endblock %}
+					</ul>
+				</div>
+				<div class="uk-navbar-right">
+					<ul class="uk-navbar-nav">
+						<li>
+							<a href="#" data-uk-icon="icon:user"></a>
+							<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left">
+								<ul class="uk-nav uk-navbar-dropdown-nav">
+									<li class="uk-nav-header uk-text-small uk-text-primary">{{ user.get_username }}</li>
+									<li><a href="/admin/password_change/"><span data-uk-icon="icon: unlock"></span>Change Password</a></li>
+									<li><a href="{% url 'logout'%}"><span data-uk-icon="icon: sign-out"></span>Logout</a></li>
+								</ul>
+							</div>
+						</li>
+						<li class="uk-hidden@m"><a class="uk-navbar-toggle" data-uk-toggle data-uk-navbar-toggle-icon href="#offcanvas-nav"></a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</header>
+	<!--/HEADER-->
+		{% block content %}{% endblock %}
+		
+		<script src="{% static 'js/uikit.min.js' %}"></script>
+		<script src="{% static 'js/uikit-icons.min.js' %}"></script>
+</body>
+</html>

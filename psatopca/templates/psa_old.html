@@ -1,0 +1,71 @@
+{% extends "base_psapca.html" %}{% block title %}PSA | SolArc{% endblock %}
+{% block filter %}
+<li>
+    <a href="#">Filter<span data-uk-icon="icon: triangle-down"></span></a>
+    <div class="uk-navbar-dropdown">
+        <ul class="uk-nav uk-navbar-dropdown-nav">
+            <li><a href="{% url 'psa'%}/psa5wdpssho-sa1">PSA 5WD PSSHO-SA1</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-sa2">PSA 5WD PSSHO-SA2</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-aju">PSA 5WD PSSHO-AJU</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-dpm">PSA 5WD PSSHO-DPM</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-ggw">PSA 5WD PSSHO-GGW</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-irs">PSA 5WD PSSHO-IRS</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-mgm">PSA 5WD PSSHO-MGM</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-mbo">PSA 5WD PSSHO-MBO</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-muh">PSA 5WD PSSHO-MUH</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-sdr">PSA 5WD PSSHO-SDR</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-tmb">PSA 5WD PSSHO-TMB</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-wit">PSA 5WD PSSHO-WIT</a></li>
+            <li><a href="{% url 'psa'%}/psa5wdpssho-zkf">PSA 5WD PSSHO-ZKF</a></li>
+        </ul>
+    </div>
+</li>
+{% endblock %}
+
+{% block content %}
+
+<!-- CONTENT -->
+<!-- <section class="uk-section uk-section-muted"> -->
+
+    <div class="uk-container">
+        <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider uk-margin-remove"> -->
+        <table class="uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
+            <!-- <caption>PSA {{ list.count }}</caption> -->
+            <thead>
+                <tr>
+                    <th class="uk-table-middle" style="font-size: 100%;">No</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">Customer Name</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">Project Name</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">Preproject Status</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">PSA Date</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">PSS HO Date</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">PSA Status</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">PSS</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">SALES</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">SA</th>
+                    <th class="uk-table-middle" style="font-size: 100%;">PCA Date</th>
+                </tr>
+            </thead>
+            <tbody>{% for psa in list %} 
+                <tr> 
+                    <td>{{ forloop.counter }}</td>
+                    <td>{% for customer in psa.preproject.oppty.customer.all %}{{ customer.customer_name }}{% endfor %}</td>
+                    <td>{{psa.preproject.oppty.project_name}}</td>
+                    <td>{% if psa.preproject.progress == 'w' %}Close Won{% elif psa.preproject.progress == 'l' %}Close Lost{% elif psa.preproject.progress == 'p' %}Progress - Internal SA{% elif psa.preproject.progress == 's' %}Progress - Submited{% elif psa.preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
+                    <td>{{psa.psa_date}}</td>
+                    <td>{{psa.pss_ho_date}}</td>
+                    <td>{% if psa.status_psa == 'g' %}GO{% elif psa.status_psa == 'h' %}HOLD{% else %}NOT GO{% endif %}</td>
+                    <td>{% for pss in psa.preproject.pss_lintasarta.all %}{{ pss.name }}{% endfor %}</td> 
+                    <td>{{psa.preproject.sales_lintasarta.name}} </td> 
+                    <td>{% for sa in psa.preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> 
+                    <td>{% for pca in psa.pca_set.all %}{{pca.pca_date}}{% endfor %}</td> 
+                </tr>
+            </tbody>{% endfor %}
+        </table>
+        {% endblock %}
+    </div>
+<!-- </section> -->
+<!-- /CONTENT -->
+
+<!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider" style="font-size:70%;"> -->
+

@@ -1,0 +1,29 @@
+{% extends "base.html" %}{% block title %}About | SolArc{% endblock %}{% block content %}
+<!-- <p>jmlh psa: {{psas.count}}</p>
+<p>jmlh pca: {{pcas.count}}</p>
+<ul>{% for psa in psas %}
+	<li>{{psa.psa_date}}</li>
+</ul>{% endfor %} -->
+
+	<!-- CONTENT -->
+	<div id="content" data-uk-height-viewport="expand: true">
+		<div class="uk-container uk-container-expand">
+			<hr>
+			<div class="uk-grid uk-grid-medium" data-uk-grid>
+				<h2>About</h2>
+			</div>
+			<div>
+				<p class="uk-text-large"><u>S</u>ol<u>A</u>rc - Solution Architect</p>
+				<p>Backend: Django </p>
+				<p>Frontend: UIkit</p>
+			</div>
+				
+			<footer class="uk-section uk-section-small uk-text-center">
+				<hr>
+				<p class="uk-text-small uk-text-center">Copyright 2020 - <a href="#">Created with smile</a> 
+				</p>
+			</footer>
+		</div>
+	</div>
+	<!-- /CONTENT -->
+{% endblock %}

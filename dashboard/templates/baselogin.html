@@ -1,0 +1,17 @@
+{% load staticfiles %}<!DOCTYPE html>
+<html>
+	<head>
+	    <title>{% block head_title %}{% endblock %}</title>
+	    <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/uikit.min.css' %}">{% block style_css %}{% endblock %}
+	</head>
+	<body>
+		<!-- <div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom"> -->
+		<!-- <div class="uk-container uk-position-top-center"> -->
+		{% block content %}{% endblock %}
+		<!-- </div> -->
+		<script src="{% static 'js/uikit.min.js' %}"></script>
+		<script src="{% static 'js/uikit-icons.min.js' %}"></script>
+	</body>
+</html>
