@@ -64,6 +64,14 @@ def preproject (request,paramm='all'):
 	})
 
 @login_required
+def opptywon (request):
+	v_preproject = Preproject.objects.filter(progress='w')
+	return render(request, 'preproject_won.html',{
+	'list': v_preproject,
+	})
+
+
+@login_required
 def customer_list(request):
 	# v_customer = Customer.objects.order_by(Lower('customer_criteria'))
 	my_list = []

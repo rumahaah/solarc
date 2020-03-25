@@ -1,0 +1,58 @@
+{% extends "base_psapca.html" %}% load widget_tweaks %}{% load preproject_extras %}{% load humanize %}{% block title %}Preproject Opportunity | SolArc{% endblock %}{% block content %}
+<div class="uk-container">
+    <table class="uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 60%;">
+    <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
+    <!-- <caption>PSA {{ list.count }}</caption> -->
+        <thead>
+            <tr>
+                <th class="uk-table-middle" style="font-size: 100%;">No</th>
+                <th class="uk-table-middle" style="font-size: 100%;">Customer Name</th>
+                <th class="uk-table-middle" style="font-size: 100%;">Project Name</th>
+                <!-- <th class="uk-table-middle">SA | PSS | Sales</th> -->
+                <th class="uk-table-middle" style="font-size: 100%;">SA</th>
+                <th class="uk-table-middle" style="font-size: 100%;">PSS</th>
+                <th class="uk-table-middle" style="font-size: 100%;">SALES</th>
+                <th class="uk-table-middle" style="font-size: 100%;">Payment Type</th>
+                <th class="uk-table-middle" style="font-size: 100%;">PCA Date</th>
+                <th class="uk-table-middle" style="font-size: 100%;">HO Known Date</th>
+                <!-- <th class="uk-table-middle">MRC | OTC | Durations</th> -->
+                <th class="uk-table-middle" style="font-size: 100%;">MRC</th>
+                <th class="uk-table-middle" style="font-size: 100%;">OTC</th>
+                <th class="uk-table-middle" style="font-size: 100%;">Durations</th>
+                <th class="uk-table-middle" style="font-size: 100%;">ACV</th>
+                <th class="uk-table-middle" style="font-size: 100%;">TCV</th>
+            </tr>
+        </thead>
+
+        <tbody>{% for preproject in list %} 
+            <tr> 
+            	<td>{{ forloop.counter }}</td> 
+                <td>{% for customer in preproject.oppty.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
+            	<td>{{preproject.oppty.project_name}}</td> 
+                <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td> 
+                <td>{% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %}</td> 
+                <td><span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td> 
+                <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td> 
+                <!-- <td>{% for pca in preproject.psa_set.all %}{{pca.pca_date}}{% endfor %}</td> -->
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.pca_date|date:'d-m-y'}}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date|date:'d-m-y'}}{% endfor %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% rupiah pca.mrc %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% rupiah pca.otc %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.duration}}{% endfor %}{% endfor %}</td>
+                <!-- <td>{% annualcontracvalue 1 1 1%}</td> -->
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n'%}{% endfor %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% totalcontracvalue pca.mrc pca.otc pca.duration %}{% endfor %}{% endfor %}</td>
+            </tr>
+        </tbody>{% endfor %}
+    </table>
+</div>
+{% endblock %}
+
+                <!-- <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td> 
+                <td>{% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %}</td> 
+                <td><span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td>  -->
+
+                <!-- <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %} | {% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %} | <span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td>  -->
+
+                <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date|date:'n'}}|{% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n'%}{% endfor %}{% endfor %}{% endfor %}</td> -->
+                <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n' %}{% endfor %}{% endfor %}{% endfor %}</td> -->

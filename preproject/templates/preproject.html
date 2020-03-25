@@ -10,14 +10,13 @@
                 <th class="uk-table-middle">Project Name</th>
                 <th class="uk-table-middle">SA</th>
                 <th class="uk-table-middle">PSS</th>
-                <th class="uk-table-middle">SALES</th>
                 <th class="uk-table-middle">Project Status</th>
                 <th class="uk-table-middle">Solution Criteria</th>
                 <th class="uk-table-middle">Progress</th>
                 <th class="uk-table-middle">Taxsonomi</th>
                 <th class="uk-table-middle">Payment Type</th>
                 <th class="uk-table-middle">PCA Date</th>
-                <th class="uk-table-middle">HO Date</th>
+                <!-- <th class="uk-table-middle">HO Date</th> -->
             </tr>
         </thead>
 
@@ -36,7 +35,7 @@
                 <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td> 
                 <!-- <td>{% for pca in preproject.psa_set.all %}{{pca.pca_date}}{% endfor %}</td> -->
                 <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.pca_date}}{% endfor %}{% endfor %}</td>
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date}}{% endfor %}{% endfor %}{% endfor %}</td>
+                <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date}}{% endfor %}{% endfor %}{% endfor %}</td> -->
                 <!-- <td>{% for ho in preproject.psa.pca.handover_set.all %}{{ho.po_known_date}}{% endfor %}</td>  -->
             </tr>
         </tbody>{% endfor %}

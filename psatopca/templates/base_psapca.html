@@ -16,11 +16,22 @@
 				<div class="uk-navbar-center uk-visible@m">
 					<ul class="uk-navbar-nav">
 						<li><a href="{% url 'dashboard_home' %}">Dashboard</a></li>
+						<li>
+							<a href="#">Preproject<span data-uk-icon="icon: triangle-down"></span></a>
+							<div class="uk-navbar-dropdown">
+								<ul class="uk-nav uk-navbar-dropdown-nav">
+									<li><a href="{% url 'preproject'%}">ALL OPPTY</a></li>
+									<li><a href="{% url 'preproject'%}/progresssa">PROGRESS</a></li>
+									<li><a href="{% url 'preproject'%}/submited">SUBMITED</a></li>
+									<li><a href="{% url 'preproject'%}/closewon">CLOSE WON</a></li>
+									<li><a href="{% url 'preproject'%}/closelost">CLOSE LOST</a></li>
+								</ul>
+							</div>
 						<li >
 							<a href="#">PSA<span data-uk-icon="icon: triangle-down"></span></a>
 							<div class="uk-navbar-dropdown">
 								<ul class="uk-nav uk-navbar-dropdown-nav">
-									<li {% url 'psa' as psa_url %}{% if request.get_full_path == psa_url %} class="uk-active" {% endif %}><a href="{% url 'psa'%}">PSA ALL</a></li>
+									<li {% url 'psa' as psa_url %}{% if request.get_full_path == psa_url %} class="uk-active" {% endif %}><a href="{% url 'psa'%}">ALL PSA</a></li>
 									<li><a href="{% url 'psa'%}/go">PSA GO</a></li>
 									<!-- <li><a href="{% url 'psa'%}/go-satbc">PSA GO SA N/A</a></li> -->
 									<li><a href="{% url 'psa'%}/not">PSA NOT GO & HOLD</a></li>
@@ -33,12 +44,13 @@
 							<a href="#">PCA<span data-uk-icon="icon: triangle-down"></span></a>
 							<div class="uk-navbar-dropdown">
 								<ul class="uk-nav uk-navbar-dropdown-nav">
-									<li><a href="{% url 'pca'%}">PCA ALL</a></li>
+									<li><a href="{% url 'pca'%}">ALL PCA</a></li>
 									<li><a href="{% url 'pca'%}/go">PCA GO/APPROVE</a></li>
 									<li><a href="{% url 'pca'%}/not">PCA NOT GO & HOLD</a></li>
 									<li><a href="{% url 'pca'%}/pca21wd">PCA 21WD</a></li>
 								</ul>
 							</div>
+						</li>
 						</li>
 						{% block filter %}{% endblock %}
 					</ul>

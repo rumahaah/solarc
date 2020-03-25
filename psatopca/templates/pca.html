@@ -19,21 +19,23 @@
                 <th class="uk-table-middle">Ebitda</th>
                 <th class="uk-table-middle">IRR</th>
                 <th class="uk-table-middle">TCV</th>
+                {% if request.user.is_staff %}<th class="uk-table-middle">Edit</th>{% endif %}
             </tr>
             <tr>
                 <form method="get" class="">
                     <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__oppty__customer__customer_name class="uk-input uk-form-width-small uk-form-small" %}</th>
-                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__oppty__project_name class="uk-input uk-form-width-small uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__oppty__customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__oppty__project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle">{% render_field list.form.psa__status_psa class="uk-select uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.psa__pss_ho_date class="uk-select uk-form-small" %}</th>
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__sa_lintasarta__name class="uk-input uk-form-width-small uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__sa_lintasarta__name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.ebitda class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.irr class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
                     <button type="submit" hidden="">Search</button>
                 </form>
@@ -54,6 +56,8 @@
                 <td>{{pca.ebitda}}%</td> 
                 <td>{{pca.irr}}%</td> 
                 <td>{% totalcontracvalue pca.mrc pca.otc pca.duration %}</td> 
+                {% if request.user.is_staff %}<td><a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a>{% endif %} </td> 
+
             </tr>
         </tbody>{% endfor %}
     </table>
