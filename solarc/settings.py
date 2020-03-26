@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
 	'10.24.17.72',
     '127.0.0.1',
     '127.0.0.2',
+    'solarc.pythonanywhere.com',
 ]
 
 # ALLOWED_HOSTS = []
@@ -133,7 +134,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = '/static/'
 
 # EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
