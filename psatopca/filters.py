@@ -34,6 +34,7 @@ class Pcafilter(django_filters.FilterSet):
                     'psa__preproject__oppty__customer__customer_name',
                     'psa__preproject__oppty__project_name',
                     'psa__preproject__sa_lintasarta__name',
+                    'psa__preproject__progress',
                     'psa__pss_ho_date',
                     'psa__status_psa',
                     'ebitda',

@@ -12,6 +12,7 @@
                 <th class="uk-table-middle" style="font-size: 100%;">SA</th>
                 <th class="uk-table-middle" style="font-size: 100%;">PSS</th>
                 <th class="uk-table-middle" style="font-size: 100%;">SALES</th>
+                <th class="uk-table-middle" style="font-size: 100%;">Progress</th>
                 <th class="uk-table-middle" style="font-size: 100%;">Payment Type</th>
                 <th class="uk-table-middle" style="font-size: 100%;">PCA Date</th>
                 <th class="uk-table-middle" style="font-size: 100%;">HO Known Date</th>
@@ -31,7 +32,8 @@
             	<td>{{preproject.oppty.project_name}}</td> 
                 <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td> 
                 <td>{% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %}</td> 
-                <td><span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td> 
+                <td><span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td>
+                <td>{% if preproject.progress == 'w' %}Close Won{% elif preproject.progress == 'l' %}Close Lost{% elif preproject.progress == 'p' %}Progress - Internal SA{% elif preproject.progress == 's' %}Progress - Submited{% elif preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
                 <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td> 
                 <!-- <td>{% for pca in preproject.psa_set.all %}{{pca.pca_date}}{% endfor %}</td> -->
                 <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.pca_date|date:'d-m-y'}}{% endfor %}{% endfor %}</td>

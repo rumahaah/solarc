@@ -66,7 +66,14 @@ def preproject (request,paramm='all'):
 @login_required
 def opptywon (request):
 	v_preproject = Preproject.objects.filter(progress='w')
-	return render(request, 'preproject_won.html',{
+	return render(request, 'preproject_wonlost.html',{
+	'list': v_preproject,
+	})
+
+@login_required
+def opptylost (request):
+	v_preproject = Preproject.objects.filter(progress='l')
+	return render(request, 'preproject_wonlost.html',{
 	'list': v_preproject,
 	})
 

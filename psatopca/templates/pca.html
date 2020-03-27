@@ -9,7 +9,7 @@
                 <th class="uk-table-middle">No</th>
                 <th class="uk-table-middle">Customer Name</th>
                 <th class="uk-table-middle">Project Name</th>
-                <th class="uk-table-middle">Preproject Status</th>
+                <th class="uk-table-middle">Progress</th>
                 <th class="uk-table-middle">PSA Date</th>
                 <th class="uk-table-middle">PSA Status</th>
                 <th class="uk-table-middle">PSS HO Date</th>
@@ -22,11 +22,11 @@
                 {% if request.user.is_staff %}<th class="uk-table-middle">Edit</th>{% endif %}
             </tr>
             <tr>
-                <form method="get" class="">
+                <form method="get">
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle">{% render_field list.form.psa__preproject__oppty__customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.psa__preproject__oppty__project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
-                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__progress class="uk-select uk-form-small" %}</th>
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle">{% render_field list.form.psa__status_psa class="uk-select uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.psa__pss_ho_date class="uk-select uk-form-small" %}</th>
