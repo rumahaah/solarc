@@ -60,21 +60,39 @@ def preproject (request,paramm='all'):
 		v_preproject =''
 
 	return render(request, 'preproject.html',{
-	'list': v_preproject,
+		'list': v_preproject,
 	})
 
 @login_required
 def opptywon (request):
 	v_preproject = Preproject.objects.filter(progress='w')
 	return render(request, 'preproject_wonlost.html',{
-	'list': v_preproject,
+		'list': v_preproject,
 	})
 
 @login_required
 def opptylost (request):
 	v_preproject = Preproject.objects.filter(progress='l')
 	return render(request, 'preproject_wonlost.html',{
-	'list': v_preproject,
+		'list': v_preproject,
+	})
+
+@login_required
+def detailpersa (request,paramm='n'):
+	if paramm == 'n':
+		v_list = Preproject.objects.filter(sa_lintasarta__initial='')
+	elif paramm == 'sa1':
+		v_list = Preproject.objects.filter(sa_lintasarta__subbag='1').order_by('sa_lintasarta__initial')
+	elif paramm == 'sa2':
+		v_list = Preproject.objects.filter(sa_lintasarta__subbag='2').order_by('sa_lintasarta__initial')
+	elif paramm == 'all':
+		v_list = Preproject.objects.order_by('sa_lintasarta__initial')
+	else:
+		v_list = Preproject.objects.filter(sa_lintasarta__initial=paramm)
+
+	# return render(request, 'preproject_detailpersa.html',{
+	return render(request, 'preproject_detailpersa_accordion.html',{
+		'list': v_list,
 	})
 
 

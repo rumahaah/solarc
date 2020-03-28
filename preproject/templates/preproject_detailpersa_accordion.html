@@ -1,0 +1,141 @@
+{% extends "base_detailpersa.html" %}% load widget_tweaks %}{% load preproject_extras %}{% load humanize %}{% block title %}Preproject Detail | SolArc{% endblock %}{% block content %}
+<div class="uk-container">
+    <div class="uk-position-top-center uk-padding-small">
+        <!-- <div class="uk-button-group"> -->
+            <a href="{% url 'detailpersa'%}/all" class="uk-button uk-button-secondary uk-text-small" style="padding: 3px 12px 3px 12px;">All</a>
+            <a href="{% url 'detailpersa'%}/sa1" class="uk-button uk-button-primary uk-text-small" style="padding: 3px 12px 3px 12px;">SA1</a>
+            <a href="{% url 'detailpersa'%}/sa2" class="uk-button uk-button-primary uk-text-small" style="padding: 3px 12px 3px 12px;">SA2</a>
+            <a href="{% url 'detailpersa'%}/GGW" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">GGW</a>
+            <a href="{% url 'detailpersa'%}/IRS" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">IRS</a>
+            <a href="{% url 'detailpersa'%}/SDR" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">SDR</a>
+            <a href="{% url 'detailpersa'%}/TMB" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">TMB</a>
+            <a href="{% url 'detailpersa'%}/WIT" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">WIT</a>
+            <a href="{% url 'detailpersa'%}/ZKF" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">ZKF</a>
+            <a href="{% url 'detailpersa'%}/AJU" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">AJU</a>
+            <a href="{% url 'detailpersa'%}/DPM" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">DPM</a>
+            <a href="{% url 'detailpersa'%}/MBO" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">MBO</a>
+            <a href="{% url 'detailpersa'%}/MGM" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">MGM</a>
+            <a href="{% url 'detailpersa'%}/MUH" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">MUH</a>
+        <!-- </div> -->
+    </div>
+    <table class="uk-table uk-table-divider uk-table-small uk-margin-medium-top" style="font-size: 70%;" >
+    <!-- <table class="uk-table uk-table-divider uk-table-hover uk-table-small"> -->
+        <thead>
+            <tr>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040"><b>No</b></th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040"><b>SA</b></th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040"><b>Customer Name</b></th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040"><b>Project Name</b></th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040"><b>PSS</b></th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040"><b>SALES</b></th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040"><b>Progress</b></th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040"><b>Payment Type</b></th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040"><b>Taxsonomi</b></th>
+                <!-- <th class="uk-table-middle">{{list.count}}</th> -->
+                <!-- <th class="uk-table-middle" style="font-size: 100%;">PSA</th> -->
+                <!-- <th class="uk-table-middle" style="font-size: 100%;">PCA</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>{% for preproject in list %}  
+                <td>{{forloop.counter}}</td>
+                <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td> 
+                <td>{% for customer in preproject.oppty.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
+            	<td>{{preproject.oppty.project_name}}</td>
+                <td>{% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.initial}}; delay:250">{{ pss.name }}</span>{% endfor %}</td> 
+                <td><span uk-tooltip="title:{{preproject.sales_lintasarta.initial}}; delay:250">{{preproject.sales_lintasarta.name}}</span></td>
+                <td>{% if preproject.progress == 'w' %}Close Won{% elif preproject.progress == 'l' %}Close Lost{% elif preproject.progress == 'p' %}Progress - Internal SA{% elif preproject.progress == 's' %}Progress - Submited{% elif preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
+                <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td>
+                <!-- <td>{% for taxsonomi in preproject.taxsonomi.all %}{{taxsonomi.product_name}}{% endfor %}</td> -->
+                <td>{% for taxsonomi in preproject.taxsonomi.all %}{% if taxsonomi.product_name == '0'%}Datacom{% elif taxsonomi.product_name == '1'%}Cloud{% elif taxsonomi.product_name == '2'%}Data Center{% elif taxsonomi.product_name == '3'%}Sec & Col{% elif taxsonomi.product_name == '4'%}ITO{% elif taxsonomi.product_name == '5'%}Insol{%else%}Digital Ads{%endif%}{% endfor %}</td> 
+
+                <!-- <td>{{preproject.taxsonomi.product_name}}</td> -->
+            </tr>
+            <tr>
+                <td colspan='9' class="uk-text-center">
+                    <div uk-accordion="multiple: true">
+                        <div class="">
+                            <a class="uk-accordion-title" href="" style="font-size: 100%"><b>PSA</b> | {% for psa in preproject.psa_set.all %}{{psa.psa_date|date:'d-M'}} | {% endfor %}</a>
+                            <div class="uk-accordion-content uk-margin-remove">
+                                <table class="uk-table uk-table-hover uk-table-divider uk-table-small">
+                                    <thead>
+                                        <tr>
+                                            <th class="uk-table-middle" style="font-size: 100%;">PSA Date</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">PSS HO Date</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Product or Not</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Scale</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Summary</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Status_psa</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Remark</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Attendance</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Risk</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>{% for psa in preproject.psa_set.all %}
+                                        <tr>
+                                            <td>{{psa.psa_date}}</td> 
+                                            <td>{{psa.pss_ho_date}}</td> 
+                                            <td>{% if psa.productornot == 'n'%}Non Product{%else%}Product{%endif%}</td> 
+                                            <td>{% if psa.scale == 'l'%}Large{% elif psa.scale == 'm'%}Medium{%else%}Small{%endif%}</td> 
+                                            <td>{{psa.summary}}</td> 
+                                            <td>{% if psa.status_psa == 'g' %}Go{% elif psa.status_psa == 'h'%}Hold{%else%}Not Go{%endif%}</td> 
+                                            <td>{{psa.remark}}</td> 
+                                            <td>{{psa.attendance}}</td> 
+                                            <td>{% if psa.risk_category == 'h' %}High{% elif psa.risk_category == 'm' %}Medium{% elif psa.risk_category == 'l' %}Low{%else%}n/a{%endif%}</td> 
+                                        </tr>
+                                    </tbody>{% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>                
+            </tr>
+            <tr>
+                <td colspan='9' class="uk-text-center">
+                    <div uk-accordion="multiple: true">
+                        <div class="">
+                            <a class="uk-accordion-title" href="#" style="font-size: 100%"><b>PCA</b> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.pca_date|date:'d-M'}} | {% endfor %}{% endfor %}</a>
+                            <div class="uk-accordion-content">
+                                <table class="uk-table uk-table-hover uk-table-divider uk-table-small">
+                                    <thead>
+                                        <tr>
+                                            <th class="uk-table-middle" style="font-size: 100%;">PCA Date</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">PCA Status</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">OTC</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">MRC</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Duration</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Ebitda</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">IRR</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Remark</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">Attendance</th>
+                                            <!-- <th class="uk-table-middle" style="font-size: 100%;">Problem Category</th> -->
+                                            <th class="uk-table-middle" style="font-size: 100%;">ACV</th>
+                                            <th class="uk-table-middle" style="font-size: 100%;">TCV</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}
+                                        <tr>
+                                            <td>{{pca.pca_date}}</td> 
+                                            <td>{% if pca.status_pca == 'g' %}APPROVED{% elif pca.status_pca == 'h' %}HOLD{% else %}NOT GO{% endif %}</td>
+                                            <td>{% rupiah pca.otc %}</td> 
+                                            <td>{% rupiah pca.mrc %}</td> 
+                                            <td>{{pca.duration}}</td> 
+                                            <td>{{pca.ebitda}}</td> 
+                                            <td>{{pca.irr}}</td> 
+                                            <td>{{pca.remark}}</td> 
+                                            <td>{{pca.attendance}}</td> 
+                                            <!-- <td>{{pca.problem_category}}</td> -->
+                                            <td>{% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n'%}</td>
+                                            <td>{% totalcontracvalue pca.mrc pca.otc pca.duration %}</td>
+                                        </tr>
+                                    </tbody>{% endfor %}{% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>             
+            </tr>{% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

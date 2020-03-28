@@ -92,7 +92,8 @@ WSGI_APPLICATION = 'solarc.wsgi.application'
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+		# 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+		'NAME': os.path.join(os.path.dirname(BASE_DIR), 'dbque','db.sqlite3'),
 	}
 }
 
@@ -135,7 +136,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 STATIC_URL = '/static/'
 
 # EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'

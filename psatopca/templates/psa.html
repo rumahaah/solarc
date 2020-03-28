@@ -26,14 +26,14 @@
                 <form method="get" class="">
                     <th class="uk-table-middle"></th>
                     <!-- <th class="uk-table-middle"></th> -->
-                    <th class="uk-table-middle">{% render_field list.form.preproject__oppty__customer__customer_name class="uk-input uk-form-width-small uk-form-small" %}</th>
-                    <th class="uk-table-middle">{% render_field list.form.preproject__oppty__project_name class="uk-input uk-form-width-small uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.preproject__oppty__customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.preproject__oppty__project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
                     <!-- <th class="uk-table-middle">{% render_field list.form.pss_ho_date class="uk-select uk-form-small" %}</th> -->
                     <th class="uk-table-middle">
                         <select name="pss_ho_date" id="id_pss_ho_date" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
-                            <option value="unknown" selected></option>
+                            <option value="unknown"></option>
                             <option value="true" class="uk-text-success uk-text-bold" {%if request.GET.pss_ho_date == 'true'%} selected {%endif%}>Y</option>
                             <option value="false" class="uk-text-danger uk-text-bold" {%if request.GET.pss_ho_date == 'false'%} selected {%endif%}>N</option>
                         </select>

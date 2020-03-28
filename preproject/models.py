@@ -89,9 +89,14 @@ class Preproject(models.Model):
 # 		ordering = ['initial', 'name']
 
 class Saperson(models.Model):
+	subbag_option = (
+		('1', 'SA 1'),
+		('2', 'SA 2'),
+	)
 	initial = models.CharField(max_length=3)
 	name = models.CharField(max_length=100)
 	email = models.CharField(max_length=100)
+	subbag = models.CharField(blank=True, max_length=1, choices=subbag_option)
 	def __str__(self):
 		return "%s - %s" % (self.initial, self.name)
 	class Meta:
