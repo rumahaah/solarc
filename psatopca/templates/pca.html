@@ -69,8 +69,8 @@
         <tbody>{% for pca in list.qs %} 
             <tr> 
             	<td>{{ forloop.counter }}</td> 
-                <td>{% for customer in pca.psa.preproject.oppty.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
-            	<td>{{pca.psa.preproject.oppty.project_name}}</td> 
+                <td>{% for customer in pca.psa.preproject.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
+            	<td>{{pca.psa.preproject.project_name}}</td> 
                 <td>{% if pca.psa.preproject.progress == 'w' %}Close Won{% elif pca.psa.preproject.progress == 'l' %}Close Lost{% elif pca.psa.preproject.progress == 'p' %}Progress - Internal SA{% elif pca.psa.preproject.progress == 's' %}Progress - Submited{% elif pca.psa.preproject.progress == 'c' %}Cacncelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
             	<td>{{pca.psa.psa_date}}</td> 
                 <td>{% if pca.psa.status_psa == 'g' %}GO{% elif pca.psa.status_psa == 'h' %}HOLD{% else %}NOT GO{% endif %}</td>

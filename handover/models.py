@@ -23,7 +23,8 @@ class Handover(models.Model):
 	problem_category = models.CharField(max_length=4, choices=problem_category_option, default='n-pr')
 
 	def __str__(self):
-		return "%s - %s - %s" %("Handover",(self.pca.psa.preproject.oppty.customer.all()[0].customer_name),self.pca.psa.preproject.oppty.project_name)
+		return "%s - %s - %s" %("Handover",(self.pca.psa.preproject.customer.all()[0].customer_name),self.pca.psa.preproject.project_name)
+		# return "%s - %s - %s" %("Handover",(self.pca.psa.preproject.oppty.customer.all()[0].customer_name),self.pca.psa.preproject.oppty.project_name)
 		# return "%s - %s" % (self.id, self.pca.psa.preproject.id)
 
 class Cleanproject(models.Model):

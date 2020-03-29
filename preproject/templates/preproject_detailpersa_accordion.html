@@ -40,8 +40,8 @@
             <tr>{% for preproject in list %}  
                 <td>{{forloop.counter}}</td>
                 <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td> 
-                <td>{% for customer in preproject.oppty.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
-            	<td>{{preproject.oppty.project_name}}</td>
+                <td>{% for customer in preproject.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
+            	<td>{{preproject.project_name}}</td>
                 <td>{% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.initial}}; delay:250">{{ pss.name }}</span>{% endfor %}</td> 
                 <td><span uk-tooltip="title:{{preproject.sales_lintasarta.initial}}; delay:250">{{preproject.sales_lintasarta.name}}</span></td>
                 <td>{% if preproject.progress == 'w' %}Close Won{% elif preproject.progress == 'l' %}Close Lost{% elif preproject.progress == 'p' %}Progress - Internal SA{% elif preproject.progress == 's' %}Progress - Submited{% elif preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 

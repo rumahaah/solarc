@@ -1,17 +1,14 @@
 from django.db import models
 
 # Create your models here.
-class Oppty(models.Model):
-	# oppty_id = models.AutoField(primary_key=True)
-	oppty_id = models.CharField(max_length=16)
-	customer = models.ManyToManyField('Customer')
-	project_name = models.CharField(max_length=100)
-	def __str__(self):
-		# return "%s - %s - %s " % (self.project_name, self.customer.all()[0], self.oppty_id)
-		# return "%s & Project %s " % (self.customer.all()[0], self.project_name)
-		return "%s & Customer: %s " % (self.project_name, self.customer.all()[0])
-	class Meta(object):
-		ordering = ['project_name']
+# class Oppty(models.Model):
+# 	# oppty_id = models.AutoField(primary_key=True)
+# 	def __str__(self):
+# 		# return "%s - %s - %s " % (self.project_name, self.customer.all()[0], self.oppty_id)
+# 		# return "%s & Project %s " % (self.customer.all()[0], self.project_name)
+# 		return "%s & Customer: %s " % (self.project_name, self.customer.all()[0])
+# 	class Meta(object):
+# 		ordering = ['project_name']
 
 class Preproject(models.Model):
 	project_status_option = (
@@ -44,7 +41,10 @@ class Preproject(models.Model):
 		('o', 'OTC'),
 	)
 
-	oppty = models.ForeignKey('Oppty', on_delete=models.CASCADE)
+	oppty_id = models.CharField(max_length=16)
+	customer = models.ManyToManyField('Customer')
+	project_name = models.CharField(max_length=100)
+	# oppty = models.ForeignKey('Oppty', on_delete=models.CASCADE)
 	# opportunity_id = models.CharField(max_length=20)
 	remark = models.TextField(max_length=1000, blank=True, null=True)
 	issues = models.TextField(max_length=1000, blank=True, null=True)
@@ -62,9 +62,13 @@ class Preproject(models.Model):
 	table_creation_timestamp = models.DateField(auto_now=False, auto_now_add=True)
 
 	def __str__(self):
-		return "%s" % (self.oppty)
+		# return "%s" % (self.project_name)
+		return "%s & Customer: %s " % (self.project_name, self.customer.all())
 		# return "%s" % (self.opportunity.all()[0])
 		# return "%s & Project %s " % (self.opportunity.all()[0], self.opportunity.all()[0])
+	# class Meta(object):
+	# 	ordering = ['project_name']
+
 
 # class PSA_PCA(models.Model):
 # 	project = models.ForeignKey('Preproject',on_delete=models.CASCADE)
