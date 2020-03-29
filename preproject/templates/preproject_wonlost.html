@@ -28,8 +28,8 @@
         <tbody>{% for preproject in list %} 
             <tr> 
             	<td>{{ forloop.counter }}</td> 
-                <td>{% for customer in preproject.oppty.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
-            	<td>{{preproject.oppty.project_name}}</td> 
+                <td>{% for customer in preproject.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
+            	<td>{{preproject.project_name}}</td> 
                 <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td> 
                 <td>{% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %}</td> 
                 <td><span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td>
