@@ -26,11 +26,11 @@ def exclude_preproprogres ():
 	return my_list
 
 def oppty_per_customer():
-	ksa = Preproject.objects.filter(oppty__customer__customer_criteria='0').count()
-	ea = Preproject.objects.filter(oppty__customer__customer_criteria='1').count()
-	sa = Preproject.objects.filter(oppty__customer__customer_criteria='2').count()
-	x = Preproject.objects.filter(oppty__customer__customer_criteria='3').count()
-	y = Preproject.objects.filter(oppty__customer__customer_criteria='4').count()
+	ksa = Preproject.objects.filter(customer__customer_criteria='0').count()
+	ea = Preproject.objects.filter(customer__customer_criteria='1').count()
+	sa = Preproject.objects.filter(customer__customer_criteria='2').count()
+	x = Preproject.objects.filter(customer__customer_criteria='3').count()
+	y = Preproject.objects.filter(customer__customer_criteria='4').count()
 	others = x + y
 	return [ksa,ea,sa,others]
 

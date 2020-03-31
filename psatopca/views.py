@@ -182,9 +182,9 @@ def index_pca (request,paramm='total'):
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcaksaea':
 		my_list = []
-		for pca in Pca.objects.filter(psa__preproject__oppty__customer__customer_criteria='0'):
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
 			my_list.append(str(pca.id))
-		for pca in Pca.objects.filter(psa__preproject__oppty__customer__customer_criteria='1'):
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
 			my_list.append(str(pca.id))
 		my_list_winlost = []
 		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='w'):
@@ -195,9 +195,9 @@ def index_pca (request,paramm='total'):
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost))
 	elif paramm == 'pcanonksaea':
 		my_list = []
-		for pca in Pca.objects.filter(psa__preproject__oppty__customer__customer_criteria='0'):
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
 			my_list.append(str(pca.id))
-		for pca in Pca.objects.filter(psa__preproject__oppty__customer__customer_criteria='1'):
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
 			my_list.append(str(pca.id))
 		my_list_winlost = []
 		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='w'):
@@ -238,9 +238,9 @@ def irrprofitability():
 
 def winrate_ksaea():
 	my_list = []
-	for pca in Pca.objects.filter(psa__preproject__oppty__customer__customer_criteria='0'):
+	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
 		my_list.append(str(pca.id))
-	for pca in Pca.objects.filter(psa__preproject__oppty__customer__customer_criteria='1'):
+	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
 		my_list.append(str(pca.id))
 	list_ksaea_won = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='w').values_list('duration','otc','mrc')
 	list_ksaea_lost = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l').values_list('duration','otc','mrc')
@@ -251,9 +251,9 @@ def winrate_ksaea():
 
 def winrate_nonksaea():
 	my_list = []
-	for pca in Pca.objects.filter(psa__preproject__oppty__customer__customer_criteria='0'):
+	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
 		my_list.append(str(pca.id))
-	for pca in Pca.objects.filter(psa__preproject__oppty__customer__customer_criteria='1'):
+	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
 		my_list.append(str(pca.id))
 	list_ksaea_won = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='w').values_list('duration','otc','mrc')
 	list_ksaea_lost = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l').values_list('duration','otc','mrc')

@@ -63,11 +63,11 @@ class Preproject(models.Model):
 
 	def __str__(self):
 		# return "%s" % (self.project_name)
-		return "%s & Customer: %s " % (self.project_name, self.customer.all())
+		return "%s & Customer: %s " % (self.project_name, self.customer.all()[0].customer_name)
 		# return "%s" % (self.opportunity.all()[0])
 		# return "%s & Project %s " % (self.opportunity.all()[0], self.opportunity.all()[0])
-	# class Meta(object):
-	# 	ordering = ['project_name']
+	class Meta(object):
+		ordering = ['project_name']
 
 
 # class PSA_PCA(models.Model):
