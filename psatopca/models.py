@@ -95,7 +95,7 @@ class Pca(models.Model):
 	remark = models.TextField(max_length=1000, blank=True, null=True)
 	attendance = models.TextField(max_length=1000, blank=True, null=True)
 	problem_category = models.CharField(max_length=4, choices=problem_category_option, default='n-pr')
-	# problem_category = models.CharField(max_length=4, choices=problem_category_option)
+	flagcalc = models.BooleanField(default=True, blank=True, null=True)
 
 	#timestamp
 	table_updated = models.DateField(auto_now=True, auto_now_add=False)
