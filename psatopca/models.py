@@ -92,6 +92,7 @@ class Pca(models.Model):
 	duration = models.IntegerField()
 	ebitda = models.DecimalField(max_digits=10, decimal_places=2)
 	irr = models.DecimalField(max_digits=10, decimal_places=2)
+	tcv = models.DecimalField(max_digits=30, decimal_places=2)
 	remark = models.TextField(max_length=1000, blank=True, null=True)
 	attendance = models.TextField(max_length=1000, blank=True, null=True)
 	problem_category = models.CharField(max_length=4, choices=problem_category_option, default='n-pr')

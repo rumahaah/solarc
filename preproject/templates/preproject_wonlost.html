@@ -22,6 +22,7 @@
                 <th class="uk-table-middle" style="font-size: 100%;">Durations</th>
                 <th class="uk-table-middle" style="font-size: 100%;">ACV</th>
                 <th class="uk-table-middle" style="font-size: 100%;">TCV</th>
+                <th class="uk-table-middle" style="font-size: 100%;">Edit</th>
             </tr>
         </thead>
 
@@ -36,14 +37,33 @@
                 <td>{% if preproject.progress == 'w' %}Close Won{% elif preproject.progress == 'l' %}Close Lost{% elif preproject.progress == 'p' %}Progress - Internal SA{% elif preproject.progress == 's' %}Progress - Submited{% elif preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
                 <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td> 
                 <!-- <td>{% for pca in preproject.psa_set.all %}{{pca.pca_date}}{% endfor %}</td> -->
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.pca_date|date:'d-m-y'}}{% endfor %}{% endfor %}</td>
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date|date:'d-m-y'}}{% endfor %}{% endfor %}{% endfor %}</td>
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% rupiah pca.mrc %}{% endfor %}{% endfor %}</td>
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% rupiah pca.otc %}{% endfor %}{% endfor %}</td>
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.duration}}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{{pca.pca_date|date:'d-M-y'}}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date|date:'d-M-y'}}{% endfor %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.mrc %}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.otc %}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{{pca.duration}}{% endif %}{% endfor %}{% endfor %}</td>
                 <!-- <td>{% annualcontracvalue 1 1 1%}</td> -->
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n'%}{% endfor %}{% endfor %}{% endfor %}</td>
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% totalcontracvalue pca.mrc pca.otc pca.duration %}{% endfor %}{% endfor %}</td>
+                <td>
+                    {% for psa in preproject.psa_set.all %}
+                        {% for pca in psa.pca_set.all %}
+                            {% if pca.flagcalc == 1 %}
+                                {% for ho in pca.handover_set.all %}
+                                    {% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n'%}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for psa in preproject.psa_set.all %}
+                        {% for pca in psa.pca_set.all %}
+                            {% if pca.flagcalc == 1 %}
+                                {% totalcontracvalue pca.mrc pca.otc pca.duration %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                {% if request.user.is_staff %}<td><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Preproject</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
             </tr>
         </tbody>{% endfor %}
     </table>
