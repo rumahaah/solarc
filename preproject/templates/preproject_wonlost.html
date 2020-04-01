@@ -48,13 +48,14 @@
                         {% for pca in psa.pca_set.all %}
                             {% if pca.flagcalc == 1 %}
                                 {% for ho in pca.handover_set.all %}
-                                    {% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n'%}
+                                    {% annualcontracvalue pca.id ho.po_known_date|date:'mY' pca.tcv %}
                                 {% endfor %}
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
                 </td>
-                <td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.tcv %}{% endif %}{% endfor %}{% endfor %}</td>
+<!--                 <td>
                     {% for psa in preproject.psa_set.all %}
                         {% for pca in psa.pca_set.all %}
                             {% if pca.flagcalc == 1 %}
@@ -62,7 +63,8 @@
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
-                </td>
+                </td> -->
+                <td></td>
                 {% if request.user.is_staff %}<td><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Preproject</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
             </tr>
         </tbody>{% endfor %}

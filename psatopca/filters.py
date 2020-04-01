@@ -5,8 +5,8 @@ from . models import Psa, Pca
 import django_filters
 
 class Psafilter(django_filters.FilterSet):
-    preproject__oppty__customer__customer_name = django_filters.CharFilter(lookup_expr='icontains')
-    preproject__oppty__project_name = django_filters.CharFilter(lookup_expr='icontains')
+    preproject__customer__customer_name = django_filters.CharFilter(lookup_expr='icontains')
+    preproject__project_name = django_filters.CharFilter(lookup_expr='icontains')
     preproject__pss_lintasarta__name = django_filters.CharFilter(lookup_expr='icontains')
     preproject__sales_lintasarta__name = django_filters.CharFilter(lookup_expr='icontains')
     preproject__sa_lintasarta__name = django_filters.CharFilter(lookup_expr='icontains')
@@ -14,8 +14,8 @@ class Psafilter(django_filters.FilterSet):
     class Meta:
         model = Psa
         fields = [
-                    'preproject__oppty__customer__customer_name',
-                    'preproject__oppty__project_name','preproject__pss_lintasarta__name',
+                    'preproject__customer__customer_name',
+                    'preproject__project_name','preproject__pss_lintasarta__name',
                     'preproject__sales_lintasarta__name',
                     'preproject__sa_lintasarta__name',
                     'risk_category',
@@ -23,16 +23,16 @@ class Psafilter(django_filters.FilterSet):
                     ]
 
 class Pcafilter(django_filters.FilterSet):
-    psa__preproject__oppty__customer__customer_name = django_filters.CharFilter(lookup_expr='icontains')
-    psa__preproject__oppty__project_name = django_filters.CharFilter(lookup_expr='icontains')
+    psa__preproject__customer__customer_name = django_filters.CharFilter(lookup_expr='icontains')
+    psa__preproject__project_name = django_filters.CharFilter(lookup_expr='icontains')
     psa__preproject__sa_lintasarta__name = django_filters.CharFilter(lookup_expr='icontains')
     psa__pss_ho_date = django_filters.BooleanFilter(field_name='psa__pss_ho_date', lookup_expr='isnull', exclude=True)
 
     class Meta:
         model = Pca
         fields = [
-                    'psa__preproject__oppty__customer__customer_name',
-                    'psa__preproject__oppty__project_name',
+                    'psa__preproject__customer__customer_name',
+                    'psa__preproject__project_name',
                     'psa__preproject__sa_lintasarta__name',
                     'psa__preproject__progress',
                     'psa__pss_ho_date',
