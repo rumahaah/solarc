@@ -1,24 +1,90 @@
-{% extends "base_detailpersa.html" %}% load widget_tweaks %}{% load preproject_extras %}{% load humanize %}{% block title %}Preproject Detail | SolArc{% endblock %}{% block content %}
+{% extends "base_psapca.html" %}% load widget_tweaks %}{% load preproject_extras %}{% load humanize %}{% block title %}Preproject Detail | SolArc{% endblock %}{% block content %}
 <div class="uk-container">
-    <div class="uk-position-top-center uk-padding-small">
-        <!-- <div class="uk-button-group"> -->
-            <a href="{% url 'detailpersa'%}/all" class="uk-button uk-button-secondary uk-text-small" style="padding: 3px 12px 3px 12px;">All</a>
-            <a href="{% url 'detailpersa'%}/sa1" class="uk-button uk-button-primary uk-text-small" style="padding: 3px 12px 3px 12px;">SA1</a>
-            <a href="{% url 'detailpersa'%}/sa2" class="uk-button uk-button-primary uk-text-small" style="padding: 3px 12px 3px 12px;">SA2</a>
-            <a href="{% url 'detailpersa'%}/GGW" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">GGW</a>
-            <a href="{% url 'detailpersa'%}/IRS" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">IRS</a>
-            <a href="{% url 'detailpersa'%}/SDR" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">SDR</a>
-            <a href="{% url 'detailpersa'%}/TMB" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">TMB</a>
-            <a href="{% url 'detailpersa'%}/WIT" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">WIT</a>
-            <a href="{% url 'detailpersa'%}/ZKF" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">ZKF</a>
-            <a href="{% url 'detailpersa'%}/AJU" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">AJU</a>
-            <a href="{% url 'detailpersa'%}/DPM" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">DPM</a>
-            <a href="{% url 'detailpersa'%}/MBO" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">MBO</a>
-            <a href="{% url 'detailpersa'%}/MGM" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">MGM</a>
-            <a href="{% url 'detailpersa'%}/MUH" class="uk-button uk-button-default uk-text-small" style="padding: 3px 12px 3px 12px;">MUH</a>
-        <!-- </div> -->
+    <ul class="uk-subnav" uk-margin>
+        <li><a href="{% url 'detail'%}/all">All</a></li>
+        <li>
+            <a href="#">Subbag<span uk-icon="icon:  triangle-down"></span></a>
+            <div uk-dropdown="mode: hover;">
+                <ul class="uk-nav uk-dropdown-nav">
+                    <li><a href="{% url 'detail'%}/sa1">SA 1</a></li>
+                    <li><a href="{% url 'detail'%}/sa2">SA 2</a></li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <a href="#">SA 1<span uk-icon="icon:  triangle-down"></span></a>
+            <div uk-dropdown="mode: hover;">
+                <ul class="uk-nav uk-dropdown-nav">
+                    <li><a href="{% url 'detail'%}/GGW">Gerry Gusman Wibowo</a></li>
+                    <li><a href="{% url 'detail'%}/IRS">Iwan Rizal Saputra</a></li>
+                    <li><a href="{% url 'detail'%}/SDR">Sudarsono</a></li>
+                    <li><a href="{% url 'detail'%}/TMB">Tommy Budianto</a></li>
+                    <li><a href="{% url 'detail'%}/WIT">Wahyu Indartono</a></li>
+                    <li><a href="{% url 'detail'%}/ZKF">Zaki Farhan</a></li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <a href="#">SA 2<span uk-icon="icon:  triangle-down"></span></a>
+            <div uk-dropdown="mode: hover;">
+                <ul class="uk-nav uk-dropdown-nav">
+                    <li><a href="{% url 'detail'%}/AJU">Adhika Judistira Mukti</a></li>
+                    <li><a href="{% url 'detail'%}/DPM">Dedy Permana</a></li>
+                    <li><a href="{% url 'detail'%}/MBO">Mohammad Rabbani</a></li>
+                    <li><a href="{% url 'detail'%}/MGM">Megati Mahardiningrum</a></li>
+                    <li><a href="{% url 'detail'%}/MUH">Muhammad Aulia Rahendra</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+    <!-- summary -->
+    <span class="uk-text-bold">{{tittle}}</span>
+    <div class=" uk-child-width-expand@s" uk-grid>
+        <div>
+            <div class="uk-card uk-card-default uk-card-body">
+                <ul class="uk-list">
+                    <li>Oppty: {{list.count}}</li>
+                    <li>Total PSA: {{totalpsa}}</li>
+                    <li>Total PCA: {{totalpca}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="uk-card uk-card-default uk-card-body">
+                <ul class="uk-list">
+                    <li>Oppty Large: {{totalpsa_l}}</li>
+                    <li>Oppty Medium: {{totalpsa_m}}</li>
+                    <li>Oppty Small: {{totalpsa_s}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="uk-card uk-card-default uk-card-body">
+                <ul class="uk-list">
+                    <li>Oppty High Risk: {{totalpsa_hr}}</li>
+                    <li>Oppty Medium Risk: {{totalpsa_mr}}</li>
+                    <li>Oppty Low Risk: {{totalpsa_lr}}</li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <table class="uk-table uk-table-divider uk-table-small uk-margin-medium-top" style="font-size: 70%;" >
+    <!-- <div class="">
+            <a href="{% url 'detail'%}/all" class="uk-button uk-button-secondary uk-text-small">All</a>
+            <a href="{% url 'detail'%}/sa1" class="uk-button uk-button-primary uk-text-small">SA1</a>
+            <a href="{% url 'detail'%}/sa2" class="uk-button uk-button-primary uk-text-small">SA2</a>
+            <a href="{% url 'detail'%}/GGW" class="uk-button uk-button-default uk-text-small">GGW</a>
+            <a href="{% url 'detail'%}/IRS" class="uk-button uk-button-default uk-text-small">IRS</a>
+            <a href="{% url 'detail'%}/SDR" class="uk-button uk-button-default uk-text-small">SDR</a>
+            <a href="{% url 'detail'%}/TMB" class="uk-button uk-button-default uk-text-small">TMB</a>
+            <a href="{% url 'detail'%}/WIT" class="uk-button uk-button-default uk-text-small">WIT</a>
+            <a href="{% url 'detail'%}/ZKF" class="uk-button uk-button-default uk-text-small">ZKF</a>
+            <a href="{% url 'detail'%}/AJU" class="uk-button uk-button-default uk-text-small">AJU</a>
+            <a href="{% url 'detail'%}/DPM" class="uk-button uk-button-default uk-text-small">DPM</a>
+            <a href="{% url 'detail'%}/MBO" class="uk-button uk-button-default uk-text-small">MBO</a>
+            <a href="{% url 'detail'%}/MGM" class="uk-button uk-button-default uk-text-small">MGM</a>
+            <a href="{% url 'detail'%}/MUH" class="uk-button uk-button-default uk-text-small">MUH</a>
+    </div> -->
+    <table class="uk-table uk-table-divider uk-table-small" style="font-size: 70%;" >
     <!-- <table class="uk-table uk-table-divider uk-table-hover uk-table-small"> -->
         <thead>
             <tr>
@@ -125,7 +191,7 @@
                                             <td>{{pca.remark}}</td> 
                                             <td>{{pca.attendance}}</td> 
                                             <!-- <td>{{pca.problem_category}}</td> -->
-                                            <td>{% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n'%}</td>
+                                            <td>{% for ho in pca.handover_set.all %}{% annualcontracvalue pca.id ho.po_known_date|date:'mY' pca.tcv %}{% endfor %}</td>
                                             <td>{% totalcontracvalue pca.mrc pca.otc pca.duration %}</td>
                                         </tr>
                                     </tbody>{% endfor %}{% endfor %}

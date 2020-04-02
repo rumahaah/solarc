@@ -129,7 +129,7 @@
                                             <td>{{pca.remark}}</td> 
                                             <td>{{pca.attendance}}</td> 
                                             <!-- <td>{{pca.problem_category}}</td> -->
-                                            <td>{% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n'%}</td>
+                                            <td>{% for ho in pca.handover_set.all %}{% annualcontracvalue pca.id ho.po_known_date|date:'mY' pca.tcv %}{% endfor %}</td>
                                             <td>{% totalcontracvalue pca.mrc pca.otc pca.duration %}</td>
                                         </tr>
                                     </tbody>{% endfor %}{% endfor %}

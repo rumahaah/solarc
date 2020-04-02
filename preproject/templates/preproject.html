@@ -1,6 +1,6 @@
 {% extends "base_psapca.html" %}{% block title %}Preproject Opportunity | SolArc{% endblock %}{% block content %}
 <div class="uk-container">
-    <table class="uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
+    <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
     <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
     <!-- <caption>PSA {{ list.count }}</caption> -->
         <thead>
@@ -19,7 +19,7 @@
                 <th class="uk-table-middle">Payment Type</th>
                 <!-- <th class="uk-table-middle">PCA Date</th> -->
                 <!-- <th class="uk-table-middle">HO Date</th> -->
-                {% if request.user.is_staff %}<th class="uk-table-middle">Edit</th>{% endif %}
+                {% if request.user.is_staff %}<th class="noExl uk-table-middle">Edit</th>{% endif %}
 
             </tr>
         </thead>
@@ -42,9 +42,11 @@
                 <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.pca_date}}{% endfor %}{% endfor %}</td> -->
                 <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date}}{% endfor %}{% endfor %}{% endfor %}</td> -->
                 <!-- <td>{% for ho in preproject.psa.pca.handover_set.all %}{{ho.po_known_date}}{% endfor %}</td>  -->
-                {% if request.user.is_staff %}<td><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a>{% endif %} </td> 
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a></td>{% endif %} 
             </tr>
         </tbody>{% endfor %}
     </table>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
 </div>
 {% endblock %}
+{% block scriptexportexcel %}filename: "Export Preproject" + ".xls",{% endblock %}

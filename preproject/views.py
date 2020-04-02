@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Lower
 
 from . models import Preproject, Customer
+from psatopca.models import Psa, Pca
+
 
 # Create your views here.
 # def preproprogres ():
@@ -78,21 +80,66 @@ def opptylost (request):
 	})
 
 @login_required
-def detailpersa (request,paramm='n'):
+def detail (request,paramm='all'):
 	if paramm == 'n':
 		v_list = Preproject.objects.filter(sa_lintasarta__initial='')
 	elif paramm == 'sa1':
 		v_list = Preproject.objects.filter(sa_lintasarta__subbag='1').order_by('sa_lintasarta__initial')
+		v_total_psa = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').count()
+		v_total_pca = Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').count()
+		v_total_psa_l = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').filter(scale='l').count()
+		v_total_psa_m = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').filter(scale='m').count()
+		v_total_psa_s = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').filter(scale='s').count()
+		v_total_psa_hr = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').filter(risk_category='h').count()
+		v_total_psa_mr = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').filter(risk_category='m').count()
+		v_total_psa_lr = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').filter(risk_category='l').count()
+		tittle = 'SA 1'
 	elif paramm == 'sa2':
 		v_list = Preproject.objects.filter(sa_lintasarta__subbag='2').order_by('sa_lintasarta__initial')
+		v_total_psa = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').count()
+		v_total_pca = Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').count()
+		v_total_psa_l = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').filter(scale='l').count()
+		v_total_psa_m = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').filter(scale='m').count()
+		v_total_psa_s = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').filter(scale='s').count()
+		v_total_psa_hr = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').filter(risk_category='h').count()
+		v_total_psa_mr = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').filter(risk_category='m').count()
+		v_total_psa_lr = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').filter(risk_category='l').count()
+		tittle = 'SA 2'
 	elif paramm == 'all':
 		v_list = Preproject.objects.order_by('sa_lintasarta__initial')
+		v_total_psa = Psa.objects.count()
+		v_total_pca = Pca.objects.count()
+		v_total_psa_l = Psa.objects.filter(scale='l').count()
+		v_total_psa_m = Psa.objects.filter(scale='m').count()
+		v_total_psa_s = Psa.objects.filter(scale='s').count()
+		v_total_psa_hr = Psa.objects.filter(risk_category='h').count()
+		v_total_psa_mr = Psa.objects.filter(risk_category='m').count()
+		v_total_psa_lr = Psa.objects.filter(risk_category='l').count()
+		tittle = 'ALL'
 	else:
 		v_list = Preproject.objects.filter(sa_lintasarta__initial=paramm)
+		v_total_psa = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).count()
+		v_total_pca = Pca.objects.filter(psa__preproject__sa_lintasarta__initial=paramm).count()
+		v_total_psa_l = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).filter(scale='l').count()
+		v_total_psa_m = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).filter(scale='m').count()
+		v_total_psa_s = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).filter(scale='s').count()
+		v_total_psa_hr = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).filter(risk_category='h').count()
+		v_total_psa_mr = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).filter(risk_category='m').count()
+		v_total_psa_lr = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).filter(risk_category='l').count()
+		tittle = paramm
 
 	# return render(request, 'preproject_detailpersa.html',{
 	return render(request, 'preproject_detailpersa_accordion.html',{
 		'list': v_list,
+		'totalpsa': v_total_psa,
+		'totalpca': v_total_pca,
+		'totalpsa_l': v_total_psa_l,
+		'totalpsa_m': v_total_psa_m,
+		'totalpsa_s': v_total_psa_s,
+		'totalpsa_hr': v_total_psa_hr,
+		'totalpsa_mr': v_total_psa_mr,
+		'totalpsa_lr': v_total_psa_lr,
+		'tittle': tittle,
 	})
 
 

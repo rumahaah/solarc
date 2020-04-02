@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.db.models.functions import Lower
-from django.db.models import Avg
+from django.db.models.functions import Lower, Coalesce
+from django.db.models import Avg, Sum, Value
 
 from . models import Psa, Pca
 from . filters import Psafilter, Pcafilter
@@ -43,7 +43,7 @@ def psa_more_than_5wd_from_pss_ho (rawdata):
 	remove_list_b = []
 	for psa in rawdata:
 		# psa_date = psa.psa_date
-		pcas = psa.pca_set.all()
+		pcas = psa.pca_set.exclude(psa__pss_ho_date__isnull=True)
 		calculation = numpy.busday_count(psa.psa_date,datetime.now().date())
 		if calculation >= 5:
 			my_list.append(psa.id)
@@ -176,10 +176,10 @@ def index_pca (request,paramm='total'):
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=b).order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcaebitda':
 		# v_pca = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').order_by(Lower('pca_date').desc())
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').order_by(Lower('pca_date').desc()))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcairr':
 		# v_pca = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').order_by(Lower('pca_date').desc())
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').order_by(Lower('pca_date').desc()))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcaksaea':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -192,7 +192,7 @@ def index_pca (request,paramm='total'):
 		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
 		# v_pca = Pca.objects.filter(pk__in=my_list_winlost)
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost).filter(flagcalc=1))
 	elif paramm == 'pcanonksaea':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -205,7 +205,7 @@ def index_pca (request,paramm='total'):
 		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
 		# v_pca = Pca.objects.filter(pk__in=my_list_winlost)
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost).filter(flagcalc=1))
 	else:
 		v_psa = ''
 
@@ -214,27 +214,63 @@ def index_pca (request,paramm='total'):
 		'list': v_pca,
 		})
 
+# def ebitdaprofitability():
+# 	avgebitda = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').aggregate(Avg('ebitda'))
+# 	datas = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').values_list('duration','otc','mrc','ebitda')
+# 	sum_tcv = sum(data[0] * data[2] + data[1] for data in datas)
+# 	sum_ebitda_weighted = 0
+# 	for data in datas:
+# 		weighted = ((data[0] * data[2]) + data[1]) / sum_tcv
+# 		ebitda_weighted = data[3] * weighted
+# 		sum_ebitda_weighted += ebitda_weighted
+# 	return [round(avgebitda['ebitda__avg'],1), round(sum_ebitda_weighted,1)]
+
 def ebitdaprofitability():
-	avgebitda = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').aggregate(Avg('ebitda'))
-	datas = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').values_list('duration','otc','mrc','ebitda')
-	sum_tcv = sum(data[0] * data[2] + data[1] for data in datas)
+	avgebitda = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).aggregate(Avg('ebitda'))
+	# sum_tcv = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').aggregate(the_sum=Coalesce(Sum('tcv'), Value(0)))['the_sum']
+	datas = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv','ebitda')
+	sum_tcv = sum(data[0] for data in datas)
 	sum_ebitda_weighted = 0
-	for data in datas:
-		weighted = ((data[0] * data[2]) + data[1]) / sum_tcv
-		ebitda_weighted = data[3] * weighted
+	for pca in datas:
+		weighted = pca[0] / sum_tcv
+		ebitda_weighted = pca[1] * weighted
 		sum_ebitda_weighted += ebitda_weighted
 	return [round(avgebitda['ebitda__avg'],1), round(sum_ebitda_weighted,1)]
 
+# def irrprofitability():
+# 	avgirr = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').aggregate(Avg('irr'))
+# 	datas = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').values_list('duration','otc','mrc','irr')
+# 	sum_tcv = sum(data[0] * data[2] + data[1] for data in datas)
+# 	sum_irr_weighted = 0
+# 	for data in datas:
+# 		weighted = ((data[0] * data[2]) + data[1]) / sum_tcv
+# 		irr_weighted = data[3] * weighted
+# 		sum_irr_weighted += irr_weighted
+# 	return [round(avgirr['irr__avg'],1), round(sum_irr_weighted,1)]
+
 def irrprofitability():
-	avgirr = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').aggregate(Avg('irr'))
-	datas = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').values_list('duration','otc','mrc','irr')
-	sum_tcv = sum(data[0] * data[2] + data[1] for data in datas)
+	avgirr = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).aggregate(Avg('irr'))
+	datas = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv','irr')
+	sum_tcv = sum(data[0] for data in datas)
 	sum_irr_weighted = 0
-	for data in datas:
-		weighted = ((data[0] * data[2]) + data[1]) / sum_tcv
-		irr_weighted = data[3] * weighted
+	for pca in datas:
+		weighted = pca[0] / sum_tcv
+		irr_weighted = pca[1] * weighted
 		sum_irr_weighted += irr_weighted
 	return [round(avgirr['irr__avg'],1), round(sum_irr_weighted,1)]
+
+# def winrate_ksaea():
+# 	my_list = []
+# 	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
+# 		my_list.append(str(pca.id))
+# 	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
+# 		my_list.append(str(pca.id))
+# 	list_ksaea_won = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='w').values_list('duration','otc','mrc')
+# 	list_ksaea_lost = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l').values_list('duration','otc','mrc')
+# 	sum_tcv_won = sum(data[0] * data[2] + data[1] for data in list_ksaea_won)
+# 	sum_tcv_lost = sum(data[0] * data[2] + data[1] for data in list_ksaea_lost)
+# 	winrate = sum_tcv_won / (sum_tcv_won + sum_tcv_lost) *100
+# 	return [round(winrate,1), sum_tcv_won, sum_tcv_lost]
 
 def winrate_ksaea():
 	my_list = []
@@ -242,12 +278,25 @@ def winrate_ksaea():
 		my_list.append(str(pca.id))
 	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
 		my_list.append(str(pca.id))
-	list_ksaea_won = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='w').values_list('duration','otc','mrc')
-	list_ksaea_lost = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l').values_list('duration','otc','mrc')
-	sum_tcv_won = sum(data[0] * data[2] + data[1] for data in list_ksaea_won)
-	sum_tcv_lost = sum(data[0] * data[2] + data[1] for data in list_ksaea_lost)
+	list_ksaea_won = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv')
+	list_ksaea_lost = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv')
+	sum_tcv_won = sum(data[0] for data in list_ksaea_won)
+	sum_tcv_lost = sum(data[0] for data in list_ksaea_lost)
 	winrate = sum_tcv_won / (sum_tcv_won + sum_tcv_lost) *100
 	return [round(winrate,1), sum_tcv_won, sum_tcv_lost]
+
+# def winrate_nonksaea():
+# 	my_list = []
+# 	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
+# 		my_list.append(str(pca.id))
+# 	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
+# 		my_list.append(str(pca.id))
+# 	list_ksaea_won = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='w').values_list('duration','otc','mrc')
+# 	list_ksaea_lost = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l').values_list('duration','otc','mrc')
+# 	sum_tcv_won = sum(data[0] * data[2] + data[1] for data in list_ksaea_won)
+# 	sum_tcv_lost = sum(data[0] * data[2] + data[1] for data in list_ksaea_lost)
+# 	winrate = sum_tcv_won / (sum_tcv_won + sum_tcv_lost) *100
+# 	return [round(winrate,1), sum_tcv_won, sum_tcv_lost]
 
 def winrate_nonksaea():
 	my_list = []
@@ -255,10 +304,10 @@ def winrate_nonksaea():
 		my_list.append(str(pca.id))
 	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
 		my_list.append(str(pca.id))
-	list_ksaea_won = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='w').values_list('duration','otc','mrc')
-	list_ksaea_lost = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l').values_list('duration','otc','mrc')
-	sum_tcv_won = sum(data[0] * data[2] + data[1] for data in list_ksaea_won)
-	sum_tcv_lost = sum(data[0] * data[2] + data[1] for data in list_ksaea_lost)
+	list_ksaea_won = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv')
+	list_ksaea_lost = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv')
+	sum_tcv_won = sum(data[0] for data in list_ksaea_won)
+	sum_tcv_lost = sum(data[0] for data in list_ksaea_lost)
 	winrate = sum_tcv_won / (sum_tcv_won + sum_tcv_lost) *100
 	return [round(winrate,1), sum_tcv_won, sum_tcv_lost]
 
@@ -267,4 +316,3 @@ def risk_criteria():
 	mr = Psa.objects.filter(risk_category='m')
 	lr = Psa.objects.filter(risk_category='l')
 	return [hr,mr,lr]
-

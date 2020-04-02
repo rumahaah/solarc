@@ -23,8 +23,9 @@
 									<li><a href="{% url 'preproject'%}">ALL OPPTY</a></li>
 									<li><a href="{% url 'preproject'%}/progresssa">PROGRESS</a></li>
 									<li><a href="{% url 'preproject'%}/submited">SUBMITED</a></li>
-									<li><a href="{% url 'preproject'%}/closewon">CLOSE WON</a></li>
-									<li><a href="{% url 'preproject'%}/closelost">CLOSE LOST</a></li>
+									<li><a href="{% url 'opptywon'%}">CLOSE WON</a></li>
+									<li><a href="{% url 'opptylost'%}">CLOSE LOST</a></li>
+									<li><a href="{% url 'detail'%}">DETAIL</a></li>
 								</ul>
 							</div>
 						<li >
@@ -52,7 +53,8 @@
 							</div>
 						</li>
 						</li>
-						{% block filter %}{% endblock %}
+						<li><a href="{% url 'handover'%}">Handover</a></li>
+						</li>
 					</ul>
 				</div>
 				<div class="uk-navbar-right">
@@ -78,5 +80,31 @@
 		
 		<script src="{% static 'js/uikit.min.js' %}"></script>
 		<script src="{% static 'js/uikit-icons.min.js' %}"></script>
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+		<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+		<!-- https://github.com/rainabba/jquery-table2excel -->
+		<script>
+            $(function() {
+                $(".exportToExcel").click(function(e){
+                    var table = $(this).prev('.table2excel');
+                    if(table && table.length){
+                        var preserveColors = (table.hasClass('table2excel_with_colors') ? true : false);
+                        $(table).table2excel({
+                            exclude: ".noExl",
+                            name: "Excel Document Name",
+                            {% block scriptexportexcel %}{% endblock %}
+                            fileext: ".xls",
+                            exclude_img: true,
+                            exclude_links: true,
+                            exclude_inputs: true,
+                            preserveColors: preserveColors
+                        });
+                    }
+                });
+                
+            });
+        </script>
+		
 </body>
 </html>

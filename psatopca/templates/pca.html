@@ -1,8 +1,8 @@
 {% extends "base_psapca.html" %}{% load widget_tweaks %}{% load psapca_extras %}{% load humanize %}{% block title %}PCA | SolArc{% endblock %}
-{% block filter %}{% endblock %}
 {% block content %}
 <div class="uk-container">
-    <table class="uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size:70%;">
+    <!-- <button onclick="exportTableToExcel('tblData', 'pca')" class="uk-button uk-button-small uk-button-primary">Export To Excel</button> -->
+    <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size:70%;">
     <!-- <table class="uk-table uk-table-small uk-text-small uk-table-divider"> -->
         <thead>
             <tr>
@@ -19,13 +19,13 @@
                 <th class="uk-table-middle">Ebitda</th>
                 <th class="uk-table-middle">IRR</th>
                 <th class="uk-table-middle">TCV</th>
-                {% if request.user.is_staff %}<th class="uk-table-middle">Edit</th>{% endif %}
+                {% if request.user.is_staff %}<th class="noExl uk-table-middle">Edit</th>{% endif %}
             </tr>
-            <tr>
+            <tr class="noExl">
                 <form method="get">
                     <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__oppty__customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
-                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__oppty__project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <!-- <th class="uk-table-middle">{% render_field list.form.psa__preproject__progress class="uk-select uk-form-small" %}</th> -->
                     <th class="uk-table-middle">
                         <select name="psa__preproject__progress" id="id_psa__preproject__progress" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
@@ -80,11 +80,13 @@
                 <td>{% for sa in pca.psa.preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> 
                 <td>{{pca.ebitda}}%</td> 
                 <td>{{pca.irr}}%</td> 
-                <td>{% totalcontracvalue pca.mrc pca.otc pca.duration %}</td> 
-                {% if request.user.is_staff %}<td><a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a>{% endif %} </td> 
+                <td>{% rupiah pca.tcv %}</td> 
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a> | <a href="/admin/psatopca/psa/{{pca.psa_id}}/change/" target="_blank" class="">PSA</a></td>{% endif %} 
 
             </tr>
         </tbody>{% endfor %}
     </table>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
 </div>
 {% endblock %}
+{% block scriptexportexcel %}filename: "Export PCA" + ".xls",{% endblock %}

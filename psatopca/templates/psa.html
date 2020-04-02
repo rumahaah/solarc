@@ -1,8 +1,7 @@
 {% extends "base_psapca.html" %}{% load widget_tweaks %}{% block title %}PSA | SolArc{% endblock %}
-{% block filter %}{% endblock %}
 {% block content %}
 <div class="uk-container">
-    <table class="uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
+    <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
     <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider uk-margin-remove"> -->
     <!-- <table class="uk-table uk-table-small uk-table-divider" style="font-size: 70%;"> -->
         <!-- <caption>PSA {{ list.count }}</caption> -->
@@ -20,14 +19,14 @@
                 <th class="uk-table-middle">SA</th>
                 <th class="uk-table-middle">RISK</th>
                 <th class="uk-table-middle">PCA</th>
-                {% if request.user.is_staff %}<th class="uk-table-middle">Edit</th>{% endif %}
+                {% if request.user.is_staff %}<th class="noExl uk-table-middle">Edit</th>{% endif %}
             </tr>
-            <tr>
+            <tr class="noExl">
                 <form method="get" class="">
                     <th class="uk-table-middle"></th>
                     <!-- <th class="uk-table-middle"></th> -->
-                    <th class="uk-table-middle">{% render_field list.form.preproject__oppty__customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
-                    <th class="uk-table-middle">{% render_field list.form.preproject__oppty__project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.preproject__customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.preproject__project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
                     <!-- <th class="uk-table-middle">{% render_field list.form.pss_ho_date class="uk-select uk-form-small" %}</th> -->
@@ -79,9 +78,11 @@
                 <td>{% for sa in psa.preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> 
                 {% if psa.risk_category == 'm' %}<td class="uk-text-bold uk-text-primary">M</td>{% elif psa.risk_category == 'h' %}<td class="uk-text-bold uk-text-danger">H</td>{% elif psa.risk_category == 'l' %}<td class="uk-text-bold uk-text-success">L</td>{% else %}<td class="uk-text-bold">n/a</td>{% endif %}
                 <td>{% for pca in psa.pca_set.all %}{{pca.pca_date}}{% endfor %}</td> 
-                {% if request.user.is_staff %}<td><a href="/admin/psatopca/psa/{{psa.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a>{% endif %} </td> 
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/psatopca/psa/{{psa.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a>{% endif %} </td> 
             </tr>
         </tbody>{% endfor %}
     </table>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
 </div>
 {% endblock %}
+{% block scriptexportexcel %}filename: "Export PSA" + ".xls",{% endblock %}

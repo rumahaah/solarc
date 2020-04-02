@@ -1,6 +1,6 @@
 {% extends "base_psapca.html" %}% load widget_tweaks %}{% load preproject_extras %}{% load humanize %}{% block title %}Preproject Opportunity | SolArc{% endblock %}{% block content %}
 <div class="uk-container">
-    <table class="uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 60%;">
+    <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 60%;">
     <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
     <!-- <caption>PSA {{ list.count }}</caption> -->
         <thead>
@@ -22,7 +22,7 @@
                 <th class="uk-table-middle" style="font-size: 100%;">Durations</th>
                 <th class="uk-table-middle" style="font-size: 100%;">ACV</th>
                 <th class="uk-table-middle" style="font-size: 100%;">TCV</th>
-                <th class="uk-table-middle" style="font-size: 100%;">Edit</th>
+                {% if request.user.is_staff %}<th class="noExl uk-table-middle" style="font-size: 100%;">Edit</th>{% endif %}
             </tr>
         </thead>
 
@@ -55,28 +55,11 @@
                     {% endfor %}
                 </td>
                 <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.tcv %}{% endif %}{% endfor %}{% endfor %}</td>
-<!--                 <td>
-                    {% for psa in preproject.psa_set.all %}
-                        {% for pca in psa.pca_set.all %}
-                            {% if pca.flagcalc == 1 %}
-                                {% totalcontracvalue pca.mrc pca.otc pca.duration %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                </td> -->
-                <td></td>
-                {% if request.user.is_staff %}<td><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Preproject</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Preproject</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
             </tr>
         </tbody>{% endfor %}
     </table>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
 </div>
 {% endblock %}
-
-                <!-- <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td> 
-                <td>{% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %}</td> 
-                <td><span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td>  -->
-
-                <!-- <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %} | {% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %} | <span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td>  -->
-
-                <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date|date:'n'}}|{% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n'%}{% endfor %}{% endfor %}{% endfor %}</td> -->
-                <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{% annualcontracvalue pca.mrc pca.otc ho.po_known_date|date:'n' %}{% endfor %}{% endfor %}{% endfor %}</td> -->
+{% block scriptexportexcel %}filename: "Export Preproject Won or Lost" + ".xls",{% endblock %}

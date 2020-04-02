@@ -2,7 +2,7 @@
 {% block filter %}{% endblock %}
 {% block content %}
 <div class="uk-container">
-    <table class="uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
+    <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
     <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
     <!-- <caption>PSA {{ list.count }}</caption> -->
         <thead>
@@ -20,6 +20,7 @@
                 <th class="uk-table-middle">Preproject Progress</th>
                 <th class="uk-table-middle">Problem Category</th>
                 <th class="uk-table-middle">TCV</th>
+                {% if request.user.is_staff %}<th class="noExl uk-table-middle">Edit</th>{% endif %}
             </tr>
             <tr>
                 <form method="get" class="">
@@ -42,13 +43,12 @@
         </thead>
         <tbody>{% for ho in list.qs %} 
             <tr> 
-            	<td>{{ forloop.counter }}</td> 
+            	<td>{{ forloop.counter }}</td>
                 <td>{% for customer in ho.pca.psa.preproject.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
                 <td>{{ho.pca.psa.preproject.project_name}}</td> 
-                <td>{% for sa in ho.pca.psa.preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> 
-                <td>{% for pss in ho.pca.psa.preproject.pss_lintasarta.all %}{{ pss.name }}{% endfor %}</td> 
-                <!-- <td>{{ho.sales_lintasarta.initial}}</td>  -->
-                <td>{{ho.pca.psa.preproject.sales_lintasarta.name}}</td> 
+                <td>{% for sa in ho.pca.psa.preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td>
+                <td>{% for pss in ho.pca.psa.preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %}</td> 
+                <td><span uk-tooltip="title:{{ho.pca.psa.preproject.sales_lintasarta.name}}; delay:250">{{ho.pca.psa.preproject.sales_lintasarta.initial}}</span></td>
             	<td>{{ho.po_date}}</td> 
             	<td>{{ho.po_known_date}}</td> 
                 <td>{{ho.submit_doc_projectcharter_date}}</td> 
@@ -56,9 +56,12 @@
                 <td>{% if ho.pca.psa.preproject.progress == 'w' %}Close Won{% elif ho.pca.psa.preproject.progress == 'l' %}Close Lost{% elif ho.pca.psa.preproject.progress == 'p' %}Progress - Internal SA{% elif ho.pca.psa.preproject.progress == 's' %}Progress - Submited{% elif ho.pca.psa.preproject.progress == 'c' %}Cacncelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
                 <!-- <td>{{ho.problem_category}}</td>  -->
                 <td>{% if ho.problem_category == 'n-pr' %}No Problem - Fulfilled{% elif ho.problem_category == 'e-sc'%}External - Scope Change{% elif ho.problem_category == 'e-rn'%}External - Renewal Process{% elif ho.problem_category == 'e-po'%}External - Conduct PSA After PO{% elif ho.problem_category == 'e-pr'%}External - Custom Product{% elif ho.problem_category == 'i-pc'%}Internal - PCA Form{% elif ho.problem_category == 'i-de'%}Internal - Delay to HO{% else %}TES{% endif %}</td>
-                <td>{% totalcontracvalue ho.pca.mrc ho.pca.otc ho.pca.duration %}</td> 
+                <td>{% rupiah ho.pca.tcv %}</td>
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/handover/handover/{{ho.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a></td>{% endif %} 
             </tr>
         </tbody>{% endfor %}
     </table>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
 </div>
 {% endblock %}
+{% block scriptexportexcel %}filename: "Export Handover" + ".xls",{% endblock %}
