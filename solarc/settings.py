@@ -157,3 +157,4 @@ STATIC_URL = '/static/'
 LOGOUT_REDIRECT_URL = '/'
 
 # django_heroku.settings(locals())
+# SECURE_SSL_REDIRECT = True

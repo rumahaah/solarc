@@ -7,20 +7,20 @@
     <!-- <caption>PSA {{ list.count }}</caption> -->
         <thead>
             <tr>
-                <th class="uk-table-middle">No</th>
-                <th class="uk-table-middle">Customer Name</th>
-                <th class="uk-table-middle">Project Name</th>
-                <th class="uk-table-middle">SA</th>
-                <th class="uk-table-middle">PSS</th>
-                <th class="uk-table-middle">Sales</th>
-                <th class="uk-table-middle">PO Date</th>
-                <th class="uk-table-middle">PO Known Date</th>
-                <th class="uk-table-middle">Submit Project Charter PMOIS Date</th>
-                <th class="uk-table-middle">Submit Presales HO PMOIS Date</th>
-                <th class="uk-table-middle">Preproject Progress</th>
-                <th class="uk-table-middle">Problem Category</th>
-                <th class="uk-table-middle">TCV</th>
-                {% if request.user.is_staff %}<th class="noExl uk-table-middle">Edit</th>{% endif %}
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">No</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Name</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Project Name</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">SA</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PSS</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Sales</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PO Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PO Known Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Submit Project Charter PMOIS Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Submit Presales HO PMOIS Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Preproject Progress</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Problem Category</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">TCV</th>
+                {% if request.user.is_staff %}<th class="noExl uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Edit</th>{% endif %}
             </tr>
             <tr>
                 <form method="get" class="">
@@ -35,7 +35,17 @@
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle">{% render_field list.form.problem_category class="uk-select uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle"><select name="problem_category" class="uk-select uk-form-small" id="id_problem_category" style="width: 35px;font-size: 80%;">
+                      <option value=""></option>
+                      <option value="n-pr" {%if request.GET.problem_category == 'n-pr'%} selected {%endif%}>No Problem - Fulfilled</option>
+                      <option value="e-sc" {%if request.GET.problem_category == 'e-sc'%} selected {%endif%}>External - Scope Change</option>
+                      <option value="e-rn" {%if request.GET.problem_category == 'e-rn'%} selected {%endif%}>External - Renewal Process</option>
+                      <option value="e-po" {%if request.GET.problem_category == 'e-po'%} selected {%endif%}>External - Conduct PSA After PO</option>
+                      <option value="e-pr" {%if request.GET.problem_category == 'e-pr'%} selected {%endif%}>External - Custom Product</option>
+                      <option value="i-pc" {%if request.GET.problem_category == 'i-pc'%} selected {%endif%}>Internal - PCA Form</option>
+                      <option value="i-de" {%if request.GET.problem_category == 'i-de'%} selected {%endif%}>Internal - Delay to HO</option>
+                    </select></th>
+                    <!-- <th class="uk-table-middle">{% render_field list.form.problem_category class="uk-select uk-form-width-xsmall uk-form-small" %}</th> -->
                     <th class="uk-table-middle"></th>
                     <button type="submit" hidden="">Search</button>
                 </form>
@@ -46,7 +56,7 @@
             	<td>{{ forloop.counter }}</td>
                 <td>{% for customer in ho.pca.psa.preproject.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
                 <td>{{ho.pca.psa.preproject.project_name}}</td> 
-                <td>{% for sa in ho.pca.psa.preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td>
+                <td>{% for sa in ho.pca.psa.preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.initial}}; delay:250">{{sa.name}}</span>{% endfor %}</td>
                 <td>{% for pss in ho.pca.psa.preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %}</td> 
                 <td><span uk-tooltip="title:{{ho.pca.psa.preproject.sales_lintasarta.name}}; delay:250">{{ho.pca.psa.preproject.sales_lintasarta.initial}}</span></td>
             	<td>{{ho.po_date}}</td> 

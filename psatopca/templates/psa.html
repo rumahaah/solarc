@@ -7,19 +7,19 @@
         <!-- <caption>PSA {{ list.count }}</caption> -->
         <thead>
             <tr>
-                <th class="uk-table-middle">No</th>
-                <th class="uk-table-middle">Customer Name</th>
-                <th class="uk-table-middle">Project Name</th>
-                <th class="uk-table-middle">Preproject Status</th>
-                <th class="uk-table-middle">PSA Date</th>
-                <th class="uk-table-middle">PSS HO Date</th>
-                <th class="uk-table-middle">PSA Status</th>
-                <th class="uk-table-middle">PSS</th>
-                <th class="uk-table-middle">SALES</th>
-                <th class="uk-table-middle">SA</th>
-                <th class="uk-table-middle">RISK</th>
-                <th class="uk-table-middle">PCA</th>
-                {% if request.user.is_staff %}<th class="noExl uk-table-middle">Edit</th>{% endif %}
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">No</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Name</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Project Name</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Preproject Status</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PSA Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PSS HO Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PSA Status</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PSS</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">SALES</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">SA</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">RISK</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PCA</th>
+                {% if request.user.is_staff %}<th class="noExl uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Edit</th>{% endif %}
             </tr>
             <tr class="noExl">
                 <form method="get" class="">
@@ -40,7 +40,7 @@
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle">{% render_field list.form.preproject__pss_lintasarta__name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.preproject__sales_lintasarta__name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
-                    <th class="uk-table-middle">{% render_field list.form.preproject__sa_lintasarta__name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.preproject__sa_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <!-- <th class="uk-table-middle">{% render_field list.form.risk_category class="uk-select uk-form-small" %}</th> -->
                     <th class="uk-table-middle">
                         <select name="risk_category" id="id_risk_category" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
@@ -73,9 +73,9 @@
             	<td>{{psa.psa_date}}</td> 
             	<td>{{psa.pss_ho_date}}</td> 
                 <td>{% if psa.status_psa == 'g' %}GO{% elif psa.status_psa == 'h' %}HOLD{% else %}NOT GO{% endif %}</td>
-                <td>{% for pss in psa.preproject.pss_lintasarta.all %}{{ pss.name }}{% endfor %}</td> 
-                <td>{{psa.preproject.sales_lintasarta.name}} </td> 
-                <td>{% for sa in psa.preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> 
+                <td>{% for pss in psa.preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.initial}}; delay:250">{{ pss.name }}</span>{% endfor %}</td> 
+                <td><span uk-tooltip="title:{{psa.preproject.sales_lintasarta.initial}}; delay:250">{{psa.preproject.sales_lintasarta.name}}</span></td>
+                <td>{% for sa in psa.preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td>
                 {% if psa.risk_category == 'm' %}<td class="uk-text-bold uk-text-primary">M</td>{% elif psa.risk_category == 'h' %}<td class="uk-text-bold uk-text-danger">H</td>{% elif psa.risk_category == 'l' %}<td class="uk-text-bold uk-text-success">L</td>{% else %}<td class="uk-text-bold">n/a</td>{% endif %}
                 <td>{% for pca in psa.pca_set.all %}{{pca.pca_date}}{% endfor %}</td> 
                 {% if request.user.is_staff %}<td class="noExl"><a href="/admin/psatopca/psa/{{psa.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a>{% endif %} </td> 

@@ -80,9 +80,22 @@ def opptylost (request):
 	})
 
 @login_required
-def detail (request,paramm='all'):
+def detail (request,paramm='n'):
 	if paramm == 'n':
-		v_list = Preproject.objects.filter(sa_lintasarta__initial='')
+		v_list = ''
+		v_total_psa = ''
+		v_total_pca = ''
+		v_total_psa_l = ''
+		v_total_psa_m = ''
+		v_total_psa_s = ''
+		v_total_psa_hr = ''
+		v_total_psa_mr = ''
+		v_total_psa_lr = ''
+		tittle = ''
+		v_total_won = ''
+		v_total_lost = ''
+		v_total_progress = ''
+		v_total_cancelled = ''
 	elif paramm == 'sa1':
 		v_list = Preproject.objects.filter(sa_lintasarta__subbag='1').order_by('sa_lintasarta__initial')
 		v_total_psa = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').count()
@@ -94,6 +107,10 @@ def detail (request,paramm='all'):
 		v_total_psa_mr = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').filter(risk_category='m').count()
 		v_total_psa_lr = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').filter(risk_category='l').count()
 		tittle = 'SA 1'
+		v_total_won = Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='w').count()
+		v_total_lost = Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='l').count()
+		v_total_progress = Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='p').count() + Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='s').count()
+		v_total_cancelled = Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='c').count() + Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='h').count()
 	elif paramm == 'sa2':
 		v_list = Preproject.objects.filter(sa_lintasarta__subbag='2').order_by('sa_lintasarta__initial')
 		v_total_psa = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').count()
@@ -105,6 +122,10 @@ def detail (request,paramm='all'):
 		v_total_psa_mr = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').filter(risk_category='m').count()
 		v_total_psa_lr = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').filter(risk_category='l').count()
 		tittle = 'SA 2'
+		v_total_won = Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='w').count()
+		v_total_lost = Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='l').count()
+		v_total_progress = Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='p').count() + Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='s').count()
+		v_total_cancelled = Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='c').count() + Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='h').count()
 	elif paramm == 'all':
 		v_list = Preproject.objects.order_by('sa_lintasarta__initial')
 		v_total_psa = Psa.objects.count()
@@ -116,6 +137,10 @@ def detail (request,paramm='all'):
 		v_total_psa_mr = Psa.objects.filter(risk_category='m').count()
 		v_total_psa_lr = Psa.objects.filter(risk_category='l').count()
 		tittle = 'ALL'
+		v_total_won = Preproject.objects.filter(progress='w').count()
+		v_total_lost = Preproject.objects.filter(progress='l').count()
+		v_total_progress = Preproject.objects.filter(progress='p').count() + Preproject.objects.filter(progress='s').count()
+		v_total_cancelled = Preproject.objects.filter(progress='c').count() + Preproject.objects.filter(progress='h').count()
 	else:
 		v_list = Preproject.objects.filter(sa_lintasarta__initial=paramm)
 		v_total_psa = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).count()
@@ -127,6 +152,10 @@ def detail (request,paramm='all'):
 		v_total_psa_mr = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).filter(risk_category='m').count()
 		v_total_psa_lr = Psa.objects.filter(preproject__sa_lintasarta__initial=paramm).filter(risk_category='l').count()
 		tittle = paramm
+		v_total_won = Preproject.objects.filter(sa_lintasarta__initial=paramm).filter(progress='w').count()
+		v_total_lost = Preproject.objects.filter(sa_lintasarta__initial=paramm).filter(progress='l').count()
+		v_total_progress = Preproject.objects.filter(sa_lintasarta__initial=paramm).filter(progress='p').count() + Preproject.objects.filter(sa_lintasarta__initial=paramm).filter(progress='s').count()
+		v_total_cancelled = Preproject.objects.filter(sa_lintasarta__initial=paramm).filter(progress='c').count() + Preproject.objects.filter(sa_lintasarta__initial=paramm).filter(progress='h').count()
 
 	# return render(request, 'preproject_detailpersa.html',{
 	return render(request, 'preproject_detailpersa_accordion.html',{
@@ -140,6 +169,9 @@ def detail (request,paramm='all'):
 		'totalpsa_mr': v_total_psa_mr,
 		'totalpsa_lr': v_total_psa_lr,
 		'tittle': tittle,
+		'totalwon': v_total_won,
+		'totalprogress': v_total_progress,
+		'totalcancelled': v_total_cancelled,
 	})
 
 

@@ -44,26 +44,35 @@
             <div class="uk-card uk-card-default uk-card-body">
                 <ul class="uk-list">
                     <li>Oppty: {{list.count}}</li>
-                    <li>Total PSA: {{totalpsa}}</li>
-                    <li>Total PCA: {{totalpca}}</li>
+                    <li>PSA: {{totalpsa}}</li>
+                    <li>PCA: {{totalpca}}</li>
                 </ul>
             </div>
         </div>
         <div>
             <div class="uk-card uk-card-default uk-card-body">
                 <ul class="uk-list">
-                    <li>Oppty Large: {{totalpsa_l}}</li>
-                    <li>Oppty Medium: {{totalpsa_m}}</li>
-                    <li>Oppty Small: {{totalpsa_s}}</li>
+                    <li>Won: {{totalwon}} | Lost: {{totalpsa_mr}}</li>
+                    <li>Progress & Submitted: {{totalprogress}}</li>
+                    <li>Cancelled & PSA Hold: {{totalcancelled}}</li>
                 </ul>
             </div>
         </div>
         <div>
             <div class="uk-card uk-card-default uk-card-body">
                 <ul class="uk-list">
-                    <li>Oppty High Risk: {{totalpsa_hr}}</li>
-                    <li>Oppty Medium Risk: {{totalpsa_mr}}</li>
-                    <li>Oppty Low Risk: {{totalpsa_lr}}</li>
+                    <li>Large: {{totalpsa_l}}</li>
+                    <li>Medium: {{totalpsa_m}}</li>
+                    <li>Small: {{totalpsa_s}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="uk-card uk-card-default uk-card-body">
+                <ul class="uk-list">
+                    <li>High Risk: {{totalpsa_hr}}</li>
+                    <li>Medium Risk: {{totalpsa_mr}}</li>
+                    <li>Low Risk: {{totalpsa_lr}}</li>
                 </ul>
             </div>
         </div>
