@@ -25,7 +25,7 @@ class Psafilter(django_filters.FilterSet):
 class Pcafilter(django_filters.FilterSet):
     psa__preproject__customer__customer_name = django_filters.CharFilter(lookup_expr='icontains')
     psa__preproject__project_name = django_filters.CharFilter(lookup_expr='icontains')
-    psa__preproject__sa_lintasarta__name = django_filters.CharFilter(lookup_expr='icontains')
+    psa__preproject__sa_lintasarta__initial = django_filters.CharFilter(lookup_expr='icontains')
     psa__pss_ho_date = django_filters.BooleanFilter(field_name='psa__pss_ho_date', lookup_expr='isnull', exclude=True)
 
     class Meta:
@@ -33,7 +33,7 @@ class Pcafilter(django_filters.FilterSet):
         fields = [
                     'psa__preproject__customer__customer_name',
                     'psa__preproject__project_name',
-                    'psa__preproject__sa_lintasarta__name',
+                    'psa__preproject__sa_lintasarta__initial',
                     'psa__preproject__progress',
                     'psa__pss_ho_date',
                     'psa__status_psa',

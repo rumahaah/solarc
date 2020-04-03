@@ -37,15 +37,16 @@
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"><select name="problem_category" class="uk-select uk-form-small" id="id_problem_category" style="width: 35px;font-size: 80%;">
                       <option value=""></option>
-                      <option value="n-pr" {%if request.GET.problem_category == 'n-pr'%} selected {%endif%}>No Problem - Fulfilled</option>
-                      <option value="e-sc" {%if request.GET.problem_category == 'e-sc'%} selected {%endif%}>External - Scope Change</option>
-                      <option value="e-rn" {%if request.GET.problem_category == 'e-rn'%} selected {%endif%}>External - Renewal Process</option>
-                      <option value="e-po" {%if request.GET.problem_category == 'e-po'%} selected {%endif%}>External - Conduct PSA After PO</option>
-                      <option value="e-pr" {%if request.GET.problem_category == 'e-pr'%} selected {%endif%}>External - Custom Product</option>
-                      <option value="i-pc" {%if request.GET.problem_category == 'i-pc'%} selected {%endif%}>Internal - PCA Form</option>
-                      <option value="i-de" {%if request.GET.problem_category == 'i-de'%} selected {%endif%}>Internal - Delay to HO</option>
+                      <option value="n-pr" {%if request.GET.problem_category == 'n-pr'%} selected {%endif%}>Fulfilled</option>
+                      <option value="e-sc" {%if request.GET.problem_category == 'e-sc'%} selected {%endif%}>E - Scope Change</option>
+                      <option value="e-rn" {%if request.GET.problem_category == 'e-rn'%} selected {%endif%}>E - Renewal Process</option>
+                      <option value="e-po" {%if request.GET.problem_category == 'e-po'%} selected {%endif%}>E - Conduct PSA After PO</option>
+                      <option value="e-pr" {%if request.GET.problem_category == 'e-pr'%} selected {%endif%}>E - Custom Product</option>
+                      <option value="i-pc" {%if request.GET.problem_category == 'i-pc'%} selected {%endif%}>I - PCA Form</option>
+                      <option value="i-de" {%if request.GET.problem_category == 'i-de'%} selected {%endif%}>I - Delay to HO</option>
                     </select></th>
                     <!-- <th class="uk-table-middle">{% render_field list.form.problem_category class="uk-select uk-form-width-xsmall uk-form-small" %}</th> -->
+                    <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
                     <button type="submit" hidden="">Search</button>
                 </form>

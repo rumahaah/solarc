@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% block title %}Dashboard | SolArc{% endblock %}{% block content %}
+{% extends "base_dashboard.html" %}{% block title %}Dashboard | SolArc{% endblock %}{% block content %}
 <!-- CONTENT -->
 <div id="content" uk-height-viewport="expand: true">
 	<div class="uk-container uk-container-expand">
@@ -60,8 +60,8 @@
 					<span data-uk-icon="icon:heart" class="uk-margin-small-right uk-text-primary"></span>Win, Lost & Handover
 				</span>
 				<h1 class="uk-heading-primary uk-margin-remove  uk-text-primary">
-					<a href="{% url 'preproject' %}/closewon">{{won_prepro}}<span class="uk-text-small"> Win</span></a>
-					<a href="{% url 'preproject' %}/closelost">{{lost_prepro}}<span class="uk-text-small"> Lost</span></a>
+					<a href="{% url 'opptywon'%}">{{won_prepro}}<span class="uk-text-small"> Win</span></a>
+					<a href="{% url 'opptylost'%}">{{lost_prepro}}<span class="uk-text-small"> Lost</span></a>
 					<a href="{% url 'handover' %}">{{handover}}<span class="uk-text-small"> Total HO</span></a>
 					<a class="uk-text-danger" href="{% url 'handover' %}/more2wdpoknowndate">{{len_ho_more_than_2wd_from_po_known_date}}<span class="uk-text-small"> HO > 2WD</span></a>
 				</h1>

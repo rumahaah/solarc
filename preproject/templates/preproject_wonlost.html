@@ -1,28 +1,28 @@
 {% extends "base_psapca.html" %}% load widget_tweaks %}{% load preproject_extras %}{% load humanize %}{% block title %}Preproject Opportunity | SolArc{% endblock %}{% block content %}
 <div class="uk-container">
-    <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 60%;">
+    <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 65%;">
     <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
     <!-- <caption>PSA {{ list.count }}</caption> -->
         <thead>
             <tr>
-                <th class="uk-table-middle" style="font-size: 100%;">No</th>
-                <th class="uk-table-middle" style="font-size: 100%;">Customer Name</th>
-                <th class="uk-table-middle" style="font-size: 100%;">Project Name</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">No</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Name</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Project Name</th>
                 <!-- <th class="uk-table-middle">SA | PSS | Sales</th> -->
-                <th class="uk-table-middle" style="font-size: 100%;">SA</th>
-                <th class="uk-table-middle" style="font-size: 100%;">PSS</th>
-                <th class="uk-table-middle" style="font-size: 100%;">SALES</th>
-                <th class="uk-table-middle" style="font-size: 100%;">Progress</th>
-                <th class="uk-table-middle" style="font-size: 100%;">Payment Type</th>
-                <th class="uk-table-middle" style="font-size: 100%;">PCA Date</th>
-                <th class="uk-table-middle" style="font-size: 100%;">HO Known Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">SA</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PSS</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">SALES</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Prog</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Payment Type</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PCA Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">HO Known Date</th>
                 <!-- <th class="uk-table-middle">MRC | OTC | Durations</th> -->
-                <th class="uk-table-middle" style="font-size: 100%;">MRC</th>
-                <th class="uk-table-middle" style="font-size: 100%;">OTC</th>
-                <th class="uk-table-middle" style="font-size: 100%;">Durations</th>
-                <th class="uk-table-middle" style="font-size: 100%;">ACV</th>
-                <th class="uk-table-middle" style="font-size: 100%;">TCV</th>
-                {% if request.user.is_staff %}<th class="noExl uk-table-middle" style="font-size: 100%;">Edit</th>{% endif %}
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">MRC</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">OTC</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Dur</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">ACV</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">TCV</th>
+                {% if request.user.is_staff %}<th class="noExl uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Edit</th>{% endif %}
             </tr>
         </thead>
 
@@ -55,7 +55,7 @@
                     {% endfor %}
                 </td>
                 <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.tcv %}{% endif %}{% endfor %}{% endfor %}</td>
-                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Preproject</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Prepro</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
             </tr>
         </tbody>{% endfor %}
     </table>

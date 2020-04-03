@@ -57,7 +57,7 @@
                     </th>
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__sa_lintasarta__name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.psa__preproject__sa_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.ebitda class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.irr class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle"></th>
@@ -77,11 +77,12 @@
             	<td>{{pca.psa.pss_ho_date}}</td> 
                 <td>{{pca.pca_date}}</td> 
                 <td>{% if pca.status_pca == 'g' %}APPROVED{% elif pca.status_pca == 'h' %}HOLD{% else %}NOT GO{% endif %}</td>
-                <td>{% for sa in pca.psa.preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> 
+                <!-- <td>{% for sa in pca.psa.preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> -->
+                <td>{% for sa in pca.psa.preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td>
                 <td>{{pca.ebitda}}%</td> 
                 <td>{{pca.irr}}%</td> 
                 <td>{% rupiah pca.tcv %}</td> 
-                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a> | <a href="/admin/psatopca/psa/{{pca.psa_id}}/change/" target="_blank" class="">PSA</a></td>{% endif %} 
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>|<a href="/admin/psatopca/psa/{{pca.psa_id}}/change/" target="_blank" class="">PSA</a></td>{% endif %} 
 
             </tr>
         </tbody>{% endfor %}
