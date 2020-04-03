@@ -1,35 +1,50 @@
-{% extends "baselogin.html" %}
-{% block head_title %}Login - SolArc{% endblock %}
-{% block style_css %}{% endblock %}
-{% block style_js %}{% endblock %}
-{% block content %}
-		<div class="uk-text-center">
-			<div class="uk-text-small uk-text-light uk-margin-small-top">
-			{% if form.errors %}
-				<span class="uk-text-danger">Your username and password didn't match. Please try again.</span>
-			{% endif %}
-			{% if next %}
-				{% if user.is_authenticated %}
-				<p class="uk-text-danger">Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
-				{% else %}
-				<p class="">Please login to see this page.</p>
-				{% endif %}
-			{% endif %}
+{% load static %}{% load widget_tweaks %}<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Login - SolArc</title>
+		<link rel="icon" href="img/favicon.ico">
+		<!-- CSS FILES -->
+		<link rel="stylesheet" type="text/css" href="{% static 'css/uikit.min.css' %}">
+	</head>
+	<body class="uk-flex uk-flex-center uk-flex-middle uk-background-muted uk-height-viewport" data-uk-height-viewport>
+		<div class="uk-position-bottom-center uk-position-small uk-visible@m uk-position-z-index">
+			<span class="uk-text-small uk-text-muted">© 2020 | Created with smile</span>
+		</div>
+		<div class="uk-width-medium uk-padding-small">
+			<!-- login -->
+			<form class="toggle-class" method="post" action="{% url 'login' %}">{% csrf_token %}
+				<fieldset class="uk-fieldset">
+					<div class="uk-margin-small">
+						<div class="uk-inline uk-width-1-1">
+							<span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: user"></span>
+							{% render_field form.username class="uk-input uk-border-pill" placeholder="Username" %}
+						</div>
+					</div>
+					<div class="uk-margin-small">
+						<div class="uk-inline uk-width-1-1">
+							<span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: lock"></span>
+							{% render_field form.password class="uk-input uk-border-pill" placeholder="Password" %}
+						</div>
+					</div>
+					<div class="uk-margin-bottom">
+						<button type="submit" class="uk-button uk-button-primary uk-border-pill uk-width-1-1">LOG IN</button>
+						<input type="hidden" name="next" value="{{ next }}">
+					</div>
+				</fieldset>
+			</form>
+			<!-- warning/error -->
+			<div class="uk-text-center">
+				<div class="uk-text-small">{% if form.errors %}
+				<p class="uk-text-danger">Your username and password didn't match. Please try again.</p>{% endif %}{% if next %}
+					{% if user.is_authenticated %}<p class="uk-text-danger">Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>{% else %}{% endif %}
+				</div>{% endif %}
 			</div>
 		</div>
-		<div class="uk-container uk-position-top-center uk-margin-large-top">
-			
-			<!-- <div class=""> -->
-				<div class="uk-panel uk-border-rounded uk-margin-small-top uk-text-center uk-button-primary" style="background: linear-gradient(to right, #444444 0%, #888888 100%);padding:9px 9px 9px 9px;"><u>S</u>ol<u>A</u>rc | Solution Architect</div>
-				<form class="" method="post" action="{% url 'login' %}">{% csrf_token %}
-					<!-- <fieldset class="uk-fsieldset"> -->
-					<p><span class="" data-uk-icon="icon: user"></span> user {{ form.username }}</p>
-					<p><span class="" data-uk-icon="icon: lock"></span> pass {{ form.password }}</p>
-					<input class="uk-width-1-1 uk-button uk-button-secondary" type="submit" value="login" style="background: linear-gradient(to left, #444444 0%, #888888 100%); border-radius: 5px;">
-					<input type="hidden" name="next" value="{{ next }}">
-					<!-- </fieldset> -->
-				</form>
-			<!-- </div> -->
-
-		</div>
-{% endblock %}
+		
+		<!-- JS FILES -->
+		<script src="{% static 'js/uikit.min.js' %}"></script>
+		<script src="{% static 'js/uikit-icons.min.js' %}"></script>
+	</body>
+</html>

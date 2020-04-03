@@ -86,7 +86,7 @@ def about(request):
 # 	return my_list
 
 @login_required
-def dashboard_home(request):
+def dashboard(request):
 	v_total_psa = Psa.objects.count()
 	v_psa_go = Psa.objects.filter(status_psa='g').count()
 	v_psa_holdnogo = Psa.objects.exclude(status_psa='g').count()
@@ -137,7 +137,7 @@ def dashboard_home(request):
 
 	# avgebitda, total_tcv = ebitdaprofitability()
 
-	return render(request, 'dashboard_home.html',{
+	return render(request, 'dashboard.html',{
 		# 'oi': psa_more_than_5wd(Psa.objects.all())[0],
 		# 'oioi': psa_more_than_5wd(Psa.objects.all())[1],
 		# 'oioioi': psa_more_than_5wd(Psa.objects.all())[2],
