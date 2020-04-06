@@ -1,9 +1,7 @@
 {% extends "base_psapca.html" %}{% load widget_tweaks %}{% load psapca_extras %}{% load humanize %}{% block title %}PCA | SolArc{% endblock %}
 {% block content %}
 <div class="uk-container">
-    <!-- <button onclick="exportTableToExcel('tblData', 'pca')" class="uk-button uk-button-small uk-button-primary">Export To Excel</button> -->
     <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size:70%;">
-    <!-- <table class="uk-table uk-table-small uk-text-small uk-table-divider"> -->
         <thead>
             <tr>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">No</th>
@@ -26,7 +24,6 @@
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle">{% render_field list.form.psa__preproject__customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.psa__preproject__project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
-                    <!-- <th class="uk-table-middle">{% render_field list.form.psa__preproject__progress class="uk-select uk-form-small" %}</th> -->
                     <th class="uk-table-middle">
                         <select name="psa__preproject__progress" id="id_psa__preproject__progress" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
                           <option></option>
@@ -39,7 +36,6 @@
                         </select>
                     </th>
                     <th class="uk-table-middle"></th>
-                    <!-- <th class="uk-table-middle">{% render_field list.form.psa__status_psa class="uk-select uk-form-small" %}</th> -->
                     <th class="uk-table-middle">
                         <select name="psa__status_psa" id="id_psa__status_psa" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
                           <option></option>
@@ -47,7 +43,6 @@
                           <option value="h" {%if request.GET.psa__status_psa == 'h'%} selected {%endif%}>HOLD</option>
                           <option value="n" {%if request.GET.psa__status_psa == 'n'%} selected {%endif%}>NOT GO</option>
                         </select></th>
-                    <!-- <th class="uk-table-middle">{% render_field list.form.psa__pss_ho_date class="uk-select uk-form-small" %}</th> -->
                     <th class="uk-table-middle">
                         <select name="psa__pss_ho_date" class="uk-select uk-form-small" id="id_psa__pss_ho_date" style="width: 35px;font-size: 80%;">
                           <option value="unknown"></option>
@@ -56,7 +51,14 @@
                         </select>
                     </th>
                     <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle">
+                        <select name="status_pca" id="id_status_pca" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value=""></option>
+                          <option value="g" {%if request.GET.status_pca == 'g'%} selected {%endif%}>GO/APPROVED</option>
+                          <option value="h" {%if request.GET.status_pca == 'h'%} selected {%endif%}>HOLD</option>
+                          <option value="n" {%if request.GET.status_pca == 'n'%} selected {%endif%}>NOT GO</option>
+                        </select>
+                    </th>
                     <th class="uk-table-middle">{% render_field list.form.psa__preproject__sa_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.ebitda class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.irr class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
@@ -72,18 +74,16 @@
                 <td>{% for customer in pca.psa.preproject.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
             	<td>{{pca.psa.preproject.project_name}}</td> 
                 <td>{% if pca.psa.preproject.progress == 'w' %}Close Won{% elif pca.psa.preproject.progress == 'l' %}Close Lost{% elif pca.psa.preproject.progress == 'p' %}Progress - Internal SA{% elif pca.psa.preproject.progress == 's' %}Progress - Submited{% elif pca.psa.preproject.progress == 'c' %}Cacncelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
-            	<td>{{pca.psa.psa_date}}</td> 
+            	<td>{{pca.psa.psa_date|date:'d-M-y'}}</td> 
                 <td>{% if pca.psa.status_psa == 'g' %}GO{% elif pca.psa.status_psa == 'h' %}HOLD{% else %}NOT GO{% endif %}</td>
-            	<td>{{pca.psa.pss_ho_date}}</td> 
-                <td>{{pca.pca_date}}</td> 
+            	<td>{{pca.psa.pss_ho_date|date:'d-M-y'}}</td> 
+                <td>{{pca.pca_date|date:'d-M-y'}}</td> 
                 <td>{% if pca.status_pca == 'g' %}APPROVED{% elif pca.status_pca == 'h' %}HOLD{% else %}NOT GO{% endif %}</td>
-                <!-- <td>{% for sa in pca.psa.preproject.sa_lintasarta.all %}{{ sa.name }}{% endfor %}</td> -->
                 <td>{% for sa in pca.psa.preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td>
                 <td>{{pca.ebitda}}%</td> 
                 <td>{{pca.irr}}%</td> 
                 <td>{% rupiah pca.tcv %}</td> 
                 {% if request.user.is_staff %}<td class="noExl"><a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>|<a href="/admin/psatopca/psa/{{pca.psa_id}}/change/" target="_blank" class="">PSA</a></td>{% endif %} 
-
             </tr>
         </tbody>{% endfor %}
     </table>

@@ -19,7 +19,8 @@ class Psafilter(django_filters.FilterSet):
                     'preproject__sales_lintasarta__name',
                     'preproject__sa_lintasarta__initial',
                     'risk_category',
-                    'pss_ho_date'
+                    'pss_ho_date',
+                    'status_psa'
                     ]
 
 class Pcafilter(django_filters.FilterSet):
@@ -38,5 +39,6 @@ class Pcafilter(django_filters.FilterSet):
                     'psa__pss_ho_date',
                     'psa__status_psa',
                     'ebitda',
-                    'irr'
+                    'irr',
+                    'status_pca'
                     ]

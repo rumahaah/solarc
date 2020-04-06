@@ -34,7 +34,6 @@
 								<ul class="uk-nav uk-navbar-dropdown-nav">
 									<li {% url 'psa' as psa_url %}{% if request.get_full_path == psa_url %} class="uk-active" {% endif %}><a href="{% url 'psa'%}">ALL PSA</a></li>
 									<li><a href="{% url 'psa'%}/go">PSA GO</a></li>
-									<!-- <li><a href="{% url 'psa'%}/go-satbc">PSA GO SA N/A</a></li> -->
 									<li><a href="{% url 'psa'%}/not">PSA NOT GO & HOLD</a></li>
 									<li><a href="{% url 'psa'%}/psa5wd">PSA 5WD</a></li>
 									<li><a href="{% url 'psa'%}/psa5wdpssho">PSA 5WD PSSHO</a></li>
@@ -77,10 +76,8 @@
 	</header>
 	<!--/HEADER-->
 		{% block content %}{% endblock %}
-		
 		<script src="{% static 'js/uikit.min.js' %}"></script>
 		<script src="{% static 'js/uikit-icons.min.js' %}"></script>
-		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
 		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
 		<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
 		<!-- https://github.com/rainabba/jquery-table2excel -->
@@ -102,9 +99,7 @@
                         });
                     }
                 });
-                
             });
         </script>
-		
 </body>
 </html>
