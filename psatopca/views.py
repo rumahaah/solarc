@@ -42,17 +42,21 @@ def psa_more_than_5wd_from_pss_ho (rawdata):
 	my_list = []
 	remove_list_b = []
 	for psa in rawdata:
-		# psa_date = psa.psa_date
-		pcas = psa.pca_set.exclude(psa__pss_ho_date__isnull=True)
+		pcas = psa.pca_set.all()
+		# pcas = psa.pca_set.exclude(psa__pss_ho_date__isnull=True)
 		calculation = numpy.busday_count(psa.psa_date,datetime.now().date())
 		if calculation >= 5:
 			my_list.append(psa.id)
 		for pca in pcas:
-			check = numpy.busday_count(psa.pss_ho_date,pca.pca_date)
-			if calculation >=5 and check <= 5:
-				remove_list_b.append(pca.psa_id)
-			a = set(remove_list_b)
-			remove_list_e = list(a)
+			if psa.pss_ho_date is None:
+				''
+			else:
+				check = numpy.busday_count(psa.pss_ho_date,pca.pca_date)
+				if calculation >=5 and check <= 5:
+					remove_list_b.append(pca.psa_id)
+				a = set(remove_list_b)
+				remove_list_e = list(a)
+
 	for apa in remove_list_e:
 		my_list.remove(apa)
 
@@ -79,53 +83,35 @@ def progressafterpca_21days (rawdata):
 @login_required
 def index_psa (request,paramm='total'):
 	if paramm == 'total':
-		aa = Psa.objects.order_by(Lower('psa_date').desc())
-		v_psa = Psafilter(request.GET, queryset=aa)
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.order_by(Lower('psa_date').desc()))
+	elif paramm == 'totalsa1':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(preproject__sa_lintasarta__subbag='1').order_by(Lower('psa_date').desc()))
+	elif paramm == 'totalsa2':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(preproject__sa_lintasarta__subbag='2').order_by(Lower('psa_date').desc()))
 	elif paramm == 'go':
-		# v_psa = Psa.objects.filter(status_psa='g').order_by(Lower('psa_date').desc())
 		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(status_psa='g').order_by(Lower('psa_date').desc()))
-	# elif paramm == 'go-satbc':
-		# v_psa = Psa.objects.filter(status_psa='g').filter(preproject__sa_lintasarta=7).order_by(Lower('psa_date').desc())
-		# v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(status_psa='g').filter(preproject__sa_lintasarta=7).order_by(Lower('psa_date').desc()))
+	elif paramm == 'gosa1':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(status_psa='g').filter(preproject__sa_lintasarta__subbag='1').order_by(Lower('psa_date').desc()))
+	elif paramm == 'gosa2':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(status_psa='g').filter(preproject__sa_lintasarta__subbag='2').order_by(Lower('psa_date').desc()))
 	elif paramm == 'not':
-		# v_psa = Psa.objects.exclude(status_psa='g').order_by(Lower('psa_date').desc())
 		v_psa = Psafilter(request.GET, queryset=Psa.objects.exclude(status_psa='g').order_by(Lower('psa_date').desc()))
+	elif paramm == 'notsa1':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.exclude(status_psa='g').filter(preproject__sa_lintasarta__subbag='1').order_by(Lower('psa_date').desc()))
+	elif paramm == 'notsa2':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.exclude(status_psa='g').filter(preproject__sa_lintasarta__subbag='2').order_by(Lower('psa_date').desc()))
 	elif paramm == 'psa5wd':
-		# a = Psa.objects.all()
-		# a = Psa.objects.filter(status_psa='g')
-		a = Psa.objects.filter(status_psa='g').exclude(preproject__progress='c')
-		b = psa_more_than_5wd(a)
-		# v_psa = Psa.objects.filter(pk__in=b).order_by(Lower('psa_date').desc())
-		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(pk__in=b).order_by(Lower('psa_date').desc()))
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(pk__in=psa_more_than_5wd(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c'))).order_by(Lower('psa_date').desc()))
+	elif paramm == 'psa5wdsa1':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(pk__in=psa_more_than_5wd(Psa.objects.filter(status_psa='g').filter(preproject__sa_lintasarta__subbag='1').exclude(preproject__progress='c'))).order_by(Lower('psa_date').desc()))
+	elif paramm == 'psa5wdsa2':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(pk__in=psa_more_than_5wd(Psa.objects.filter(status_psa='g').filter(preproject__sa_lintasarta__subbag='2').exclude(preproject__progress='c'))).order_by(Lower('psa_date').desc()))
 	elif paramm == 'psa5wdpssho':
-		# a = Psa.objects.all()
-		a = Psa.objects.filter(status_psa='g').exclude(preproject__progress='c')
-		b = psa_more_than_5wd_from_pss_ho(a)
-		# aa = Psa.objects.filter(pk__in=b).order_by(Lower('psa_date').desc())
-		# aa = Psa.objects.order_by(Lower('psa_date').desc())
-		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(pk__in=b).order_by(Lower('psa_date').desc()))
-	# elif paramm == 'psa5wdpssho-ggw':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=1))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-irs':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=2))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-mgm':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=3))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-sdr':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=4))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-tmb':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=5))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-zkf':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=6))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-wit':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=8))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-dpm':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=9))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-mbo':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=10))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-aju':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=11))).order_by(Lower('psa_date').desc())
-	# elif paramm == 'psa5wdpssho-muh':
-	# 	v_psa = Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta=12))).order_by(Lower('psa_date').desc())
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c'))).order_by(Lower('psa_date').desc()))
+	elif paramm == 'psa5wdpsshosa1':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c'))).filter(preproject__sa_lintasarta__subbag='1').order_by(Lower('psa_date').desc()))
+	elif paramm == 'psa5wdpsshosa2':
+		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c'))).filter(preproject__sa_lintasarta__subbag='2').order_by(Lower('psa_date').desc()))
 	elif paramm == 'psa5wdpssho-sa1':
 		v_psa = Psafilter(request.GET, queryset=Psa.objects.filter(pk__in=psa_more_than_5wd_from_pss_ho(Psa.objects.filter(sub_dept='sa1').filter(status_psa='g').exclude(preproject__progress='c'))).order_by(Lower('psa_date').desc()))
 	elif paramm == 'psa5wdpssho-sa2':
@@ -161,25 +147,41 @@ def index_psa (request,paramm='total'):
 @login_required
 def index_pca (request,paramm='total'):
 	if paramm == 'total':
-		# v_pca = Pca.objects.order_by(Lower('pca_date').desc())
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.order_by(Lower('pca_date').desc()))
+	elif paramm == 'totalsa1':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
+	elif paramm == 'totalsa2':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
 	elif paramm == 'go':
-		# v_pca = Pca.objects.filter(status_pca='g').order_by(Lower('pca_date').desc())
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(status_pca='g').order_by(Lower('pca_date').desc()))
+	elif paramm == 'gosa1':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(status_pca='g').filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
+	elif paramm == 'gosa2':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(status_pca='g').filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
 	elif paramm == 'not':
-		# v_pca = Pca.objects.exclude(status_pca='g').order_by(Lower('pca_date').desc())
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(status_pca='g').order_by(Lower('pca_date').desc()))
+	elif paramm == 'notsa1':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(status_pca='g').filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
+	elif paramm == 'notsa2':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(status_pca='g').filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pca21wd':
-		a = Pca.objects.filter(status_pca='g')
-		b = progressafterpca_21days(a)
-		# v_pca = Pca.objects.filter(pk__in=b).order_by(Lower('pca_date').desc())
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=b).order_by(Lower('pca_date').desc()))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=progressafterpca_21days(Pca.objects.filter(status_pca='g'))).order_by(Lower('pca_date').desc()))
+	elif paramm == 'pca21wdsa1':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=progressafterpca_21days(Pca.objects.filter(status_pca='g').filter(psa__preproject__sa_lintasarta__subbag='1'))).order_by(Lower('pca_date').desc()))
+	elif paramm == 'pca21wdsa2':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=progressafterpca_21days(Pca.objects.filter(status_pca='g').filter(psa__preproject__sa_lintasarta__subbag='2'))).order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcaebitda':
-		# v_pca = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').order_by(Lower('pca_date').desc())
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).order_by(Lower('pca_date').desc()))
+	elif paramm == 'pcaebitdasa1':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
+	elif paramm == 'pcaebitdasa2':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcairr':
-		# v_pca = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').order_by(Lower('pca_date').desc())
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).order_by(Lower('pca_date').desc()))
+	elif paramm == 'pcairrsa1':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
+	elif paramm == 'pcairrsa2':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcaksaea':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -191,8 +193,31 @@ def index_pca (request,paramm='total'):
 			my_list_winlost.append(str(pca.id))
 		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
-		# v_pca = Pca.objects.filter(pk__in=my_list_winlost)
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost).filter(flagcalc=1))
+	elif paramm == 'pcaksaeasa1':
+		my_list = []
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
+			my_list.append(str(pca.id))
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
+			my_list.append(str(pca.id))
+		my_list_winlost = []
+		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='w'):
+			my_list_winlost.append(str(pca.id))
+		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l'):
+			my_list_winlost.append(str(pca.id))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').filter(pk__in=my_list_winlost).filter(flagcalc=1))
+	elif paramm == 'pcaksaeasa2':
+		my_list = []
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
+			my_list.append(str(pca.id))
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
+			my_list.append(str(pca.id))
+		my_list_winlost = []
+		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='w'):
+			my_list_winlost.append(str(pca.id))
+		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l'):
+			my_list_winlost.append(str(pca.id))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').filter(pk__in=my_list_winlost).filter(flagcalc=1))
 	elif paramm == 'pcanonksaea':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -204,8 +229,31 @@ def index_pca (request,paramm='total'):
 			my_list_winlost.append(str(pca.id))
 		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
-		# v_pca = Pca.objects.filter(pk__in=my_list_winlost)
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost).filter(flagcalc=1))
+	elif paramm == 'pcanonksaeasa1':
+		my_list = []
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
+			my_list.append(str(pca.id))
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
+			my_list.append(str(pca.id))
+		my_list_winlost = []
+		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='w'):
+			my_list_winlost.append(str(pca.id))
+		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l'):
+			my_list_winlost.append(str(pca.id))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').filter(pk__in=my_list_winlost).filter(flagcalc=1))
+	elif paramm == 'pcanonksaeasa2':
+		my_list = []
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
+			my_list.append(str(pca.id))
+		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
+			my_list.append(str(pca.id))
+		my_list_winlost = []
+		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='w'):
+			my_list_winlost.append(str(pca.id))
+		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l'):
+			my_list_winlost.append(str(pca.id))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').filter(pk__in=my_list_winlost).filter(flagcalc=1))
 	else:
 		v_psa = ''
 
@@ -225,10 +273,12 @@ def index_pca (request,paramm='total'):
 # 		sum_ebitda_weighted += ebitda_weighted
 # 	return [round(avgebitda['ebitda__avg'],1), round(sum_ebitda_weighted,1)]
 
-def ebitdaprofitability():
-	avgebitda = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).aggregate(Avg('ebitda'))
+def ebitdaprofitability(query):
+	# avgebitda = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).aggregate(Avg('ebitda'))
+	avgebitda = query.aggregate(Avg('ebitda'))
 	# sum_tcv = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').aggregate(the_sum=Coalesce(Sum('tcv'), Value(0)))['the_sum']
-	datas = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv','ebitda')
+	# datas = Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv','ebitda')
+	datas = query.values_list('tcv','ebitda')
 	sum_tcv = sum(data[0] for data in datas)
 	sum_ebitda_weighted = 0
 	for pca in datas:
@@ -248,9 +298,11 @@ def ebitdaprofitability():
 # 		sum_irr_weighted += irr_weighted
 # 	return [round(avgirr['irr__avg'],1), round(sum_irr_weighted,1)]
 
-def irrprofitability():
-	avgirr = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).aggregate(Avg('irr'))
-	datas = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv','irr')
+def irrprofitability(query):
+	# avgirr = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).aggregate(Avg('irr'))
+	avgirr = query.aggregate(Avg('irr'))
+	# datas = Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv','irr')
+	datas = query.values_list('tcv','irr')
 	sum_tcv = sum(data[0] for data in datas)
 	sum_irr_weighted = 0
 	for pca in datas:
@@ -272,18 +324,20 @@ def irrprofitability():
 # 	winrate = sum_tcv_won / (sum_tcv_won + sum_tcv_lost) *100
 # 	return [round(winrate,1), sum_tcv_won, sum_tcv_lost]
 
-def winrate_ksaea():
-	my_list = []
-	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
-		my_list.append(str(pca.id))
-	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
-		my_list.append(str(pca.id))
-	list_ksaea_won = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv')
-	list_ksaea_lost = Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv')
+def winrate_ksaea(query):
+	# my_list = []
+	# for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
+	# 	my_list.append(str(pca.id))
+	# for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
+	# 	my_list.append(str(pca.id))
+	list_ksaea_won = query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv')
+	list_ksaea_lost = query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv')
+	list_ksaea_progress_submited = query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='p').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='p').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='s').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='s').filter(flagcalc=1).values_list('tcv')
 	sum_tcv_won = sum(data[0] for data in list_ksaea_won)
 	sum_tcv_lost = sum(data[0] for data in list_ksaea_lost)
+	sum_tcv_progress_submited = sum(data[0] for data in list_ksaea_progress_submited)
 	winrate = sum_tcv_won / (sum_tcv_won + sum_tcv_lost) *100
-	return [round(winrate,1), sum_tcv_won, sum_tcv_lost]
+	return [round(winrate,1), sum_tcv_won, sum_tcv_lost, sum_tcv_progress_submited]
 
 # def winrate_nonksaea():
 # 	my_list = []
@@ -298,18 +352,20 @@ def winrate_ksaea():
 # 	winrate = sum_tcv_won / (sum_tcv_won + sum_tcv_lost) *100
 # 	return [round(winrate,1), sum_tcv_won, sum_tcv_lost]
 
-def winrate_nonksaea():
+def winrate_nonksaea(query):
 	my_list = []
 	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
 		my_list.append(str(pca.id))
 	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
 		my_list.append(str(pca.id))
-	list_ksaea_won = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv')
-	list_ksaea_lost = Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv')
-	sum_tcv_won = sum(data[0] for data in list_ksaea_won)
-	sum_tcv_lost = sum(data[0] for data in list_ksaea_lost)
+	list_nonksaea_won = query.exclude(pk__in=my_list).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv')
+	list_nonksaea_lost = query.exclude(pk__in=my_list).filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv')
+	list_nonksaea_progress_submited = query.exclude(pk__in=my_list).filter(psa__preproject__progress='p').filter(flagcalc=1).values_list('tcv') | query.exclude(pk__in=my_list).filter(psa__preproject__progress='s').filter(flagcalc=1).values_list('tcv')
+	sum_tcv_won = sum(data[0] for data in list_nonksaea_won)
+	sum_tcv_lost = sum(data[0] for data in list_nonksaea_lost)
+	sum_tcv_progress_submited = sum(data[0] for data in list_nonksaea_progress_submited)
 	winrate = sum_tcv_won / (sum_tcv_won + sum_tcv_lost) *100
-	return [round(winrate,1), sum_tcv_won, sum_tcv_lost]
+	return [round(winrate,1), sum_tcv_won, sum_tcv_lost, sum_tcv_progress_submited]
 
 def risk_criteria():
 	hr = Psa.objects.filter(risk_category='h')

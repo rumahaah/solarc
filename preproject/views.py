@@ -17,15 +17,15 @@ from psatopca.models import Psa, Pca
 # 		my_list.append(str(identity))
 # 	return my_list
 
-def exclude_preproprogres ():
-	my_list = []
-	for preproject in Preproject.objects.all():
-		my_list.append(preproject.id)
-	for preproject in Preproject.objects.filter(progress='s'):
-		my_list.remove(preproject.id)
-	for preproject in Preproject.objects.filter(progress='p'):
-		my_list.remove(preproject.id)
-	return my_list
+# def exclude_preproprogres ():
+# 	my_list = []
+# 	for preproject in Preproject.objects.all():
+# 		my_list.append(preproject.id)
+# 	for preproject in Preproject.objects.filter(progress='s'):
+# 		my_list.remove(preproject.id)
+# 	for preproject in Preproject.objects.filter(progress='p'):
+# 		my_list.remove(preproject.id)
+# 	return my_list
 
 def oppty_per_customer():
 	ksa = Preproject.objects.filter(customer__customer_criteria='0').count()
@@ -40,24 +40,40 @@ def oppty_per_customer():
 def preproject (request,paramm='all'):
 	if paramm == 'all':
 		v_preproject = Preproject.objects.all()
-	elif paramm == 'progresssa':
-		# b = preproprogres()
+	elif paramm == 'allsa1':
+		v_preproject = Preproject.objects.filter(sa_lintasarta__subbag='1')
+	elif paramm == 'allsa2':
+		v_preproject = Preproject.objects.filter(sa_lintasarta__subbag='2')
+	elif paramm == 'progress':
 		v_preproject = Preproject.objects.filter(progress='p')
-		# v_preproject = Preproject.objects.filter(pk__in=preproprogres())
-		# v_preproject = Preproject.objects.filter(progress='s').filter(progress='p')
-		# v_preproject = Preproject.objects.filter(preproject__progress_contains='s')
-		# v_psa = Psa.objects.filter(status_psa='g').order_by(Lower('psa_date').desc())
+	elif paramm == 'progresssa1':
+		v_preproject = Preproject.objects.filter(progress='p').filter(sa_lintasarta__subbag='1')
+	elif paramm == 'progresssa2':
+		v_preproject = Preproject.objects.filter(progress='p').filter(sa_lintasarta__subbag='2')
 	elif paramm == 'submited':
 		v_preproject = Preproject.objects.filter(progress='s')
-
+	elif paramm == 'submitedsa1':
+		v_preproject = Preproject.objects.filter(progress='s').filter(sa_lintasarta__subbag='1')
+	elif paramm == 'submitedsa2':
+		v_preproject = Preproject.objects.filter(progress='s').filter(sa_lintasarta__subbag='2')
 	elif paramm == 'closewon':
 		v_preproject = Preproject.objects.filter(progress='w')
-
+	elif paramm == 'closewonsa1':
+		v_preproject = Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='1')
+	elif paramm == 'closewonsa2':
+		v_preproject = Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='2')
 	elif paramm == 'closelost':
 		v_preproject = Preproject.objects.filter(progress='l')
-
-	elif paramm == 'exprogress':
-		v_preproject = Preproject.objects.filter(pk__in=exclude_preproprogres())
+	elif paramm == 'closelostsa1':
+		v_preproject = Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='1')
+	elif paramm == 'closelostsa2':
+		v_preproject = Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='2')
+	elif paramm == 'cancelled_psahold':
+		v_preproject = Preproject.objects.filter(progress='c') | Preproject.objects.filter(progress='h')
+	elif paramm == 'cancelled_psaholdsa1':
+		v_preproject = Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='c') | Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='h')
+	elif paramm == 'cancelled_psaholdsa2':
+		v_preproject = Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='c') | Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='h')
 	else:
 		v_preproject =''
 
@@ -185,6 +201,6 @@ def customer_list(request):
 		my_list.append(customer.id)
 
 	v_customer = Customer.objects.filter(pk__in=my_list).order_by(Lower('customer_criteria'))
-	return render(request, 'customer.html',{
+	return render(request, 'customer_subbag.html',{
 	'list': v_customer,
 	})

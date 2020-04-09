@@ -20,8 +20,8 @@
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">MRC</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">OTC</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Dur</th>
-                <!-- <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">ACV</th> -->
-                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Criteria</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">ACV</th>
+                <!-- <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Criteria</th> -->
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">TCV</th>
                 {% if request.user.is_staff %}<th class="noExl uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Edit</th>{% endif %}
             </tr>
@@ -44,7 +44,7 @@
                 <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.otc %}{% endif %}{% endfor %}{% endfor %}</td>
                 <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{{pca.duration}}{% endif %}{% endfor %}{% endfor %}</td>
                 <!-- <td>{% annualcontracvalue 1 1 1%}</td> -->
-<!--                 <td>
+                <td>
                     {% for psa in preproject.psa_set.all %}
                         {% for pca in psa.pca_set.all %}
                             {% if pca.flagcalc == 1 %}
@@ -54,8 +54,8 @@
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
-                </td> -->
-                <td>{% for customer in preproject.customer.all %}{% if customer.customer_criteria == '0' %}KSA{% elif customer.customer_criteria == '1' %}EA{% elif customer.customer_criteria == '2' %}SA{% else %}RA{% endif %}{% endfor %}</td> 
+                </td>
+                <!-- <td>{% for customer in preproject.customer.all %}{% if customer.customer_criteria == '0' %}KSA{% elif customer.customer_criteria == '1' %}EA{% elif customer.customer_criteria == '2' %}SA{% else %}RA{% endif %}{% endfor %}</td>  -->
                 <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.tcv %}{% endif %}{% endfor %}{% endfor %}</td>
                 {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Prepro</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
             </tr>

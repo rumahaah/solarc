@@ -1,0 +1,81 @@
+{% extends "base_dashboard.html" %}{% block title %}Dashboard | SolArc{% endblock %}{% block content %}
+<!-- CONTENT -->
+<div id="content" uk-height-viewport="expand: true">
+	<div class="uk-container uk-container-expand">
+		<!-- PSA&PCA -->
+		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-2 uk-child-width-1-4@l uk-child-width-1-5@xl" uk-grid>
+			<div>
+				<span data-uk-icon="icon:cog" class="uk-margin-small-right uk-text-primary"></span>PSA
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a href="{% url 'psa' %}/total{{subbag}}">{{total_psas}}<span class="uk-text-small">Total </span></a><a href="{% url 'psa' %}/go{{subbag}}">{{go_psas}}<span class="uk-text-small">Go </span></a><a href="{% url 'psa' %}/not{{subbag}}">{{holdnotgo_psas}}<span class="uk-text-small">Not</span></a></h1>
+			</div>
+			<div>
+				<span data-uk-icon="icon:nut" class="uk-margin-small-right uk-text-primary"></span>PCA
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a href="{% url 'pca' %}/total{{subbag}}">{{total_pcas}}<span class="uk-text-small">Total </span></a><a href="{% url 'pca' %}/go{{subbag}}">{{go_pcas}}<span class="uk-text-small">Go </span></a><a href="{% url 'pca' %}/not{{subbag}}">{{holdnotgo_pcas}}<span class="uk-text-small">Not</span></a></h1>
+			</div>
+			<div>
+				<span class="uk-text-small"><span data-uk-icon="icon:clock" class="uk-margin-small-right uk-text-primary"></span>PSA > 5WD *GO Only</span>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a class="uk-text-danger" href="{% url 'psa' %}/psa5wdpssho{{subbag}}">{{len_psa_more_than_5wd_from_pss_ho}}<span class="uk-text-small">PSS HO </span></a><a class="uk-text-warning" href="{% url 'psa' %}/psa5wd{{subbag}}">{{len_psa_more_than_5wd}}<span class="uk-text-small">PSA Date</span></a></h1>
+			</div>
+			<div>
+				<span class="uk-text-small"><span data-uk-icon="icon:clock" class="uk-margin-small-right uk-text-primary"></span>PCA > 21D *GO Only</span>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a class="uk-text-danger" href="{% url 'pca' %}/pca21wd{{subbag}}">{{len_progressafterpca_21days}}<span class="uk-text-small"> Progress</span></a></h1>
+			</div>
+		</div>
+		<!-- /PSA&PCA -->
+		<hr>
+		<!-- OPPTY&HO -->
+		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-2 uk-child-width-1-4@l uk-child-width-1-5@xl" uk-grid>
+			<div>
+				<span data-uk-icon="icon:bolt" class="uk-margin-small-right uk-text-primary"></span>Opportunity
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a href="{% url 'preproject' %}/all{{subbag}}">{{total_prepro}}<span class="uk-text-small">Total </span></a><a href="{% url 'preproject' %}/progress{{subbag}}">{{progress_prepro}}<span class="uk-text-small">Progress </span></a></h1>
+			</div>
+			<div>
+				<span data-uk-icon="icon:bolt" class="uk-margin-small-right uk-text-primary"></span>Opportunity
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a href="{% url 'preproject' %}/submited{{subbag}}">{{submit_prepro}}<span class="uk-text-small">Submited </span></a><a href="{% url 'preproject' %}/cancelled_psahold{{subbag}}">{{cancelled_psahold_prepro}}<span class="uk-text-small">Cancelled</span></a></h1>
+			</div>
+			<div>
+				<span data-uk-icon="icon:bolt" class="uk-margin-small-right uk-text-primary"></span>Opportunity
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a href="{% url 'preproject' %}/closewon{{subbag}}">{{won_prepro}}<span class="uk-text-small">Won </span></a><a href="{% url 'preproject' %}/closelost{{subbag}}">{{lost_prepro}}<span class="uk-text-small">Lost</span></a></h1>
+			</div>
+			<div>
+				<span data-uk-icon="icon:heart" class="uk-margin-small-right uk-text-primary"></span>Handover
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a href="{% url 'handover' %}/total{{subbag}}">{{handover}}<span class="uk-text-small"> Total HO</span></a><a class="uk-text-danger" href="{% url 'handover' %}/more2wdpoknowndate{{subbag}}">{{len_ho_more_than_2wd_from_po_known_date}}<span class="uk-text-small"> HO > 2WD</span></a></h1>
+			</div>
+		</div>
+		<!-- /OPPTY&HO -->
+		<hr>
+		<!-- PROFITABILITY & WINRATE -->
+		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-2 uk-child-width-1-4@l uk-child-width-1-5@xl" uk-grid>
+			<div>
+				<span class="uk-text-small"><span uk-icon="icon: credit-card" class="uk-margin-small-right uk-text-primary"></span>Ebitda Profitability</span>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a class="{% if ebitdaprofitability < 12 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaebitda{{subbag}}">{{ebitdaprofitability_avg}}<span class="uk-text-small">% Average</span></a><br><a class="{% if ebitdaprofitability_weighted < 12 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaebitda{{subbag}}">{{ebitdaprofitability_weighted}}<span class="uk-text-small">% Weighted</span></a></h1>
+			</div>
+			<div>
+				<span class="uk-text-small"><span uk-icon="icon:tag" class="uk-margin-small-right uk-text-primary"></span>IRR Profitability</span>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a class="{% if irrprofitability < 22 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcairr{{subbag}}">{{irrprofitability_avg}}<span class="uk-text-small">% Average</span></a><br><a class="{% if irrprofitability_weighted < 22 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcairr{{subbag}}">{{irrprofitability_weighted}}<span class="uk-text-small">% Weighted</span></a></h1>
+			</div>
+			<div>
+				<span class="uk-text-small"><span uk-icon="icon:star" class="uk-margin-small-right uk-text-primary"></span>Win Rate</span>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 37px"><a class="{% if winrate_ksaea < 75 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaksaea{{subbag}}">{{winrate_ksaea}}<span class="uk-text-small">% KSA & EA</span></a><br><a class="{% if winrate_nonksaea < 50 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcanonksaea{{subbag}}">{{winrate_nonksaea}}<span class="uk-text-small">% Non</span></a></h1>
+			</div>
+			<div>
+				<span class="uk-text-small"><span uk-icon="icon:check" class="uk-margin-small-right uk-text-primary"></span>SLA</span>
+				<h1 class="uk-heading-primary uk-margin-remove uk-text-primary" style="font-size: 37px">N/A<span class="uk-text-small">% PSA-PCA</span><br>N/A<span class="uk-text-small">% PO-HO</span></h1>
+			</div>
+		</div>
+		<!-- /PROFITABILITY & WINRATE -->
+		<hr>
+		<footer class="uk-section uk-section-small uk-text-center">
+			<hr>
+			<p class="uk-text-small uk-text-center">Copyright 2020 - <a href="#">Created with smile</a> 
+			</p>
+		</footer>
+	</div>
+</div>
+<!-- /CONTENT -->
+{% endblock %}
+{% block javascript %}
+<script>
+	// For Chart
+</script>
+{% endblock %}

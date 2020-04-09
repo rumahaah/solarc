@@ -6,10 +6,11 @@ from handover.models import Handover
 from preproject.models import Preproject
 from psatopca.views import psa_more_than_5wd, psa_more_than_5wd_from_pss_ho, progressafterpca_21days, ebitdaprofitability, irrprofitability, winrate_ksaea, winrate_nonksaea, risk_criteria
 from handover.views import ho_more_than_2wd_from_po_known_date
-from preproject.views import exclude_preproprogres, oppty_per_customer
+from preproject.views import oppty_per_customer
 
 # from datetime import datetime
 # import numpy
+from decimal import Decimal
 
 # Create your views here.
 def home(request):
@@ -19,74 +20,8 @@ def home(request):
 def about(request):
 	return render(request, 'about_solarc.html')
 
-# def psa_more_than_5wd (rawdata):
-# 	my_list = []
-# 	for data in rawdata:
-# 		# psa_date = data.psa_date
-# 		# pcas = data.pca_set.all()
-# 		# for data in pcas:
-# 		calculation = numpy.busday_count(data.psa_date,datetime.now().date())
-# 		if calculation >= 5:
-# 			psamorethan5wd = data.id
-# 			my_list.append(str(psamorethan5wd))
-# 	return my_list
-
-# def psa_more_than_5wd (rawdata):
-# 	my_list = []
-# 	for psa in rawdata:
-# 		# psa_date = psa.psa_date
-# 		pcas = psa.pca_set.all()
-# 		calculation = numpy.busday_count(psa.psa_date,datetime.now().date())
-# 		if calculation >= 5:
-# 			psamorethan5wd = psa.id
-# 			my_list.append(str(psamorethan5wd))
-# 		for pca in pcas:
-# 			# check =  pca.pca_date - psa.psa_date
-# 			check = numpy.busday_count(psa.psa_date,pca.pca_date)
-# 			# if check.days <= 5:
-# 			if check <= 5:
-# 				psawaspca = pca.psa_id
-# 				my_list.remove(str(psawaspca))
-# 	return my_list
-
-# def psa_more_than_5wd_from_pss_ho (rawdata):
-# 	my_list = []
-# 	for psa in rawdata:
-# 		# psa_date = psa.psa_date
-# 		pcas = psa.pca_set.all()
-# 		calculation = numpy.busday_count(psa.psa_date,datetime.now().date())
-# 		if calculation >= 5:
-# 			psamorethan5wd = psa.id
-# 			my_list.append(str(psamorethan5wd))
-# 		for pca in pcas:
-# 			# check =  pca.pca_date - psa.pss_ho_date
-# 			check = numpy.busday_count(psa.pss_ho_date,pca.pca_date)
-# 			# if check.days <= 5:
-# 			if check <= 5:
-# 				psawaspca = pca.psa_id
-# 				my_list.remove(str(psawaspca))
-# 	return my_list
-
-# def ho_more_than_2wd_from_po_date(rawdata):
-# 	my_list = []
-# 	for handover in rawdata:
-# 		check = numpy.busday_count(handover.po_date,datetime.now().date())
-# 		if check >= 2:
-# 			powas2wd = handover.id
-# 			my_list.append(str(powas2wd))
-# 	return my_list
-
-# def ho_more_than_2wd_from_po_known_date(rawdata):
-# 	my_list = []
-# 	for handover in rawdata:
-# 		check = numpy.busday_count(handover.po_known_date,datetime.now().date())
-# 		if check >= 2:
-# 			powas2wd = handover.id
-# 			my_list.append(str(powas2wd))
-# 	return my_list
-
 @login_required
-def dashboard(request):
+def Dashboard(request):
 	v_total_psa = Psa.objects.count()
 	v_psa_go = Psa.objects.filter(status_psa='g').count()
 	v_psa_holdnogo = Psa.objects.exclude(status_psa='g').count()
@@ -99,14 +34,15 @@ def dashboard(request):
 	v_submit_prepro = Preproject.objects.filter(progress='s').count()
 	v_won_prepro = Preproject.objects.filter(progress='w').count()
 	v_lost_prepro = Preproject.objects.filter(progress='l').count()
-	# v_progress_prepro = len(preproprogres())
-	v_exclude_progress_prepro = len(exclude_preproprogres())
+	v_cancelled_psahold_prepro = Preproject.objects.filter(progress='c').count() + Preproject.objects.filter(progress='h').count()
 	v_len_psa_more_than_5wd = len(psa_more_than_5wd(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c')))
-	# v_len_psa_more_than_5wd = len(psa_more_than_5wd(Psa.objects.all())[0])
 	v_len_psa_more_than_5wd_from_pss_ho = len(psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c')))
 	v_len_progressafterpca_21days = len(progressafterpca_21days(Pca.objects.filter(status_pca='g')))
 	v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.exclude(problem_category='n-pr')))
-	# v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.all()))
+	ebitdaprofitability_avg = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1))[0]
+	ebitdaprofitability_weighted = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1))[1]
+	irrprofitability_avg = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1))[0]
+	irrprofitability_weighted = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1))[1]
 
 	#CHART
 	v_total_psa_1 = Psa.objects.filter(psa_date__month='1').count()
@@ -135,12 +71,12 @@ def dashboard(request):
 	v_total_pca_11 = Pca.objects.filter(pca_date__month='11').count()
 	v_total_pca_12 = Pca.objects.filter(pca_date__month='12').count()
 
-	# avgebitda, total_tcv = ebitdaprofitability()
+	sum_tcv_won = (winrate_ksaea(Pca.objects)[1] + winrate_nonksaea(Pca.objects)[1]) / 1000000000
+	sum_tcv_lost = (winrate_ksaea(Pca.objects)[2] + winrate_nonksaea(Pca.objects)[2]) / 1000000000
+	sum_tcv_progress = (winrate_ksaea(Pca.objects)[3] + winrate_nonksaea(Pca.objects)[3]) / 1000000000
+
 
 	return render(request, 'dashboard.html',{
-		# 'oi': psa_more_than_5wd(Psa.objects.all())[0],
-		# 'oioi': psa_more_than_5wd(Psa.objects.all())[1],
-		# 'oioioi': psa_more_than_5wd(Psa.objects.all())[2],
 		'total_psas': v_total_psa,
 		'go_psas': v_psa_go,
 		'holdnotgo_psas': v_psa_holdnogo,
@@ -153,19 +89,17 @@ def dashboard(request):
 		'won_prepro': v_won_prepro,
 		'lost_prepro': v_lost_prepro,
 		'submit_prepro': v_submit_prepro,
-		'exclude_progress_prepro': v_exclude_progress_prepro,
+		'cancelled_psahold_prepro': v_cancelled_psahold_prepro,
 		'len_psa_more_than_5wd': v_len_psa_more_than_5wd,
 		'len_psa_more_than_5wd_from_pss_ho': v_len_psa_more_than_5wd_from_pss_ho,
 		'len_progressafterpca_21days': v_len_progressafterpca_21days,
 		'len_ho_more_than_2wd_from_po_known_date': v_len_ho_more_than_2wd_from_po_known_date,
-		'ebitdaprofitability': ebitdaprofitability()[0],
-		'ebitdaprofitability_weighted': ebitdaprofitability()[1],
-		'irrprofitability': irrprofitability()[0],
-		'irrprofitability_weighted': irrprofitability()[1],
-		'winrate_ksaea': winrate_ksaea()[0],
-		'sum_tcv_won': winrate_ksaea()[1],
-		'sum_tcv_lost': winrate_ksaea()[2],
-		'winrate_nonksaea': winrate_nonksaea()[0],
+		'ebitdaprofitability_avg': ebitdaprofitability_avg,
+		'ebitdaprofitability_weighted': ebitdaprofitability_weighted,
+		'irrprofitability_avg': irrprofitability_avg,
+		'irrprofitability_weighted': irrprofitability_weighted,
+		'winrate_ksaea': winrate_ksaea(Pca.objects)[0],
+		'winrate_nonksaea': winrate_nonksaea(Pca.objects)[0],
 		
 		#CHART1 PSA & PCA
 		'total_psa_1': v_total_psa_1,
@@ -193,15 +127,118 @@ def dashboard(request):
 		'total_pca_11': v_total_pca_11,
 		'total_pca_12': v_total_pca_12,
 
+		#CHART2 Revenue TCV (Plan)
+		'sum_tcv_won': sum_tcv_won,
+		'sum_tcv_lost': sum_tcv_lost,
+		'sum_tcv_progress': sum_tcv_progress,
+
+
 		#CHART3 Customer Criteria
 		'qty_ksa': oppty_per_customer()[0],
 		'qty_ea': oppty_per_customer()[1],
 		'qty_sa': oppty_per_customer()[2],
 		'qty_others': oppty_per_customer()[3],
 
-		#CHART3 Risk Criteria
+		#CHART4 Risk Criteria
 		'hr': risk_criteria()[0].count(),
 		'mr': risk_criteria()[1].count(),
 		'lr': risk_criteria()[2].count(),
-		})
+	})
+
+@login_required
+def Dashboardsubbag(request,paramm='sa1'):
+	if paramm == 'sa1':
+		v_total_psa = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').count()
+		v_psa_go = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').filter(status_psa='g').count()
+		v_psa_holdnogo = Psa.objects.filter(preproject__sa_lintasarta__subbag='1').exclude(status_psa='g').count()
+		v_total_pca = Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').count()
+		v_pca_go = Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').filter(status_pca='g').count()
+		v_pca_holdnogo = Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').exclude(status_pca='g').count()
+		v_len_psa_more_than_5wd = len(psa_more_than_5wd(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta__subbag='1')))
+		v_len_psa_more_than_5wd_from_pss_ho = len(psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta__subbag='1')))
+		v_len_progressafterpca_21days = len(progressafterpca_21days(Pca.objects.filter(status_pca='g').filter(psa__preproject__sa_lintasarta__subbag='1')))
+		v_total_prepro = Preproject.objects.filter(sa_lintasarta__subbag='1').count()
+		v_progress_prepro = Preproject.objects.filter(progress='p').filter(sa_lintasarta__subbag='1').count()
+		v_submit_prepro = Preproject.objects.filter(progress='s').filter(sa_lintasarta__subbag='1').count()
+		v_cancelled_psahold_prepro = Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='c').count() + Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='h').count()
+		v_won_prepro = Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='1').count()
+		v_lost_prepro = Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='1').count()
+		v_handover = Handover.objects.filter(pca__psa__preproject__sa_lintasarta__subbag='1').count()
+		v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.exclude(problem_category='n-pr').filter(pca__psa__preproject__sa_lintasarta__subbag='1')))
+
+
+
+		ebitdaprofitability_avg = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1'))[0]
+		ebitdaprofitability_weighted = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1'))[1]
+		irrprofitability_avg = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1'))[0]
+		irrprofitability_weighted = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1'))[1]
+		v_winrate_ksaea = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1'))[0]
+		v_sum_tcv_won = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1'))[1]
+		v_sum_tcv_lost = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1'))[2]
+		v_winrate_nonksaea = winrate_nonksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1'))[0]
+
+	elif paramm == 'sa2':
+		v_total_psa = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').count()
+		v_psa_go = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').filter(status_psa='g').count()
+		v_psa_holdnogo = Psa.objects.filter(preproject__sa_lintasarta__subbag='2').exclude(status_psa='g').count()
+		v_total_pca = Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').count()
+		v_pca_go = Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').filter(status_pca='g').count()
+		v_pca_holdnogo = Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').exclude(status_pca='g').count()
+		v_len_psa_more_than_5wd = len(psa_more_than_5wd(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta__subbag='2')))
+		v_len_psa_more_than_5wd_from_pss_ho = len(psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c').filter(preproject__sa_lintasarta__subbag='2')))
+		v_len_progressafterpca_21days = len(progressafterpca_21days(Pca.objects.filter(status_pca='g').filter(psa__preproject__sa_lintasarta__subbag='2')))
+		v_total_prepro = Preproject.objects.filter(sa_lintasarta__subbag='2').count()
+		v_progress_prepro = Preproject.objects.filter(progress='p').filter(sa_lintasarta__subbag='2').count()
+		v_submit_prepro = Preproject.objects.filter(progress='s').filter(sa_lintasarta__subbag='2').count()
+		v_cancelled_psahold_prepro = Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='c').count() + Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='h').count()
+		v_won_prepro = Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='2').count()
+		v_lost_prepro = Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='2').count()
+		v_handover = Handover.objects.filter(pca__psa__preproject__sa_lintasarta__subbag='2').count()
+		v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.exclude(problem_category='n-pr').filter(pca__psa__preproject__sa_lintasarta__subbag='2')))
+	
+
+
+		ebitdaprofitability_avg = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2'))[0]
+		ebitdaprofitability_weighted = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2'))[1]
+		irrprofitability_avg = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2'))[0]
+		irrprofitability_weighted = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2'))[1]
+		v_winrate_ksaea = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2'))[0]
+		v_sum_tcv_won = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2'))[1]
+		v_sum_tcv_lost = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2'))[2]
+		v_winrate_nonksaea = winrate_nonksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2'))[0]
+
+	return render(request, 'dashboard_subbag.html',{
+		'total_psas': v_total_psa,
+		'go_psas': v_psa_go,
+		'holdnotgo_psas': v_psa_holdnogo,
+		'total_pcas': v_total_pca,
+		'go_pcas': v_pca_go,
+		'holdnotgo_pcas': v_pca_holdnogo,
+		'len_psa_more_than_5wd': v_len_psa_more_than_5wd,
+		'len_psa_more_than_5wd_from_pss_ho': v_len_psa_more_than_5wd_from_pss_ho,
+		'len_progressafterpca_21days': v_len_progressafterpca_21days,
+		'total_prepro': v_total_prepro,
+		'progress_prepro': v_progress_prepro,
+		'submit_prepro': v_submit_prepro,
+		'cancelled_psahold_prepro': v_cancelled_psahold_prepro,
+		'won_prepro': v_won_prepro,
+		'lost_prepro': v_lost_prepro,
+		'handover': v_handover,
+		'len_ho_more_than_2wd_from_po_known_date': v_len_ho_more_than_2wd_from_po_known_date,
+		
+
+
+		'ebitdaprofitability_avg': ebitdaprofitability_avg,
+		'ebitdaprofitability_weighted': ebitdaprofitability_weighted,
+		'irrprofitability_avg': irrprofitability_avg,
+		'irrprofitability_weighted': irrprofitability_weighted,
+		'subbag': paramm,
+		'winrate_ksaea': v_winrate_ksaea,
+		'sum_tcv_won': v_sum_tcv_won,
+		'sum_tcv_lost': v_sum_tcv_lost,
+		'winrate_nonksaea': v_winrate_nonksaea,
+
+	})
+
+
 

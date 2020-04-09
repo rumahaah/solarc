@@ -2,108 +2,71 @@
 <!-- CONTENT -->
 <div id="content" uk-height-viewport="expand: true">
 	<div class="uk-container uk-container-expand">
-		<!-- PSA PCA -->
-		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-1 uk-child-width-1-2@l uk-child-width-1-5@xl" data-uk-grid>
-			<div class="uk-text-center">
-				<span class="uk-text-small">
-					<span data-uk-icon="icon:cog" class="uk-margin-small-right uk-text-primary"></span>Project Selection Approval
-				</span>
-				<h1 class="uk-heading-primary uk-margin-remove  uk-text-primary">
-					<a href="{% url 'psa' %}">{{total_psas}}<span class="uk-text-small"> Total</span></a>
-					<a href="{% url 'psa' %}/go">{{go_psas}}<span class="uk-text-small"> Go</span></a>
-					<a href="{% url 'psa' %}/not">{{holdnotgo_psas}}<span class="uk-text-small"> Not</span></a>
-				</h1><br>
-				<span class="uk-text-small">
-					<span data-uk-icon="icon:clock" class="uk-margin-small-right uk-text-primary"></span>PSA > 5WD *GO Only
-				</span>
-				<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
-					<a class="uk-text-danger" href="{% url 'psa' %}/psa5wdpssho">{{len_psa_more_than_5wd_from_pss_ho}}<span class="uk-text-small"> PSS HO</span></a>
-					<a class="uk-text-warning" href="{% url 'psa' %}/psa5wd">{{len_psa_more_than_5wd}}<span class="uk-text-small"> PSA Date</span></a>
-				</h1>
+		<!-- PSA&PCA -->
+		<!-- {{sum_tcv_progress}} -->
+		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-2 uk-child-width-1-4@l uk-child-width-1-5@xl" uk-grid>
+			<div>
+				<span data-uk-icon="icon:cog" class="uk-margin-small-right uk-text-primary"></span>PSA
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a href="{% url 'psa' %}/total">{{total_psas}}<span style="font-size: 12px">Total </span></a><a href="{% url 'psa' %}/go">{{go_psas}}<span style="font-size: 12px">Go </span></a><a href="{% url 'psa' %}/not">{{holdnotgo_psas}}<span style="font-size: 12px">Not</span></a></h1>
 			</div>
-			<div class="uk-text-center">
-				<span class="uk-text-small">
-					<span data-uk-icon="icon:nut" class="uk-margin-small-right uk-text-primary"></span>Project Commercial Approval
-				</span>
-				<h1 class="uk-heading-primary uk-margin-remove  uk-text-primary">
-					<a href="{% url 'pca' %}">{{total_pcas}}<span class="uk-text-small"> Total</span></a>
-					<a href="{% url 'pca' %}/go">{{go_pcas}}<span class="uk-text-small"> Go</small></a>
-					<a href="{% url 'pca' %}/not">{{holdnotgo_pcas}}<span class="uk-text-small"> Not</span></a>
-				</h1><br>
-				<span class="uk-text-small">
-					<span data-uk-icon="icon:clock" class="uk-margin-small-right uk-text-primary"></span>PCA > 21D *GO Only
-				</span>
-				<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
-					<a class="uk-text-danger" href="{% url 'pca' %}/pca21wd">{{len_progressafterpca_21days}}<span class="uk-text-small"> Progress</a></span><span class=""> </span>
-					<!-- <a href="{% url 'psa' %}/psa5wd"> <span class="uk-text-warning"># <span class="uk-text-small">PSA</span></a></span> -->
-				</h1>
+			<div>
+				<span data-uk-icon="icon:nut" class="uk-margin-small-right uk-text-primary"></span>PCA
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a href="{% url 'pca' %}/total">{{total_pcas}}<span style="font-size: 12px">Total </span></a><a href="{% url 'pca' %}/go">{{go_pcas}}<span style="font-size: 12px">Go </span></a><a href="{% url 'pca' %}/not">{{holdnotgo_pcas}}<span style="font-size: 12px">Not</span></a></h1>
+			</div>
+			<div>
+				<span class="uk-text-small"><span data-uk-icon="icon:clock" class="uk-margin-small-right uk-text-primary"></span>PSA > 5WD *GO Only</span>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a class="uk-text-danger" href="{% url 'psa' %}/psa5wdpssho">{{len_psa_more_than_5wd_from_pss_ho}}<span style="font-size: 12px">PSS HO </span></a><a class="uk-text-warning" href="{% url 'psa' %}/psa5wd">{{len_psa_more_than_5wd}}<span style="font-size: 12px">PSA Date</span></a></h1>
+			</div>
+			<div>
+				<span class="uk-text-small"><span data-uk-icon="icon:clock" class="uk-margin-small-right uk-text-primary"></span>PCA > 21D *GO Only</span>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a class="uk-text-danger" href="{% url 'pca' %}/pca21wd">{{len_progressafterpca_21days}}<span style="font-size: 12px"> Progress</span></a></h1>
 			</div>
 		</div>
+		<!-- /PSA&PCA -->
 		<hr>
-		<!-- /PSA PCA -->
-		<!-- OPPTY PREPROJECT WINLOST -->
-		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-1 uk-child-width-1-2@l uk-child-width-1-5@xl" data-uk-grid>
-			<div class="uk-text-center">
-				<span class="uk-text-small">
-					<span data-uk-icon="icon:bolt" class="uk-margin-small-right uk-text-primary"></span>Opportunity
-				</span>
-				<h1 class="uk-heading-primary uk-margin-remove  uk-text-primary">
-					<a href="{% url 'preproject' %}">{{total_prepro}}<span class="uk-text-small"> Total</span></a>
-					<a href="{% url 'preproject' %}/progresssa">{{progress_prepro}}<span class="uk-text-small"> Progress</span></a>
-					<a href="{% url 'preproject' %}/submited">{{submit_prepro}}<span class="uk-text-small"> Submited</span></a>
-					<a href="{% url 'preproject' %}/exprogress">{{exclude_progress_prepro}}<span class="uk-text-small"> Not</span></a>
-					<!-- <a href="{% url 'psa' %}/not">{{holdnotgo_psas.count}} <span class="uk-text-small">NOT</span></a> -->
-				</h1>
+		<!-- OPPTY&HO -->
+		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-2 uk-child-width-1-4@l uk-child-width-1-5@xl" uk-grid>
+			<div>
+				<span data-uk-icon="icon:bolt" class="uk-margin-small-right uk-text-primary"></span>Opportunity
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a href="{% url 'preproject' %}/all">{{total_prepro}}<span style="font-size: 12px">Total </span></a><a href="{% url 'preproject' %}/progress">{{progress_prepro}}<span style="font-size: 12px">Progress </span></a></h1>
 			</div>
-			<div class="uk-text-center">
-				<span class="uk-text-small">
-					<span data-uk-icon="icon:heart" class="uk-margin-small-right uk-text-primary"></span>Win, Lost & Handover
-				</span>
-				<h1 class="uk-heading-primary uk-margin-remove  uk-text-primary">
-					<a href="{% url 'opptywon'%}">{{won_prepro}}<span class="uk-text-small"> Win</span></a>
-					<a href="{% url 'opptylost'%}">{{lost_prepro}}<span class="uk-text-small"> Lost</span></a>
-					<a href="{% url 'handover' %}">{{handover}}<span class="uk-text-small"> Total HO</span></a>
-					<a class="uk-text-danger" href="{% url 'handover' %}/more2wdpoknowndate">{{len_ho_more_than_2wd_from_po_known_date}}<span class="uk-text-small"> HO > 2WD</span></a>
-				</h1>
+			<div>
+				<span data-uk-icon="icon:bolt" class="uk-margin-small-right uk-text-primary"></span>Opportunity
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a href="{% url 'preproject' %}/submited">{{submit_prepro}}<span style="font-size: 12px">Submited </span></a><a href="{% url 'preproject' %}/cancelled_psahold">{{cancelled_psahold_prepro}}<span style="font-size: 12px">Cancelled</span></a></h1>
+			</div>
+			<div>
+				<span data-uk-icon="icon:bolt" class="uk-margin-small-right uk-text-primary"></span>Opportunity
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a href="{% url 'opptywon' %}">{{won_prepro}}<span style="font-size: 12px">Won </span></a><a href="{% url 'opptylost' %}">{{lost_prepro}}<span style="font-size: 12px">Lost</span></a></h1>
+			</div>
+			<div>
+				<span data-uk-icon="icon:heart" class="uk-margin-small-right uk-text-primary"></span>Handover
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a href="{% url 'handover' %}/total">{{handover}}<span style="font-size: 12px"> Total HO</span></a><a class="uk-text-danger" href="{% url 'handover' %}/more2wdpoknowndate">{{len_ho_more_than_2wd_from_po_known_date}}<span style="font-size: 12px"> HO > 2WD</span></a></h1>
 			</div>
 		</div>
+		<!-- /OPPTY&HO -->
 		<hr>
-		<!-- /OPPTY PREPROJECT WINLOST -->
-
+		<!-- PROFITABILITY & WINRATE -->
 		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-2 uk-child-width-1-4@l uk-child-width-1-5@xl" uk-grid>
 			<div>
 				<span class="uk-text-small"><span uk-icon="icon: credit-card" class="uk-margin-small-right uk-text-primary"></span>Ebitda Profitability</span>
-				<h1 class="uk-heading-primary uk-margin-remove uk-text-primary"><a href="{% url 'pca' %}/pcaebitda">{{ebitdaprofitability}}<small class="uk-text-small">% Average</small></a><br><a href="{% url 'pca' %}/pcaebitda">{{ebitdaprofitability_weighted}}<small class="uk-text-small">% Weighted</small></a></h1>
-				<div class="uk-text-small">
-					<!-- <span class="uk-text-danger" uk-icon="icon: triangle-up">{{ebitdaprofitability}} - {{irrprofitability}}</span> ebitda: {{sum_tcv_ebitda}} - irr: {{sum_tcv_irr}} <br><br> -->
-					<!-- <span class="uk-text-danger" uk-icon="icon: triangle-up">{{irrprofitability_weighted}}</span>irr: {{sum_tcv_irr_weighted}} -->
-					<!-- <span class="uk-text-danger" uk-icon="icon: triangle-up">ebitda: 2{{sum_tcv_ebitda}} - irr: {{sum_tcv_irr}}</span> -->
-				</div>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a class="{% if ebitdaprofitability < 12 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaebitda">{{ebitdaprofitability_avg}}<span style="font-size: 12px">% Average</span></a><br><a class="{% if ebitdaprofitability_weighted < 12 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaebitda">{{ebitdaprofitability_weighted}}<span style="font-size: 12px">% Weighted</span></a></h1>
 			</div>
 			<div>
 				<span class="uk-text-small"><span uk-icon="icon:tag" class="uk-margin-small-right uk-text-primary"></span>IRR Profitability</span>
-				<h1 class="uk-heading-primary uk-margin-remove uk-text-primary"><a href="{% url 'pca' %}/pcairr">{{irrprofitability}}<small class="uk-text-small">% Average</small></a><br><a href="{% url 'pca' %}/pcairr">{{irrprofitability_weighted}}<small class="uk-text-small">% Weighted</small></a></h1>
-				<!-- <h1 class="uk-heading-primary uk-margin-remove uk-text-primary">{{irrprofitability}}<small class="uk-text-small">% Average</small><br>{{irrprofitability_weighted}}<small class="uk-text-small">% Weighted</small></h1> -->
-				<div class="uk-text-small">
-					<!-- <span class="uk-text-danger" uk-icon="icon: triangle-up"></span> -->
-				</div>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a class="{% if irrprofitability < 22 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcairr">{{irrprofitability_avg}}<span style="font-size: 12px">% Average</span></a><br><a class="{% if irrprofitability_weighted < 22 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcairr">{{irrprofitability_weighted}}<span style="font-size: 12px">% Weighted</span></a></h1>
 			</div>
 			<div>
 				<span class="uk-text-small"><span uk-icon="icon:star" class="uk-margin-small-right uk-text-primary"></span>Win Rate</span>
-				<h1 class="uk-heading-primary uk-margin-remove uk-text-primary"><a href="{% url 'pca' %}/pcaksaea">{{winrate_ksaea}}<small class="uk-text-small">% KSA & EA</small></a><br><a href="{% url 'pca' %}/pcanonksaea">{{winrate_nonksaea}}<small class="uk-text-small">% Non</small></a></h1>
-				<div class="uk-text-small">
-			<!-- <span class="uk-text-warning" uk-icon="icon: triangle-down"></span> {{sum_tcv_won}} - {{sum_tcv_lost}} -->
-				</div>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a class="{% if winrate_ksaea < 75 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaksaea">{{winrate_ksaea}}<span style="font-size: 12px">% KSA & EA</span></a><br><a class="{% if winrate_nonksaea < 50 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcanonksaea">{{winrate_nonksaea}}<span style="font-size: 12px">% Non</span></a></h1>
 			</div>
 			<div>
 				<span class="uk-text-small"><span uk-icon="icon:check" class="uk-margin-small-right uk-text-primary"></span>SLA</span>
-				<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">N/A<small class="uk-text-small">% PSA-PCA</small><br>N/A<small class="uk-text-small">% PO-HO</small></h1>
-				<div class="uk-text-small">
-					<!-- <span class="uk-text-warning" uk-icon="icon: triangle-down">-15%</span> less than last week. -->
-				</div>
+				<h1 class="uk-heading-primary uk-margin-remove uk-text-primary" style="font-size: 34px">N/A<span style="font-size: 12px">% PSA-PCA</span><br>N/A<span style="font-size: 12px">% PO-HO</span></h1>
 			</div>
 		</div>
+		<!-- /PROFITABILITY & WINRATE -->
 		<hr>
+		<!-- CHART -->
 		<div class="uk-grid uk-grid-medium" data-uk-grid>
 			
 			<!-- panel -->
@@ -132,7 +95,7 @@
 				<div class="uk-card uk-card-default uk-card-small uk-card-hover">
 					<div class="uk-card-header">
 						<div class="uk-grid uk-grid-small">
-							<div class="uk-width-auto"><h4>N/A</h4></div>
+							<div class="uk-width-auto"><h4>Revenue TCV (Plan)</h4></div>
 							<div class="uk-width-expand uk-text-right panel-icons">
 								<!-- <a href="#" class="uk-icon-link" title="Move" data-uk-tooltip data-uk-icon="icon: move"></a> -->
 								<!-- <a href="#" class="uk-icon-link" title="Configuration" data-uk-tooltip data-uk-icon="icon: cog"></a> -->
@@ -142,7 +105,7 @@
 					</div>
 					<div class="uk-card-body">
 						<div class="chart-container">
-							<canvas id="chart20"></canvas>
+							<canvas id="chart2"></canvas>
 						</div>
 					</div>
 				</div>
@@ -195,7 +158,7 @@
 				<div class="uk-card uk-card-default uk-card-small uk-card-hover">
 					<div class="uk-card-header">
 						<div class="uk-grid uk-grid-small">
-							<div class="uk-width-auto"><h4>N/A</h4></div>
+							<div class="uk-width-auto"><h4>Opportunity</h4></div>
 							<div class="uk-width-expand uk-text-right panel-icons">
 								<a href="#" class="uk-icon-link" title="Move" data-uk-tooltip data-uk-icon="icon: move"></a>
 								<a href="#" class="uk-icon-link" title="Configuration" data-uk-tooltip data-uk-icon="icon: cog"></a>
@@ -212,9 +175,8 @@
 			</div>
 			<!-- /panel -->
 		</div>
-
+		<!-- /CHART -->
 		<hr>
-		<!-- {% lorem %} -->
 		<footer class="uk-section uk-section-small uk-text-center">
 			<hr>
 			<p class="uk-text-small uk-text-center">Copyright 2020 - <a href="#">Created with smile</a> 
@@ -254,6 +216,36 @@
 	    title: {
 	      display: true,
 	      text: 'PSA PCA per month'
+	    }
+	  }
+	});
+
+	// Chart WIN & LOST
+	// ========================================================================
+	var char1El = document.getElementById('chart2');
+	new Chart(char1El, {
+	  type: 'bar',
+	  data: {
+	    labels: ["Won", "Lost", "Progress"],
+	    datasets: [{
+	      label: "TCV (billions)",
+	      backgroundColor: ["#39f", "#895df6", "#3cba9f"],
+	      data: [{{sum_tcv_won}}, {{sum_tcv_lost}}, {{sum_tcv_progress}}]
+	    }]
+	  },
+	  
+	  options: {
+	    maintainAspectRatio: false,
+	    responsiveAnimationDuration: 500,
+	    legend: {
+	      display: false
+	    },
+	    animation: {
+	      duration: 2000
+	    },
+	    title: {
+	      display: true,
+	      text: 'Revenue TCV (billions)'
 	    }
 	  }
 	});
@@ -315,6 +307,36 @@
 	        text: 'Total PSA per Criteria'
 	      }
 	    }
+	});
+
+	// Chart Qty Oppty
+	// ========================================================================
+	var char3El = document.getElementById('chart5');
+
+	new Chart(char3El, {
+	  type: 'horizontalBar',
+	  data: {
+	    labels: ["Progress", "Submited", "Cancelled", "Won", "Lost"],
+	    datasets: [{
+	      label: "Oppty",
+	      backgroundColor: ["#39f", "#895df6", "#3cba9f", "#e8c3b9", "#c45850"],
+	      data: [{{progress_prepro}}, {{submit_prepro}}, {{cancelled_psahold_prepro}}, {{won_prepro}}, {{lost_prepro}}]
+	    }]
+	  },
+	  options: {
+	    maintainAspectRatio: false,
+	    responsiveAnimationDuration: 500,
+	    legend: {
+	      display: false
+	    },
+	    animation: {
+	      duration: 2000
+	    },
+	    title: {
+	      display: true,
+	      text: 'Total {{total_prepro}} Oppty'
+	    }
+	  }
 	});
 </script>
 {% endblock %}
