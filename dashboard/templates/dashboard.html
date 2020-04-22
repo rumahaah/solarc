@@ -226,11 +226,11 @@
 	new Chart(char1El, {
 	  type: 'bar',
 	  data: {
-	    labels: ["Won", "Lost", "Progress"],
+	    labels: ["Won", "Progress", "Lost"],
 	    datasets: [{
 	      label: "TCV (billions)",
-	      backgroundColor: ["#3cba9f", "#C45850", "#39f"],
-	      data: [{{sum_tcv_won}}, {{sum_tcv_lost}}, {{sum_tcv_progress}}]
+	      backgroundColor: ["#3cba9f", "#39f", "#C45850"],
+	      data: [{{sum_tcv_won}}, {{sum_tcv_progress}}, {{sum_tcv_lost}}]
 	    }]
 	  },
 	  
@@ -316,11 +316,11 @@
 	new Chart(char3El, {
 	  type: 'horizontalBar',
 	  data: {
-	    labels: ["Progress", "Submited", "Cancelled", "Won", "Lost"],
+	    labels: ["Progress", "Submited", "Won", "Lost", "Cancelled"],
 	    datasets: [{
 	      label: "Oppty",
-	      backgroundColor: ["#39f", "#895df6", "#3cba9f", "#e8c3b9", "#c45850"],
-	      data: [{{progress_prepro}}, {{submit_prepro}}, {{cancelled_psahold_prepro}}, {{won_prepro}}, {{lost_prepro}}]
+	      backgroundColor: ["#39f", "#895df6", "#3cba9f", "#c45850", "#e8c3b9"],
+	      data: [{{progress_prepro}}, {{submit_prepro}}, {{won_prepro}}, {{lost_prepro}}, {{cancelled_psahold_prepro}}]
 	    }]
 	  },
 	  options: {
