@@ -1,6 +1,8 @@
 {% load static %}<!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/uikit.min.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
 	<title>{% block title %}{% endblock %}</title>
@@ -29,7 +31,7 @@
 								</ul>
 							</div>
 						<li >
-							<a href="#">PSA<span data-uk-icon="icon: triangle-down"></span></a>
+							<a href="#" {% if request.path == '/psapca/' %} class="uk-active" {% endif %}>PSA<span data-uk-icon="icon: triangle-down"></span></a>
 							<div class="uk-navbar-dropdown">
 								<ul class="uk-nav uk-navbar-dropdown-nav">
 									<li {% url 'psa' as psa_url %}{% if request.get_full_path == psa_url %} class="uk-active" {% endif %}><a href="{% url 'psa'%}">ALL PSA</a></li>
@@ -76,6 +78,49 @@
 	</header>
 	<!--/HEADER-->
 		{% block content %}{% endblock %}
+		<!-- OFFCANVAS -->
+		<div id="offcanvas-nav" data-uk-offcanvas="flip: true; overlay: true">
+			<div class="uk-offcanvas-bar uk-offcanvas-bar-animation uk-offcanvas-slide">
+				<button class="uk-offcanvas-close uk-close uk-icon" type="button" data-uk-close></button>
+				<ul class="uk-nav uk-nav-default">
+					<li><a href="/">Home</a></li>
+					<li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+					<li class="uk-parent">
+						<a href="#">Preproject</a>
+						<ul class="uk-nav-sub">
+							<li {% url 'preproject' as preproject_url %}{% if request.get_full_path == preproject_url %} class="uk-active" {% endif %}><a href="{% url 'preproject'%}">All Oppty</a></li>
+							<li {% if request.get_full_path == '/preproject/oppty/progresssa' %} class="uk-active" {% endif %}><a href="{% url 'preproject'%}/progresssa">Progress</a></li>
+							<li {% if request.get_full_path == '/preproject/oppty/submited' %} class="uk-active" {% endif %}><a href="{% url 'preproject'%}/submited">Submited</a></li>
+							<li {% if request.get_full_path == '/preproject/opptywon' %} class="uk-active" {% endif %}><a href="{% url 'opptywon'%}">Close Won</a></li>
+							<li {% if request.get_full_path == '/preproject/opptylost' %} class="uk-active" {% endif %}><a href="{% url 'opptylost'%}">Close Lost</a></li>
+							<li {% if request.get_full_path == '/preproject/detail' %} class="uk-active" {% endif %}><a href="{% url 'detail'%}">Detail</a></li>
+						</ul>
+					<li>
+					<li >
+						<a href="#">PSA</a>
+						<ul class="uk-nav-sub">
+							<li {% url 'psa' as psa_url %}{% if request.get_full_path == psa_url %} class="uk-active" {% endif %}><a href="{% url 'psa'%}">All PSA</a></li>
+							<li {% if request.get_full_path == '/psapca/psa/go' %} class="uk-active" {% endif %}><a href="{% url 'psa'%}/go">PSA GO</a></li>
+							<li {% if request.get_full_path == '/psapca/psa/not' %} class="uk-active" {% endif %}><a href="{% url 'psa'%}/not">PSA NOT GO & HOLD</a></li>
+							<li {% if request.get_full_path == '/psapca/psa/psa5wd' %} class="uk-active" {% endif %}><a href="{% url 'psa'%}/psa5wd">PSA 5WD</a></li>
+							<li {% if request.get_full_path == '/psapca/psa/psa5wdpssho' %} class="uk-active" {% endif %}><a href="{% url 'psa'%}/psa5wdpssho">PSA 5WD PSSHO</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">PCA</a>
+						<ul class="uk-nav-sub">
+							<li {% url 'pca' as pca_url %}{% if request.get_full_path == pca_url %} class="uk-active" {% endif %}><a href="{% url 'pca'%}">ALL PCA</a></li>
+							<li {% if request.get_full_path == 'psapca/pca/go' %} class="uk-active" {% endif %}><a href="{% url 'pca'%}/go">PCA GO/APPROVE</a></li>
+							<li {% if request.get_full_path == 'psapca/pca/not' %} class="uk-active" {% endif %}><a href="{% url 'pca'%}/not">PCA NOT GO & HOLD</a></li>
+							<li {% if request.get_full_path == 'psapca/pca/pca21wd' %} class="uk-active" {% endif %}><a href="{% url 'pca'%}/pca21wd">PCA 21WD</a></li>
+						</ul>
+					</li>
+					<li {% url 'handover' as handover_url %}{% if request.get_full_path == handover_url %} class="uk-active" {% endif %}><a href="{% url 'handover'%}">Handover</a></li>
+				</ul>
+			</div>
+		</div>
+		<!-- /OFFCANVAS -->
+		<!-- JAVA SCRIPT -->
 		<script src="{% static 'js/uikit.min.js' %}"></script>
 		<script src="{% static 'js/uikit-icons.min.js' %}"></script>
 		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
@@ -101,5 +146,6 @@
                 });
             });
         </script>
+		<!-- /JAVA SCRIPT -->
 </body>
 </html>
