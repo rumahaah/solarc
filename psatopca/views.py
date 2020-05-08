@@ -1,24 +1,21 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.db.models.functions import Lower, Coalesce
-from django.db.models import Avg, Sum, Value
-
-from . models import Psa, Pca
-from . filters import Psafilter, Pcafilter
-
 from datetime import datetime
 import numpy
 import statistics 
 
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.db.models.functions import Lower, Coalesce
+from django.db.models import Avg, Sum, Value
+from django.core.mail import BadHeaderError, EmailMessage
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+
+from . models import Psa, Pca
+from preproject.models import Othersperson
+from . filters import Psafilter, Pcafilter
+
 # Create your views here.
-# register = template.Library()
 
-# @register.simple_tag
-# def totalcontracvalue(mrc, otc, duration, *args, **kwargs):
-#     # you would need to do any localization of the result here
-#     return ( mrc * duration ) + otc
-
-#help_function
 def psa_more_than_5wd (rawdata):
 	my_list = []
 	remove_list_b = []
@@ -81,7 +78,60 @@ def progressafterpca_21days (rawdata):
 
 #viewtotemplate
 @login_required
-def index_psa (request,paramm='total'):
+def sendemail(request, pk=None):
+	jmsa1 = Othersperson.objects.get(flag='1').email
+	jmsa2 = Othersperson.objects.get(flag='2').email
+	smpss = Othersperson.objects.get(flag='3').email
+	smsa = Othersperson.objects.get(flag='4').email
+	flagsendemail = Psa.objects.get(pk=pk).flagsendemail
+	datapsa = Psa.objects.filter(pk=pk)
+	for psa in datapsa:
+		salesemail = psa.preproject.sales_lintasarta.email
+		projectname = psa.preproject.project_name
+		preprojectid = psa.preproject.id
+		for customer in psa.preproject.customer.all():
+			customer_name = customer.customer_name
+		for pss in psa.preproject.pss_lintasarta.all():
+			pssemail = pss.email
+		for sa in psa.preproject.sa_lintasarta.all():
+			saemail = sa.email
+			sasubbag = sa.subbag
+	if sasubbag == '1':
+		jmemail = jmsa1
+	elif sasubbag == '2':
+		jmemail = jmsa2
+	else:
+		jmemail = ''
+
+	subject = 'Handover PSS to SA - %s' % (projectname)
+	from_email = 'Solution Architect <solarc.solutionarchitect@gmail.com>'
+	context = {'datapsa': datapsa,}
+	to = [salesemail,pssemail,saemail,]
+	# to = ['solarc.solutionarchitect@gmail.com',]
+	cc = [jmemail,smpss,smsa,]
+	# reply_to= to + cc
+	reply_to= [salesemail,pssemail,saemail,jmemail,smpss,smsa,]
+	if saemail == 'tbc@tbc.tbc':
+		return render(request, 'respond_email.html',{'message': '<span class="uk-text-danger">Failed.</span> Assign SA first (<a href="/admin/preproject/preproject/%s/change/">click</a>) before  sending an email. <br>Project %s and customer %s.' % (preprojectid,projectname,customer_name)})
+	elif subject and from_email and to and cc and flagsendemail==0:
+	# elif subject and from_email and to and flagsendemail==0:
+	# elif subject and from_email and to:
+		try:
+			msg_html = render_to_string('sendemail.html',context)
+			msg = EmailMessage(subject=subject, body=msg_html, from_email=from_email, to=to, cc=cc, reply_to=reply_to)
+			# msg = EmailMessage(subject=subject, body=msg_html, from_email=from_email, to=to, reply_to=reply_to)
+			msg.content_subtype = "html"  # Main content is now text/html
+			msg.send()
+			Psa.objects.filter(pk=pk).update(flagsendemail=1)
+		except BadHeaderError:
+			return HttpResponse('Invalid header found.')
+		return render(request, 'respond_email.html',{'message': 'The email was sent <span class="uk-text-success">successfully</span>. <br>Project %s and customer %s.' % (projectname,customer_name)})
+		# return HttpResponseRedirect('%s%s' % ('/sendemail/cc/',pk))
+	else:
+		return render(request, 'respond_email.html',{'message': '<span class="uk-text-danger">Failed.</span> An email has been sent before. <br>Project %s and customer %s.' % (projectname,customer_name)})
+
+@login_required
+def index_psa (request,paramm='total',idpsa=None):
 	if paramm == 'total':
 		v_psa = Psafilter(request.GET, queryset=Psa.objects.order_by(Lower('psa_date').desc()))
 	elif paramm == 'totalsa1':
@@ -121,6 +171,7 @@ def index_psa (request,paramm='total'):
 	return render(request, 'psa.html',{
 	# return render(request, 'psa_oioi.html',{
 		'list': v_psa,
+		'idpsa': idpsa,
 		})
 
 

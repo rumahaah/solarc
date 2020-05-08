@@ -10,5 +10,6 @@ urlpatterns = [
     path('pca/<slug:paramm>', views.index_pca),
     # path('psa5wd', views.psa5wd, name='psa5wd'),
     # path('psa5wdpssho', views.psa5wdpssho, name='psa5wdpssho'),
+    path('sendemail/<int:pk>', views.sendemail),
 
 ]

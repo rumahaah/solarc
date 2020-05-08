@@ -87,7 +87,7 @@
                 <td>{% for sa in psa.preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td>
                 {% if psa.risk_category == 'm' %}<td class="uk-text-bold uk-text-primary">M</td>{% elif psa.risk_category == 'h' %}<td class="uk-text-bold uk-text-danger">H</td>{% elif psa.risk_category == 'l' %}<td class="uk-text-bold uk-text-success">L</td>{% else %}<td class="uk-text-bold">n/a</td>{% endif %}
                 <td>{% for pca in psa.pca_set.all %}{{pca.pca_date|date:'d-M-y'}}{% endfor %}</td> 
-                {% if request.user.is_staff %}<td><a href="">send email</a></td>{% endif %} 
+                {% if request.user.is_staff %}<td>{% if psa.flagsendemail == 0 %}<a href="/psapca/sendemail/{{psa.id}}">Send Email</a>{% else %}Sent{% endif %}</td>{% endif %} 
                 {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{psa.preproject_id}}/change/" target="_blank">Prepro</a> | <a href="/admin/psatopca/psa/{{psa.id}}/change/" target="_blank">PSA</a></td>{% endif %} 
             </tr>
         </tbody>{% endfor %}
@@ -96,3 +96,10 @@
 </div>
 {% endblock %}
 {% block scriptexportexcel %}filename: "Export PSA" + ".xls",{% endblock %}
+{% block additionaljavascript %}
+    
+    
+        <script>{% if m %}UIkit.notification('row pk {{m}}, email sent');{% endif %}</script>
+{% endblock %}
+
+

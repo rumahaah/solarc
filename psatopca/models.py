@@ -4,10 +4,6 @@ from preproject.models import Preproject
 # Create your models here.
 class Psa(models.Model):
 	preproject = models.ForeignKey('preproject.Preproject', on_delete=models.CASCADE)
-	# product_category_option = (
-	# 	('d', 'Datacomm'),
-	# 	('i', 'ITS'),
-	# )
 	productornot_option = (
 		('p', 'Product'),
 		('n', 'Non Product'),
@@ -34,16 +30,8 @@ class Psa(models.Model):
 	)
 	psa_date = models.DateField()
 	pss_ho_date = models.DateField(blank=True, null=True)
-	# pca_date = models.DateField(blank=True, null=True)
-	# product_category =  models.CharField(max_length=1, choices=product_category_option)
-	# customer = models.ManyToManyField('preproject.Customer')
-	# customer = models.ForeignKey('preproject.Customer', on_delete=models.CASCADE)
-	# customer = models.ForeignKey('Customer')
-	# project_name = models.CharField(max_length=100)
-	# sales_lintasarta = models.ForeignKey('preproject.Lintasartaperson',related_name='+', on_delete=models.CASCADE)
-	# sales_lintasarta = models.ForeignKey('preproject.Lintasartaperson',related_name="Psapca.sales_lintasarta",on_delete=models.CASCADE)
-	# pss_lintasarta = models.ManyToManyField('preproject.Lintasartaperson',related_name='+')
-	# pss_lintasarta = models.ManyToManyField('preproject.Lintasartaperson',related_name="Psapca.pss_lintasarta")
+	# pss_ho_detail = models.ForeignKey('Pssho', blank=True, null=True, on_delete=models.CASCADE)
+	pss_ho_detail = models.OneToOneField('Pssho', blank=True, null=True, on_delete=models.CASCADE)
 	productornot =  models.CharField(max_length=1, choices=productornot_option)
 	scale =  models.CharField(max_length=1, choices=scale_option)
 	summary = models.TextField(max_length=1000)
@@ -53,12 +41,11 @@ class Psa(models.Model):
 	risk_category = models.CharField(max_length=1, choices=risk_category_option)
 	sub_dept = models.CharField(max_length=3, choices=sub_dept_option)
 	
+	flagsendemail = models.BooleanField(default=True)
+	
 	#timestamp
 	table_updated = models.DateField(auto_now=True, auto_now_add=False)
 	table_creation_timestamp = models.DateField(auto_now=False, auto_now_add=True)
-
-	# def is_upperclass(self):
-	# 	return self.status_psa in {self.h, self.g}
 
 	def __str__(self):
 		if self.status_psa == 'g':
@@ -101,7 +88,6 @@ class Pca(models.Model):
 	#timestamp
 	table_updated = models.DateField(auto_now=True, auto_now_add=False)
 	table_creation_timestamp = models.DateField(auto_now=False, auto_now_add=True)
-	
 	def __str__(self):
 		if self.status_pca == 'g':
 			status_pca_1 = 'PCA: APPROVED'
@@ -110,3 +96,13 @@ class Pca(models.Model):
 		else:
 			status_pca_1 = 'PCA: NOT GO'
 		return "%s - %s" % (self.psa, status_pca_1)
+
+class Pssho(models.Model):
+	psa_doc = models.BooleanField(default=False, verbose_name="Project Selection Approval")
+	resource_assessment_doc = models.BooleanField(default=False, verbose_name="Resource Assessment")
+	risk_assessment_doc = models.BooleanField(default=False, verbose_name="Risk Assessment")
+	brs_doc = models.BooleanField(default=False, verbose_name="Business Requirement Specification (BRS)")
+	rks_doc = models.BooleanField(default=False, verbose_name="RKS Tender (if available)")
+	
+	def __str__(self):
+		return 'PSA (%s) - Resource (%s) - Risk (%s) - BRS (%s) - RKS (%s)' % (self.psa_doc,self.resource_assessment_doc,self.risk_assessment_doc,self.brs_doc,self.rks_doc)

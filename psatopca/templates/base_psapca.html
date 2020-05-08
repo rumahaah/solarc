@@ -53,9 +53,7 @@
 								</ul>
 							</div>
 						</li>
-						</li>
 						<li><a href="{% url 'handover'%}">Handover</a></li>
-						</li>
 					</ul>
 				</div>
 				<div class="uk-navbar-right">
@@ -146,6 +144,7 @@
                 });
             });
         </script>
+		{% block additionaljavascript %}{% endblock %}
 		<!-- /JAVA SCRIPT -->
 </body>
 </html>

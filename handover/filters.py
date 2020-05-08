@@ -15,5 +15,6 @@ class Handoverfilter(django_filters.FilterSet):
                     'pca__psa__preproject__customer__customer_name',
                     'pca__psa__preproject__project_name',
                     'pca__psa__preproject__sa_lintasarta__initial',
+                    'pmois_status',
                     'problem_category',
                     ]

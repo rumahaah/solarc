@@ -10,33 +10,33 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import os
-# import django_heroku
+import environ
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+root = environ.Path(__file__)
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = root()
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ik($0*7b$kjn_t6fxt56$1@^k8nxh+bvp6_l#$ws%o2m80%&z1'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# False if not in os.environ
+DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = [
-	'10.24.17.72',
-    '127.0.0.1',
-    '127.0.0.2',
-    'solarc.pythonanywhere.com',
-]
-
-# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [env('ALLOWED_HOSTS')]
 
 # Application definition
-
 INSTALLED_APPS = [
 	'psatopca.apps.PsatopcaConfig',
 	'preproject.apps.PreprojectConfig',
@@ -49,8 +49,6 @@ INSTALLED_APPS = [
 	'django.contrib.sessions',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
-	# 'djcelery_email',
-	# 'django_celery_results',
 	'django.contrib.humanize',
 	'widget_tweaks',
 ]
@@ -85,18 +83,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'solarc.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		# 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-		'NAME': os.path.join(os.path.dirname(BASE_DIR), 'dbque','db.sqlite3'),
-	}
-}
+# DATABASES = {
+# 	'default': {
+# 		'ENGINE': 'django.db.backends.sqlite3',
+# 		# 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+# 		'NAME': os.path.join(os.path.dirname(BASE_DIR), 'dbque','db.sqlite3'),
+# 	}
+# }
 
+DATABASES = {'default': env.db('SQLITE_URL', default='sqlite:////tmp/my-tmp-sqlite.db')}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -116,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
 	},
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -135,26 +132,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+STATIC_ROOT = root('../../../static')
 STATIC_URL = '/static/'
-
-# EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
-
-# CELERY STUFF
-# BROKER_URL = 'redis://localhost:6379'
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'Asia/Jakarta'
-
-# CELERY_RESULT_BACKEND = 'django-db'
-# CELERY_CACHE_BACKEND = 'django-cache'
 
 # LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# django_heroku.settings(locals())
+## EMAIL CONFIG ##
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+# EMAIL_CONFIG = env.email_url('EMAIL_URL', default='smtp://user@:password@localhost:25')
+# EMAIL_USE_TLS = True
+# vars().update(EMAIL_CONFIG)
+
 # SECURE_SSL_REDIRECT = True

@@ -13,6 +13,15 @@ class Handover(models.Model):
 		('i-pc','Internal - PCA Form'),
 		('i-de','Internal - Delay to HO'),
 	)
+	pmois_status_option = (
+		('1','Project Charter - Draft'),
+		('2','Project Charter - Waiting Approval Presales GM'),
+		('3','Project Charter - Waiting Approval Delivery GM'),
+		('4','Project Charter - Waiting Approval PM'),
+		('5','Presales Handover - Draft'),
+		('6','Presales Handover - Waiting Approval PM'),
+		('7','Presales Handover - Approved'),
+	)
 	pca = models.ForeignKey('psatopca.Pca', on_delete=models.CASCADE)
 	# oppty = models.ForeignKey('preproject.Preproject', on_delete=models.CASCADE)
 	po_date = models.DateField()
@@ -20,6 +29,7 @@ class Handover(models.Model):
 	submit_doc_projectcharter_date = models.DateField()
 	submit_presales_handover_date = models.DateField()
 	remark = models.TextField(max_length=1000, blank=True, null=True)
+	pmois_status = models.CharField(max_length=1, choices=pmois_status_option, default='1')
 	problem_category = models.CharField(max_length=4, choices=problem_category_option, default='n-pr')
 
 	def __str__(self):

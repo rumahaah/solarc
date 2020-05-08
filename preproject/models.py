@@ -124,6 +124,23 @@ class Salesperson(models.Model):
 	class Meta:
 		ordering = ['initial', 'name']
 
+class Othersperson(models.Model):
+	flag_option = (
+		('1', 'SA 1'),
+		('2', 'SA 2'),
+		('3', 'PSS SM'),
+		('4', 'SA SM'),
+	)
+	initial = models.CharField(max_length=3)
+	name = models.CharField(max_length=100)
+	email = models.CharField(max_length=100)
+	flag = models.CharField(max_length=1, choices=flag_option)
+
+	def __str__(self):
+		return "%s - %s" % (self.initial, self.name)
+	class Meta:
+		ordering = ['initial', 'name']
+
 class Customer(models.Model):
 	segment_option = (
 			('0', 'Banking 1'),
