@@ -45,6 +45,7 @@
                       <option value="5" {%if request.GET.pmois_status == '5'%} selected {%endif%}>Presales Handover - Draft</option>
                       <option value="6" {%if request.GET.pmois_status == '6'%} selected {%endif%}>Presales Handover - Waiting Approval PM</option>
                       <option value="7" {%if request.GET.pmois_status == '7'%} selected {%endif%}>Presales Handover - Approved</option>
+                      <option value="8" {%if request.GET.pmois_status == '8'%} selected {%endif%}>Presales Handover - Rejected</option>
                     </select></th>
                     <th class="uk-table-middle"><select name="problem_category" class="uk-select uk-form-small" id="id_problem_category" style="width: 35px;font-size: 80%;">
                       <option value=""></option>
@@ -76,7 +77,7 @@
                 <td>{{ho.submit_doc_projectcharter_date|date:'d-M-y'}}</td> 
                 <td>{{ho.submit_presales_handover_date|date:'d-M-y'}}</td> 
                 <td>{% if ho.pca.psa.preproject.progress == 'w' %}Close Won{% elif ho.pca.psa.preproject.progress == 'l' %}Close Lost{% elif ho.pca.psa.preproject.progress == 'p' %}Progress - Internal SA{% elif ho.pca.psa.preproject.progress == 's' %}Progress - Submited{% elif ho.pca.psa.preproject.progress == 'c' %}Cacncelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
-                <td>{% if ho.pmois_status == '1' %}Project Charter - Draft{% elif ho.pmois_status == '2' %}Project Charter - Waiting Approval Presales GM{% elif ho.pmois_status == '3' %}Project Charter - Waiting Approval Delivery GM{% elif ho.pmois_status == '4' %}Project Charter - Waiting Approval PM{% elif ho.pmois_status == '5' %}Presales Handover - Draft{% elif ho.pmois_status == '6' %}Presales Handover - Waiting Approval PM{% elif ho.pmois_status == '7' %}Presales Handover - Approved{% endif %}</td> 
+                <td>{% if ho.pmois_status == '1' %}Project Charter - Draft{% elif ho.pmois_status == '2' %}Project Charter - Waiting Approval Presales GM{% elif ho.pmois_status == '3' %}Project Charter - Waiting Approval Delivery GM{% elif ho.pmois_status == '4' %}Project Charter - Waiting Approval PM{% elif ho.pmois_status == '5' %}Presales Handover - Draft{% elif ho.pmois_status == '6' %}Presales Handover - Waiting Approval PM{% elif ho.pmois_status == '7' %}Presales Handover - Approved{% else %}Presales Handover - Rejected{% endif %}</td> 
                 <td>{% if ho.problem_category == 'n-pr' %}No Problem - Fulfilled{% elif ho.problem_category == 'e-sc'%}External - Scope Change{% elif ho.problem_category == 'e-rn'%}External - Renewal Process{% elif ho.problem_category == 'e-po'%}External - Conduct PSA After PO{% elif ho.problem_category == 'e-pr'%}External - Custom Product{% elif ho.problem_category == 'i-pc'%}Internal - PCA Form{% elif ho.problem_category == 'i-de'%}Internal - Delay to HO{% else %}TES{% endif %}</td>
                 <td>{% rupiah ho.pca.tcv %}</td>
                 {% if request.user.is_staff %}<td class="noExl"><a href="/admin/handover/handover/{{ho.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a></td>{% endif %} 

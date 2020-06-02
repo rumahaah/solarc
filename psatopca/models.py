@@ -41,7 +41,7 @@ class Psa(models.Model):
 	risk_category = models.CharField(max_length=1, choices=risk_category_option)
 	sub_dept = models.CharField(max_length=3, choices=sub_dept_option)
 	
-	flagsendemail = models.BooleanField(default=True)
+	flagsendemail = models.BooleanField(default=False)
 	
 	#timestamp
 	table_updated = models.DateField(auto_now=True, auto_now_add=False)
@@ -103,6 +103,7 @@ class Pssho(models.Model):
 	risk_assessment_doc = models.BooleanField(default=False, verbose_name="Risk Assessment")
 	brs_doc = models.BooleanField(default=False, verbose_name="Business Requirement Specification (BRS)")
 	rks_doc = models.BooleanField(default=False, verbose_name="RKS Tender (if available)")
+	remark = models.TextField(max_length=1000, blank=True, null=True)
 	
 	def __str__(self):
 		return 'PSA (%s) - Resource (%s) - Risk (%s) - BRS (%s) - RKS (%s)' % (self.psa_doc,self.resource_assessment_doc,self.risk_assessment_doc,self.brs_doc,self.rks_doc)

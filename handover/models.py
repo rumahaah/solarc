@@ -21,6 +21,8 @@ class Handover(models.Model):
 		('5','Presales Handover - Draft'),
 		('6','Presales Handover - Waiting Approval PM'),
 		('7','Presales Handover - Approved'),
+		('8','Presales Handover - Rejected'),
+		('9','Handover Not Required'),
 	)
 	pca = models.ForeignKey('psatopca.Pca', on_delete=models.CASCADE)
 	# oppty = models.ForeignKey('preproject.Preproject', on_delete=models.CASCADE)
