@@ -13,19 +13,14 @@
 
 		#customers {
 		  border-collapse: collapse;
-		  /*width: 100%;*/
 		}
 		#customers td, #customers th {
-		  /*border: 1px solid #ddd;*/
 		  border: 1px solid #C0C0C0;
 		  padding: 4px;
 		}
-		/*#customers tr:nth-child(even){background-color: #f2f2f2;}*/
-		/*#customers tr:hover {background-color: #ddd;}*/
 		#customers th {
 		  padding-top: 5px;
 		  padding-bottom: 5px;
-		  /*text-align: left;*/
 		  text-align: center;
 		  background-color: #D3D3D3;
 		  color: black;
@@ -34,12 +29,13 @@
 </head>
 <body>
 	{% for psa in datapsa %}
-	<span>Dear Rekan {{psa.preproject.sales_lintasarta.name}},</span>
+	<span>Dear Rekan {{psa.preproject.sales_lintasarta.name}},</span><br>
 	<span>Terkait dengan PSA Project:</span>
 	<table id="customers">
 	  <tr>
 	    <th>PSA Date</th>
 	    <th>Oppty ID</th>
+	    <th>Customer Name</th>
 	    <th>Project Name</th>
 	    <th>Sales</th>
 	    <th>Product/Not</th>
@@ -52,10 +48,9 @@
 	  <tr>
 	    <td>{{psa.psa_date}}</td>
 	    <td>{{psa.preproject.oppty_id}}</td>
+	    <td>{% for customer in psa.preproject.customer.all %}{{ customer.customer_name }}{% endfor %}</td>
 	    <td>{{psa.preproject.project_name}}</td>
 	    <td>{{psa.preproject.sales_lintasarta.name}}</td>
-<!-- 	    <td>{{psa.productornot}}</td>
-	    <td>{{psa.scale}}</td> -->
 	    <td>{% if psa.productornot == 'n'%}Non Product{%else%}Product{%endif%}</td> 
 	    <td>{% if psa.scale == 'l'%}Large{% elif psa.scale == 'm'%}Medium{%else%}Small{%endif%}</td> 
 	    <td>{{psa.summary}}</td>
@@ -67,8 +62,8 @@
 	<span>Sesuai koridor, accountablility dari proyek  ada di Sales, mohon bantuannya untuk dapat di share ke tim SA:</span>
 	<ol>
 	  <li>Dokumen PSA, karena PCA tidak bisa di proses ttd apabila dokumen PSA nya tidak ada</li>
-	  <li>Strategi Pemenangan Project , jika diperlukan meeting lanjutan pembahasan project ini tim SA siap untuk membantu</li>
-	  <li>RFS Submit nya (Tanggal dan Jam)</li>
+	  <li>Strategi pemenangan project, jika diperlukan meeting lanjutan pembahasan project ini tim SA siap untuk membantu</li>
+	  <li>Timeline proses pra penjualannya seperti waktu submit (tanggal dan jam), penjelasan proposal (jika ada), nego dan lainnya</li>
 	</ol>
 	<span>Dear Rekan {% for pss in psa.preproject.pss_lintasarta.all %}{{ pss.name }}{% endfor %},</span>
 	<span>Mohon dibantu share dokumen nya. Demikian check list HO PSS to SA:</span>
@@ -118,7 +113,7 @@
 	</ol>
 	<span>Apabila ada pekerjaan diluar 3 point diatas, mohon dapat segera di infokan, untuk dapat kami pelajari terlebih dahulu.</span>
 	<span>Atas dokumen dan informasinya kami ucapkan banyak terima kasih.</span>
-	<br><span>Best Regards,</span>
+	<br><span>Best Regards,</span><br>
 	<span>Solution Architect</span>
 	{% endfor %}
 </body>

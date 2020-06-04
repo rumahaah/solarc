@@ -25,7 +25,7 @@ def ho_more_than_2wd_from_po_known_date(rawdata):
 			my_list.append(str(handover.id))
 	return my_list
 
-
+@login_required
 def handover (request,paramm='total'):
 	if paramm == 'total':
 		v_ho = Handoverfilter(request.GET, queryset=Handover.objects.order_by(Lower('po_known_date').desc()))

@@ -103,7 +103,7 @@ def sendemail(request, pk=None):
 	else:
 		jmemail = ''
 
-	subject = 'Handover PSS to SA - %s' % (projectname)
+	subject = 'Handover PSS to SA - %s - %s' % (customer_name, projectname)
 	from_email = 'Solution Architect <solarc.solutionarchitect@gmail.com>'
 	context = {'datapsa': datapsa,}
 	to = [salesemail,pssemail,saemail,]
