@@ -1,4 +1,4 @@
-{% extends "base_psapca.html" %}{% block title %}Preproject Opportunity | SolArc{% endblock %}{% block content %}
+{% extends "base_psapca.html" %}{% load widget_tweaks %}{% block title %}Preproject Opportunity | SolArc{% endblock %}{% block content %}
 <div class="uk-container">
     <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
     <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
@@ -22,9 +22,74 @@
                 {% if request.user.is_staff %}<th class="noExl uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Edit</th>{% endif %}
 
             </tr>
+            <tr class="noExl">
+                <form method="get" class="">
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle">{% render_field list.form.customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.sa_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.pss_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.sales_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">
+                        <select name="project_status" id="id_project_status" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value="" selected></option>
+                          <option value="c" {%if request.GET.project_status == 'c'%} selected {%endif%}>Create</option>
+                          <option value="o" {%if request.GET.project_status == 'o'%} selected {%endif%}>Open</option>
+                          <option value="b" {%if request.GET.project_status == 'b'%} selected {%endif%}>Break</option>
+                        </select>
+                    </th>
+                    <th class="uk-table-middle">
+                        <select name="solution_criteria" id="id_solution_criteria" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value="" selected></option>
+                          <option value="s" {%if request.GET.solution_criteria == 's'%} selected {%endif%}>Standard</option>
+                          <option value="m" {%if request.GET.solution_criteria == 'm'%} selected {%endif%}>Multiservice</option>
+                          <option value="cm" {%if request.GET.solution_criteria == 'cm'%} selected {%endif%}>Complex MRC &gt; 150JT</option>
+                          <option value="co" {%if request.GET.solution_criteria == 'co'%} selected {%endif%}>Complex OTC &gt; 5M</option>
+                          <option value="cn" {%if request.GET.solution_criteria == 'cn'%} selected {%endif%}>Complex Non Product</option>
+                          <option value="cc" {%if request.GET.solution_criteria == 'cc'%} selected {%endif%}>Complex Custom Product</option>
+                        </select>
+                    </th>
+                    <th class="uk-table-middle">
+                        <select name="progress" id="id_progress" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value="" selected></option>
+                          <option value="w" {%if request.GET.progress == 'w'%} selected {%endif%}>Close Won</option>
+                          <option value="l" {%if request.GET.progress == 'l'%} selected {%endif%}>Close Lost</option>
+                          <option value="p" {%if request.GET.progress == 'p'%} selected {%endif%}>Progress - Internal SA</option>
+                          <option value="s" {%if request.GET.progress == 's'%} selected {%endif%}>Progress - Submited</option>
+                          <option value="c" {%if request.GET.progress == 'c'%} selected {%endif%}>Cancelled</option>
+                          <option value="h" {%if request.GET.progress == 'h'%} selected {%endif%}>PSA Hold</option>
+                        </select>
+                    </th>
+                    <!-- <th class="uk-table-middle">{% render_field list.form.taxsonomi %}</th> -->
+                    <!-- <th class="uk-table-middle">
+                        <select name="taxsonomi" id="id_taxsonomi" multiple class="uk-select uk-form-small" style="width: 100%;font-size: 80%;">
+                          <option value="1">Datacom</option>
+                          <option value="2">Cloud</option>
+                          <option value="3">Data Center</option>
+                          <option value="4">Sec &amp; Col</option>
+                          <option value="5">ITO</option>
+                          <option value="6">Insol</option>
+                          <option value="7">Digital Ads</option>
+                        </select>
+                    </th> -->
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle">
+                        <select name="payment" id="id_payment" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value="" selected></option>
+                          <option value="m" {%if request.GET.payment == 'm'%} selected {%endif%}>MRC</option>
+                          <option value="o" {%if request.GET.payment == 'o'%} selected {%endif%}>OTC</option>
+                          <option value="a" {%if request.GET.payment == 'a'%} selected {%endif%}>OTC &amp; MRC</option>
+                        </select>
+                    </th>
+                    <!-- <th class="uk-table-middle"></th> -->
+                    <th class="uk-table-middle"><button type="submit" class="uk-form-small uk-button-primary uk-border-rounded">Filter</button></th>
+                    
+                </form>
+            </tr>
         </thead>
 
-        <tbody>{% for preproject in list %} 
+        <tbody>{% for preproject in list.qs %} 
             <tr> 
             	<td>{{ forloop.counter }}</td> 
                 <td>{{ preproject.oppty_id }}</td> 
@@ -37,7 +102,7 @@
                 <td>{% if preproject.solution_criteria == 's' %}Standard{% elif preproject.solution_criteria == 'm' %}Multiservice{% elif preproject.solution_criteria == 'cm' %}Complex MRC > 150{% elif preproject.solution_criteria == 'co' %}Complex OTC > 5M{% elif preproject.solution_criteria == 'cn' %}Complex Non Product{% elif preproject.solution_criteria == 'cc' %}Complex Costum Product{% else %}-{%endif%}</td> 
                 <td>{% if preproject.progress == 'w' %}Close Won{% elif preproject.progress == 'l' %}Close Lost{% elif preproject.progress == 'p' %}Progress - Internal SA{% elif preproject.progress == 's' %}Progress - Submited{% elif preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
                 <td>{% for taxsonomi in preproject.taxsonomi.all %}{% if taxsonomi.product_name == '0' %}Datacom{% elif taxsonomi.product_name == '1' %}Cloud{% elif taxsonomi.product_name == '2' %}Data Center{% elif taxsonomi.product_name == '3' %}Sec & Col{% elif taxsonomi.product_name == '4' %}ITO{% elif taxsonomi.product_name == '5' %}InSol{% elif taxsonomi.product_name == '6' %}Digital Ads{% else %}|{% endif %}{% endfor %}</td> 
-                <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td> 
+                <td>{% if preproject.payment == 'm' %}MRC{% elif preproject.payment == 'o' %}OTC{% else %}OTC & MRC{% endif %}</td> 
                 <!-- <td>{% for pca in preproject.psa_set.all %}{{pca.pca_date}}{% endfor %}</td> -->
                 <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{{pca.pca_date}}{% endfor %}{% endfor %}</td> -->
                 <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date}}{% endfor %}{% endfor %}{% endfor %}</td> -->
@@ -46,7 +111,7 @@
             </tr>
         </tbody>{% endfor %}
     </table>
-    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary uk-border-rounded">Export to XLS</button>
 </div>
 {% endblock %}
 {% block scriptexportexcel %}filename: "Export Preproject" + ".xls",{% endblock %}

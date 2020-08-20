@@ -38,11 +38,19 @@ def Dashboard(request):
 	v_len_psa_more_than_5wd = len(psa_more_than_5wd(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c')))
 	v_len_psa_more_than_5wd_from_pss_ho = len(psa_more_than_5wd_from_pss_ho(Psa.objects.filter(status_psa='g').exclude(preproject__progress='c')))
 	v_len_progressafterpca_21days = len(progressafterpca_21days(Pca.objects.filter(status_pca='g')))
-	v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.exclude(problem_category='n-pr')))
-	ebitdaprofitability_avg = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1))[0]
-	ebitdaprofitability_weighted = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1))[1]
-	irrprofitability_avg = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1))[0]
-	irrprofitability_weighted = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1))[1]
+	v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.exclude(clean_project_category='n-pr')))
+	
+
+	# ebitdaprofitability
+	ebitdaprofitability_avg = ebitdaprofitability(Pca.objects.filter(bc_category='o').filter(psa__preproject__progress='w').exclude(bc_category='e'))[0]
+	ebitdaprofitability_weighted = ebitdaprofitability(Pca.objects.filter(bc_category='o').filter(psa__preproject__progress='w').exclude(bc_category='e'))[1]
+	ebitdaprofitability_weighted_otc_mrc_only = ebitdaprofitability(Pca.objects.filter(bc_category='o').exclude(psa__preproject__payment='m').filter(psa__preproject__progress='w').exclude(bc_category='e'))[1]
+	ebitdaprofitability_weighted_mrc_only = ebitdaprofitability(Pca.objects.filter(bc_category='o').filter(psa__preproject__payment='m').filter(psa__preproject__progress='w').exclude(bc_category='e'))[1]
+	
+	# irrprofitability_avg
+	irrprofitability_avg = irrprofitability(Pca.objects.filter(bc_category='c').filter(psa__preproject__progress='w').filter(psa__preproject__progress='w').exclude(bc_category='e'))[0]
+	irrprofitability_weighted = irrprofitability(Pca.objects.filter(bc_category='c').filter(psa__preproject__progress='w').exclude(bc_category='e'))[1]
+	irrprofitability_weighted_ebitda = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(bc_category='o').filter(psa__preproject__progress='w').exclude(bc_category='e'))[1]
 
 	#CHART
 	v_total_psa_1 = Psa.objects.filter(psa_date__month='1').count()
@@ -96,8 +104,11 @@ def Dashboard(request):
 		'len_ho_more_than_2wd_from_po_known_date': v_len_ho_more_than_2wd_from_po_known_date,
 		'ebitdaprofitability_avg': ebitdaprofitability_avg,
 		'ebitdaprofitability_weighted': ebitdaprofitability_weighted,
+		'ebitdaprofitability_weighted_otc_mrc_only': ebitdaprofitability_weighted_otc_mrc_only,
+		'ebitdaprofitability_weighted_mrc_only': ebitdaprofitability_weighted_mrc_only,
 		'irrprofitability_avg': irrprofitability_avg,
 		'irrprofitability_weighted': irrprofitability_weighted,
+		'irrprofitability_weighted_ebitda': irrprofitability_weighted_ebitda,
 		'winrate_ksaea': winrate_ksaea(Pca.objects)[0],
 		'winrate_nonksaea': winrate_nonksaea(Pca.objects)[0],
 		
@@ -164,14 +175,14 @@ def Dashboardsubbag(request,paramm='sa1'):
 		v_won_prepro = Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='1').count()
 		v_lost_prepro = Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='1').count()
 		v_handover = Handover.objects.filter(pca__psa__preproject__sa_lintasarta__subbag='1').count()
-		v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.exclude(problem_category='n-pr').filter(pca__psa__preproject__sa_lintasarta__subbag='1')))
+		v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.exclude(clean_project_category='n-pr').filter(pca__psa__preproject__sa_lintasarta__subbag='1')))
 
 
 
-		ebitdaprofitability_avg = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1'))[0]
-		ebitdaprofitability_weighted = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1'))[1]
-		irrprofitability_avg = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1'))[0]
-		irrprofitability_weighted = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1'))[1]
+		ebitdaprofitability_avg = ebitdaprofitability(Pca.objects.filter(bc_category='o').filter(psa__preproject__progress='w').exclude(bc_category='e').filter(psa__preproject__sa_lintasarta__subbag='1'))[0]
+		ebitdaprofitability_weighted = ebitdaprofitability(Pca.objects.filter(bc_category='o').filter(psa__preproject__progress='w').exclude(bc_category='e').filter(psa__preproject__sa_lintasarta__subbag='1'))[1]
+		irrprofitability_avg = irrprofitability(Pca.objects.filter(bc_category='c').filter(psa__preproject__progress='w').exclude(bc_category='e').filter(psa__preproject__sa_lintasarta__subbag='1'))[0]
+		irrprofitability_weighted = irrprofitability(Pca.objects.filter(bc_category='c').filter(psa__preproject__progress='w').exclude(bc_category='e').filter(psa__preproject__sa_lintasarta__subbag='1'))[1]
 		v_winrate_ksaea = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1'))[0]
 		v_sum_tcv_won = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1'))[1]
 		v_sum_tcv_lost = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1'))[2]
@@ -194,14 +205,14 @@ def Dashboardsubbag(request,paramm='sa1'):
 		v_won_prepro = Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='2').count()
 		v_lost_prepro = Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='2').count()
 		v_handover = Handover.objects.filter(pca__psa__preproject__sa_lintasarta__subbag='2').count()
-		v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.exclude(problem_category='n-pr').filter(pca__psa__preproject__sa_lintasarta__subbag='2')))
+		v_len_ho_more_than_2wd_from_po_known_date = len(ho_more_than_2wd_from_po_known_date(Handover.objects.exclude(clean_project_category='n-pr').filter(pca__psa__preproject__sa_lintasarta__subbag='2')))
 	
 
 
-		ebitdaprofitability_avg = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2'))[0]
-		ebitdaprofitability_weighted = ebitdaprofitability(Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2'))[1]
-		irrprofitability_avg = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2'))[0]
-		irrprofitability_weighted = irrprofitability(Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2'))[1]
+		ebitdaprofitability_avg = ebitdaprofitability(Pca.objects.filter(bc_category='o').filter(psa__preproject__progress='w').exclude(bc_category='e').filter(psa__preproject__sa_lintasarta__subbag='2'))[0]
+		ebitdaprofitability_weighted = ebitdaprofitability(Pca.objects.filter(bc_category='o').filter(psa__preproject__progress='w').exclude(bc_category='e').filter(psa__preproject__sa_lintasarta__subbag='2'))[1]
+		irrprofitability_avg = irrprofitability(Pca.objects.filter(bc_category='c').filter(psa__preproject__progress='w').exclude(bc_category='e').filter(psa__preproject__sa_lintasarta__subbag='2'))[0]
+		irrprofitability_weighted = irrprofitability(Pca.objects.filter(bc_category='c').filter(psa__preproject__progress='w').exclude(bc_category='e').filter(psa__preproject__sa_lintasarta__subbag='2'))[1]
 		v_winrate_ksaea = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2'))[0]
 		v_sum_tcv_won = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2'))[1]
 		v_sum_tcv_lost = winrate_ksaea(Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2'))[2]

@@ -1,38 +1,59 @@
-{% extends "base_psapca.html" %}{% block title %}Preproject Customer | SolArc{% endblock %}{% block content %}
-<table class="uk-table uk-text-small uk-table-small uk-table-divider">
-    <!-- <caption>PSA {{ list.count }}</caption> -->
-    <thead>
-        <tr>
-            <th class="uk-table-middle">No</th>
-            <th class="uk-table-middle">Customer Name</th>
-            <th class="uk-table-middle">Customer Segment</th>
-            <th class="uk-table-middle">Customer Criteria</th>
-        </tr>
-    </thead>
-<!-- 
-            ('0', 'Banking 1'),
-            ('1', 'Banking 2'),
-            ('2', 'Finance Non-Bank'),
-            ('3', 'Supply Chain'),
-            ('4', 'Public Sector 1'),
-            ('5', 'Public Sector 2'),
-            ('6', 'Resources'),
-            ('7', 'Telco'),
+{% extends "base_psapca.html" %}{% load customer_extras %}{% block title %}Preproject Customer | SolArc{% endblock %}{% block content %}
+<div class="uk-container">
+    <!-- <span>oppty:{{opptycount}}</span> <span>psa:{{psacount}}</span> <span>pca:{{pcacount}}</span> <span>won:{{woncount}}</span> -->
+    <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 70%;">
+    <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
+        <!-- <caption>PSA {{ list.count }}</caption> -->
+        <!-- {{opptycount}} -->
+        <!-- {{opptycount.num_oppty}} -->
+        <!-- {% for oioi in opptycount %}{{oioi.num_oppty}}{{oioi.customer_name}}{% endfor %} -->
+        <thead>
+            <tr>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">No</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Name</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Segment</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Criteria</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">#Oppty</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">#PSA</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">#PCA</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">#WON</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">#LOST</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Edit</th>
+            </tr>
+        </thead>
+    <!-- 
+                ('0', 'Banking 1'),
+                ('1', 'Banking 2'),
+                ('2', 'Finance Non-Bank'),
+                ('3', 'Supply Chain'),
+                ('4', 'Public Sector 1'),
+                ('5', 'Public Sector 2'),
+                ('6', 'Resources'),
+                ('7', 'Telco'),
 
-            ('0', 'Key Strategic Account'),
-            ('1', 'Emerging Account'),
-            ('2', 'Strategic Account'),
-            ('3', 'New Customer & Not EA'),
-            ('4', 'Regular'), -->
+                ('0', 'Key Strategic Account'),
+                ('1', 'Emerging Account'),
+                ('2', 'Strategic Account'),
+                ('3', 'New Customer & Not EA'),
+                ('4', 'Regular'), -->
 
-    <tbody>{% for customer in list %} 
-        <tr> 
-        	<td>{{forloop.counter}}</td> 
-        	<td>{{customer.customer_name}}</td> 
-            <td>{% if customer.customer_segment == '0' %}BANKING 1{% elif customer.customer_segment == '1' %}BANKING 2{% elif customer.customer_segment == '2' %}FINANCE NON-BANK{% elif customer.customer_segment == '3' %}SUPPLY CHAIN{% elif customer.customer_segment == '4' %}PUBLIC SECTOR 1{% elif customer.customer_segment == '5' %}PUBLIC SECTOR 2{% elif customer.customer_segment == '6' %}RESOURCES{% elif customer.customer_segment == '7' %}TELCO{%else%}N/A{% endif %}</td> 
-            <td>{% if customer.customer_criteria == '0' %}KEY STRATEGIC ACCOUNT{% elif customer.customer_criteria == '1' %}EMERGING ACCOUNT{% elif customer.customer_criteria == '2' %}STRATEGIC ACCOUNT{% else %}REGULAR{% endif %}</td> 
-            <!-- <td>{{customer.customer_criteria}}</td>  -->
-        </tr>
-    </tbody>{% endfor %}
-</table>
+        <tbody>{% for customer in list %} 
+            <tr> 
+            	<!-- <td>{{customer.id}}</td>  -->
+                <td>{{ forloop.counter }}</td> 
+            	<td><a class="uk-link-muted" href="/preproject/customerdetail/{{customer.id}}">{{customer.customer_name}}</a></td> 
+                <td>{% if customer.customer_segment == '0' %}BANKING 1{% elif customer.customer_segment == '1' %}BANKING 2{% elif customer.customer_segment == '2' %}FINANCE NON-BANK{% elif customer.customer_segment == '3' %}SUPPLY CHAIN{% elif customer.customer_segment == '4' %}PUBLIC SECTOR 1{% elif customer.customer_segment == '5' %}PUBLIC SECTOR 2{% elif customer.customer_segment == '6' %}RESOURCES{% elif customer.customer_segment == '7' %}TELCO{%else%}N/A{% endif %}</td> 
+                <td>{% if customer.customer_criteria == '0' %}STRATEGIC KEY ACCOUNT{% elif customer.customer_criteria == '1' %}EMERGING ACCOUNT{% elif customer.customer_criteria == '2' %}KEY ACCOUNT{% else %}REGULAR ACCOUNT{% endif %}</td> 
+                <td>{{customer.num_oppty}}</td> 
+                <td>{% psacount customer.id %}</td> 
+                <td>{% pcacount customer.id %}</td> 
+                <td>{% woncount customer.id %}</td> 
+                <td>{% lostcount customer.id %}</td> 
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/customer/{{customer.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a></td>{% endif %} 
+            </tr>
+        </tbody>{% endfor %}
+    </table>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
+</div>
 {% endblock %}
+{% block scriptexportexcel %}filename: "Export Customer" + ".xls",{% endblock %}

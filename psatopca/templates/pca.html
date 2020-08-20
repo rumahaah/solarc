@@ -63,8 +63,9 @@
                     <th class="uk-table-middle">{% render_field list.form.ebitda class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.irr class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle"></th>
-                    <button type="submit" hidden="">Search</button>
+                    <!-- <th class="uk-table-middle"></th> -->
+                    <th class="uk-table-middle"><button type="submit" class="uk-form-small uk-button-primary uk-border-rounded">Filter</button></th>
+                    <!-- <button type="submit" hidden="">Search</button> -->
                 </form>
             </tr>
         </thead>
@@ -87,7 +88,7 @@
             </tr>
         </tbody>{% endfor %}
     </table>
-    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary uk-border-rounded">Export to XLS</button>
 </div>
 {% endblock %}
 {% block scriptexportexcel %}filename: "Export PCA" + ".xls",{% endblock %}

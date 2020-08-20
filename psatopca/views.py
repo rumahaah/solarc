@@ -171,7 +171,7 @@ def index_psa (request,paramm='total',idpsa=None):
 	return render(request, 'psa.html',{
 	# return render(request, 'psa_oioi.html',{
 		'list': v_psa,
-		'idpsa': idpsa,
+		# 'idpsa': idpsa,
 		})
 
 
@@ -222,17 +222,29 @@ def index_pca (request,paramm='total'):
 	elif paramm == 'pca21wdsa2':
 		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=progressafterpca_21days(Pca.objects.filter(status_pca='g').filter(psa__preproject__sa_lintasarta__subbag='2'))).order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcaebitda':
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).order_by(Lower('pca_date').desc()))
+		# v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).order_by(Lower('pca_date').desc()))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(bc_category='e').filter(psa__preproject__progress='w').filter(bc_category='o').order_by(Lower('pca_date').desc()))
+	elif paramm == 'pcaebitdaotc':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(psa__preproject__payment='m').exclude(bc_category='e').filter(psa__preproject__progress='w').filter(bc_category='o').order_by(Lower('pca_date').desc()))
+	elif paramm == 'pcaebitdamrc':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__payment='m').exclude(bc_category='e').filter(psa__preproject__progress='w').filter(bc_category='o').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcaebitdasa1':
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
+		# v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(bc_category='e').filter(psa__preproject__progress='w').filter(bc_category='o').filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcaebitdasa2':
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
+		# v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(bc_category='e').filter(psa__preproject__progress='w').filter(bc_category='o').filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcairr':
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).order_by(Lower('pca_date').desc()))
+		# v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).order_by(Lower('pca_date').desc()))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(bc_category='e').filter(psa__preproject__progress='w').filter(bc_category='c').order_by(Lower('pca_date').desc()))
+	elif paramm == 'pcacapexebitda':
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(ebitda=0).exclude(bc_category='e').filter(psa__preproject__progress='w').filter(bc_category='c').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcairrsa1':
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
+		# v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(bc_category='e').filter(psa__preproject__progress='w').filter(bc_category='c').filter(psa__preproject__sa_lintasarta__subbag='1').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcairrsa2':
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
+		# v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(irr=0).filter(psa__preproject__progress='w').filter(flagcalc=1).filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.exclude(bc_category='e').filter(psa__preproject__progress='w').filter(bc_category='c').filter(psa__preproject__sa_lintasarta__subbag='2').order_by(Lower('pca_date').desc()))
 	elif paramm == 'pcaksaea':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -244,7 +256,7 @@ def index_pca (request,paramm='total'):
 			my_list_winlost.append(str(pca.id))
 		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost).filter(flagcalc=1))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost).exclude(bc_category='e'))
 	elif paramm == 'pcaksaeasa1':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -256,7 +268,7 @@ def index_pca (request,paramm='total'):
 			my_list_winlost.append(str(pca.id))
 		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').filter(pk__in=my_list_winlost).filter(flagcalc=1))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').filter(pk__in=my_list_winlost).exclude(bc_category='e'))
 	elif paramm == 'pcaksaeasa2':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -268,7 +280,7 @@ def index_pca (request,paramm='total'):
 			my_list_winlost.append(str(pca.id))
 		for pca in Pca.objects.filter(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').filter(pk__in=my_list_winlost).filter(flagcalc=1))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').filter(pk__in=my_list_winlost).exclude(bc_category='e'))
 	elif paramm == 'pcanonksaea':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -280,7 +292,7 @@ def index_pca (request,paramm='total'):
 			my_list_winlost.append(str(pca.id))
 		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost).filter(flagcalc=1))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(pk__in=my_list_winlost).exclude(bc_category='e'))
 	elif paramm == 'pcanonksaeasa1':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -292,7 +304,7 @@ def index_pca (request,paramm='total'):
 			my_list_winlost.append(str(pca.id))
 		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').filter(pk__in=my_list_winlost).filter(flagcalc=1))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='1').filter(pk__in=my_list_winlost).exclude(bc_category='e'))
 	elif paramm == 'pcanonksaeasa2':
 		my_list = []
 		for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='0'):
@@ -304,7 +316,7 @@ def index_pca (request,paramm='total'):
 			my_list_winlost.append(str(pca.id))
 		for pca in Pca.objects.exclude(pk__in=my_list).filter(psa__preproject__progress='l'):
 			my_list_winlost.append(str(pca.id))
-		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').filter(pk__in=my_list_winlost).filter(flagcalc=1))
+		v_pca = Pcafilter(request.GET, queryset=Pca.objects.filter(psa__preproject__sa_lintasarta__subbag='2').filter(pk__in=my_list_winlost).exclude(bc_category='e'))
 	else:
 		v_psa = ''
 
@@ -381,9 +393,9 @@ def winrate_ksaea(query):
 	# 	my_list.append(str(pca.id))
 	# for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
 	# 	my_list.append(str(pca.id))
-	list_ksaea_won = query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv')
-	list_ksaea_lost = query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv')
-	list_ksaea_progress_submited = query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='p').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='p').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='s').filter(flagcalc=1).values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='s').filter(flagcalc=1).values_list('tcv')
+	list_ksaea_won = query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='w').exclude(bc_category='e').values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='w').exclude(bc_category='e').values_list('tcv')
+	list_ksaea_lost = query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='l').exclude(bc_category='e').values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='l').exclude(bc_category='e').values_list('tcv')
+	list_ksaea_progress_submited = query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='p').exclude(bc_category='e').values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='p').exclude(bc_category='e').values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='0').filter(psa__preproject__progress='s').exclude(bc_category='e').values_list('tcv') | query.filter(psa__preproject__customer__customer_criteria='1').filter(psa__preproject__progress='s').exclude(bc_category='e').values_list('tcv')
 	sum_tcv_won = sum(data[0] for data in list_ksaea_won)
 	sum_tcv_lost = sum(data[0] for data in list_ksaea_lost)
 	sum_tcv_progress_submited = sum(data[0] for data in list_ksaea_progress_submited)
@@ -409,9 +421,9 @@ def winrate_nonksaea(query):
 		my_list.append(str(pca.id))
 	for pca in Pca.objects.filter(psa__preproject__customer__customer_criteria='1'):
 		my_list.append(str(pca.id))
-	list_nonksaea_won = query.exclude(pk__in=my_list).filter(psa__preproject__progress='w').filter(flagcalc=1).values_list('tcv')
-	list_nonksaea_lost = query.exclude(pk__in=my_list).filter(psa__preproject__progress='l').filter(flagcalc=1).values_list('tcv')
-	list_nonksaea_progress_submited = query.exclude(pk__in=my_list).filter(psa__preproject__progress='p').filter(flagcalc=1).values_list('tcv') | query.exclude(pk__in=my_list).filter(psa__preproject__progress='s').filter(flagcalc=1).values_list('tcv')
+	list_nonksaea_won = query.exclude(pk__in=my_list).filter(psa__preproject__progress='w').exclude(bc_category='e').values_list('tcv')
+	list_nonksaea_lost = query.exclude(pk__in=my_list).filter(psa__preproject__progress='l').exclude(bc_category='e').values_list('tcv')
+	list_nonksaea_progress_submited = query.exclude(pk__in=my_list).filter(psa__preproject__progress='p').exclude(bc_category='e').values_list('tcv') | query.exclude(pk__in=my_list).filter(psa__preproject__progress='s').exclude(bc_category='e').values_list('tcv')
 	sum_tcv_won = sum(data[0] for data in list_nonksaea_won)
 	sum_tcv_lost = sum(data[0] for data in list_nonksaea_lost)
 	sum_tcv_progress_submited = sum(data[0] for data in list_nonksaea_progress_submited)

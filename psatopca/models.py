@@ -62,6 +62,13 @@ class Pca(models.Model):
 		('h', 'HOLD'),
 		('n', 'NOT GO'),
 	)
+	bc_category_options = (
+		('o', 'OpEx'),
+		('c', 'CapEx'),
+		('e', 'Exclude'),
+		# ('c', 'Support CR'),
+		# ('b', 'Support Overbudget'),
+	)
 	problem_category_option = (
 		('n-pr','No Problem - Fulfilled'),
 		('e-ra','External - Resource Assessment'),
@@ -74,6 +81,7 @@ class Pca(models.Model):
 	psa = models.ForeignKey('Psa', on_delete=models.CASCADE)
 	pca_date = models.DateField()
 	status_pca = models.CharField(max_length=1, choices=status_option)
+	bc_category = models.CharField(max_length=4, choices=bc_category_options)
 	otc = models.DecimalField(max_digits=30, decimal_places=2)
 	mrc = models.DecimalField(max_digits=30, decimal_places=2)
 	duration = models.IntegerField()
@@ -83,7 +91,6 @@ class Pca(models.Model):
 	remark = models.TextField(max_length=1000, blank=True, null=True)
 	attendance = models.TextField(max_length=1000, blank=True, null=True)
 	problem_category = models.CharField(max_length=4, choices=problem_category_option, default='n-pr')
-	flagcalc = models.BooleanField(default=True, blank=True, null=True)
 
 	#timestamp
 	table_updated = models.DateField(auto_now=True, auto_now_add=False)

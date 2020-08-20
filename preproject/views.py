@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Lower
+from django.db.models import Count
 
 from . models import Preproject, Customer
 from psatopca.models import Psa, Pca
-
+from . filters import Preprojectfilter
 
 # Create your views here.
 # def preproprogres ():
@@ -39,41 +40,41 @@ def oppty_per_customer():
 @login_required
 def preproject (request,paramm='all'):
 	if paramm == 'all':
-		v_preproject = Preproject.objects.all()
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.all())
 	elif paramm == 'allsa1':
-		v_preproject = Preproject.objects.filter(sa_lintasarta__subbag='1')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(sa_lintasarta__subbag='1'))
 	elif paramm == 'allsa2':
-		v_preproject = Preproject.objects.filter(sa_lintasarta__subbag='2')
-	elif paramm == 'progress':
-		v_preproject = Preproject.objects.filter(progress='p')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(sa_lintasarta__subbag='2'))
+	elif paramm == 'progresssa':
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='p'))
 	elif paramm == 'progresssa1':
-		v_preproject = Preproject.objects.filter(progress='p').filter(sa_lintasarta__subbag='1')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='p').filter(sa_lintasarta__subbag='1'))
 	elif paramm == 'progresssa2':
-		v_preproject = Preproject.objects.filter(progress='p').filter(sa_lintasarta__subbag='2')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='p').filter(sa_lintasarta__subbag='2'))
 	elif paramm == 'submited':
-		v_preproject = Preproject.objects.filter(progress='s')
+		v_preproject =  Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='s'))
 	elif paramm == 'submitedsa1':
-		v_preproject = Preproject.objects.filter(progress='s').filter(sa_lintasarta__subbag='1')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='s').filter(sa_lintasarta__subbag='1'))
 	elif paramm == 'submitedsa2':
-		v_preproject = Preproject.objects.filter(progress='s').filter(sa_lintasarta__subbag='2')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='s').filter(sa_lintasarta__subbag='2'))
 	elif paramm == 'closewon':
-		v_preproject = Preproject.objects.filter(progress='w')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='w'))
 	elif paramm == 'closewonsa1':
-		v_preproject = Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='1')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='1'))
 	elif paramm == 'closewonsa2':
-		v_preproject = Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='2')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='w').filter(sa_lintasarta__subbag='2'))
 	elif paramm == 'closelost':
-		v_preproject = Preproject.objects.filter(progress='l')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='l'))
 	elif paramm == 'closelostsa1':
-		v_preproject = Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='1')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='1'))
 	elif paramm == 'closelostsa2':
-		v_preproject = Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='2')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='l').filter(sa_lintasarta__subbag='2'))
 	elif paramm == 'cancelled_psahold':
-		v_preproject = Preproject.objects.filter(progress='c') | Preproject.objects.filter(progress='h')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(progress='c') | Preproject.objects.filter(progress='h'))
 	elif paramm == 'cancelled_psaholdsa1':
-		v_preproject = Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='c') | Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='h')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='c') | Preproject.objects.filter(sa_lintasarta__subbag='1').filter(progress='h'))
 	elif paramm == 'cancelled_psaholdsa2':
-		v_preproject = Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='c') | Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='h')
+		v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='c') | Preproject.objects.filter(sa_lintasarta__subbag='2').filter(progress='h'))
 	else:
 		v_preproject =''
 
@@ -192,15 +193,29 @@ def detail (request,paramm='n'):
 
 
 @login_required
-def customer_list(request):
-	# v_customer = Customer.objects.order_by(Lower('customer_criteria'))
-	my_list = []
-	for customer in Customer.objects.filter(customer_criteria='0'):
-		my_list.append(customer.id)
-	for customer in Customer.objects.filter(customer_criteria='1'):
-		my_list.append(customer.id)
+def customer_list(request,paramm='all'):
+	if paramm == 'all':
+		v_customer = Customer.objects.all().annotate(num_oppty=Count('preproject')).order_by(Lower('customer_criteria'))
+	elif paramm == 'ska':
+		v_customer = Customer.objects.filter(customer_criteria='0').annotate(num_oppty=Count('preproject')).order_by(Lower('customer_segment'))
+	elif paramm == 'ea':
+		v_customer = Customer.objects.filter(customer_criteria='1').annotate(num_oppty=Count('preproject'))
+	elif paramm == 'ka':
+		v_customer = Customer.objects.filter(customer_criteria='2').annotate(num_oppty=Count('preproject'))
+	elif paramm == 'ra':
+		v_customer = Customer.objects.filter(customer_criteria='3').annotate(num_oppty=Count('preproject')) | Customer.objects.filter(customer_criteria='4').annotate(num_oppty=Count('preproject'))
+	elif paramm == 'skaea':
+		v_customer = Customer.objects.filter(customer_criteria='0').annotate(num_oppty=Count('preproject')).order_by(Lower('customer_criteria')) | Customer.objects.filter(customer_criteria='1').annotate(num_oppty=Count('preproject')).order_by(Lower('customer_criteria'))
 
-	v_customer = Customer.objects.filter(pk__in=my_list).order_by(Lower('customer_criteria'))
-	return render(request, 'customer_subbag.html',{
+	return render(request, 'customer.html',{
 	'list': v_customer,
+	})
+
+@login_required
+def customer_list_detail(request,paramm):
+	v_customer = Customer.objects.filter(id=paramm).annotate(num_oppty=Count('preproject'))
+	v_preproject = Preproject.objects.filter(customer__id=paramm)
+	return render(request, 'customerdetail.html',{
+	'p_list': v_preproject,
+	'c_list': v_customer,
 	})

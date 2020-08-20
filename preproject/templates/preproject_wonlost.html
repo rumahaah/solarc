@@ -1,4 +1,4 @@
-{% extends "base_psapca.html" %}% load widget_tweaks %}{% load preproject_extras %}{% load humanize %}{% block title %}Preproject Opportunity | SolArc{% endblock %}{% block content %}
+{% extends "base_psapca.html" %}{% load preproject_extras %}{% load humanize %}{% block title %}Preproject Opportunity | SolArc{% endblock %}{% block content %}
 <div class="uk-container">
     <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 65%;">
     <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
@@ -38,16 +38,16 @@
                 <td>{% if preproject.progress == 'w' %}Close Won{% elif preproject.progress == 'l' %}Close Lost{% elif preproject.progress == 'p' %}Progress - Internal SA{% elif preproject.progress == 's' %}Progress - Submited{% elif preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
                 <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td> 
                 <!-- <td>{% for pca in preproject.psa_set.all %}{{pca.pca_date}}{% endfor %}</td> -->
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{{pca.pca_date|date:'d-M-y'}}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{{pca.pca_date|date:'d-M-y'}}{% endif %}{% endfor %}{% endfor %}</td>
                 <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date|date:'d-M-y'}}{% endfor %}{% endfor %}{% endfor %}</td>
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.mrc %}{% endif %}{% endfor %}{% endfor %}</td>
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.otc %}{% endif %}{% endfor %}{% endfor %}</td>
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{{pca.duration}}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{% rupiah pca.mrc %}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{% rupiah pca.otc %}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{{pca.duration}}{% endif %}{% endfor %}{% endfor %}</td>
                 <!-- <td>{% annualcontracvalue 1 1 1%}</td> -->
                 <td>
                     {% for psa in preproject.psa_set.all %}
                         {% for pca in psa.pca_set.all %}
-                            {% if pca.flagcalc == 1 %}
+                            {% if pca.bc_category != 'e' %}
                                 {% for ho in pca.handover_set.all %}
                                     {% annualcontracvalue pca.id ho.po_known_date|date:'mY' pca.tcv %}
                                 {% endfor %}
@@ -56,8 +56,8 @@
                     {% endfor %}
                 </td>
                 <!-- <td>{% for customer in preproject.customer.all %}{% if customer.customer_criteria == '0' %}KSA{% elif customer.customer_criteria == '1' %}EA{% elif customer.customer_criteria == '2' %}SA{% else %}RA{% endif %}{% endfor %}</td>  -->
-                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}{% rupiah pca.tcv %}{% endif %}{% endfor %}{% endfor %}</td>
-                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Prepro</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.flagcalc == 1 %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{% rupiah pca.tcv %}{% endif %}{% endfor %}{% endfor %}</td>
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Prepro</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
             </tr>
         </tbody>{% endfor %}
     </table>

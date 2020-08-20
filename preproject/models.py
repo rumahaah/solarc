@@ -39,6 +39,7 @@ class Preproject(models.Model):
 	payment_option = (
 		('m', 'MRC'),
 		('o', 'OTC'),
+		('a', 'OTC & MRC'),
 	)
 
 	oppty_id = models.CharField(max_length=16)
@@ -153,11 +154,11 @@ class Customer(models.Model):
 			('7', 'Telco'),
 		)
 	customer_criteria_option = (
-		('0', 'Key Strategic Account'),
+		('0', 'Strategic Key Account'),
 		('1', 'Emerging Account'),
-		('2', 'Strategic Account'),
+		('2', 'Key Account'),
 		('3', 'New Customer & Not EA'),
-		('4', 'Regular'),
+		('4', 'Regular Account'),
 	)
 	customer_name = models.CharField(max_length=100)
 	customer_segment = models.CharField(max_length=1, choices=segment_option)
@@ -165,15 +166,15 @@ class Customer(models.Model):
 
 	def __str__(self):
 		if self.customer_criteria == '0':
-			customer_criteria_1 = 'KSA'
+			customer_criteria_1 = 'SKA'
 		elif self.customer_criteria == '1':
 			customer_criteria_1 = 'EA'
 		elif self.customer_criteria == '2':
-			customer_criteria_1 = 'SA'
+			customer_criteria_1 = 'KA'
 		elif self.customer_criteria == '3':
-			customer_criteria_1 = 'NEW'
+			customer_criteria_1 = 'RA'
 		else:
-			customer_criteria_1 = 'REG'
+			customer_criteria_1 = 'RA'
 		return "%s - %s" % (self.customer_name, customer_criteria_1)
 		# return self.customer_name
 	class Meta:

@@ -48,12 +48,12 @@
 		<!-- PROFITABILITY & WINRATE -->
 		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-2 uk-child-width-1-4@l uk-child-width-1-5@xl" uk-grid>
 			<div>
-				<span class="uk-text-small"><span uk-icon="icon: credit-card" class="uk-margin-small-right uk-text-primary"></span>Ebitda Profitability</span>
-				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a class="{% if ebitdaprofitability < 12 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaebitda">{{ebitdaprofitability_avg}}<span style="font-size: 12px">% Average</span></a><br><a class="{% if ebitdaprofitability_weighted < 12 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaebitda">{{ebitdaprofitability_weighted}}<span style="font-size: 12px">% Weighted</span></a></h1>
+				<span class="uk-text-small"><span uk-icon="icon: credit-card" class="uk-margin-small-right uk-text-primary"></span>OpEx Profitability (Weighted)</span>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a class="{% if ebitdaprofitability_weighted < 12 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaebitda">{{ebitdaprofitability_weighted}}<span style="font-size: 12px">% EBITDA ALL</span></a><br><a class="{% if ebitdaprofitability_weighted_otc_mrc_only < 12 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaebitdaotc">{{ebitdaprofitability_weighted_otc_mrc_only}}<span style="font-size: 12px">% OTC</span></a>  <a class="{% if ebitdaprofitability_weighted_mrc_only < 12 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcaebitdamrc">{{ebitdaprofitability_weighted_mrc_only}}<span style="font-size: 12px">% MRC</span></a></h1>
 			</div>
 			<div>
-				<span class="uk-text-small"><span uk-icon="icon:tag" class="uk-margin-small-right uk-text-primary"></span>IRR Profitability</span>
-				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a class="{% if irrprofitability < 22 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcairr">{{irrprofitability_avg}}<span style="font-size: 12px">% Average</span></a><br><a class="{% if irrprofitability_weighted < 22 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcairr">{{irrprofitability_weighted}}<span style="font-size: 12px">% Weighted</span></a></h1>
+				<span class="uk-text-small"><span uk-icon="icon:tag" class="uk-margin-small-right uk-text-primary"></span>CapEx Profitability (Weighted)</span>
+				<h1 class="uk-heading-primary uk-margin-remove" style="font-size: 34px"><a class="{% if irrprofitability < 22 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcairr">{{irrprofitability_weighted}}<span style="font-size: 12px">% IRR</span></a><br><a class="{% if irrprofitability_weighted < 22 %}uk-text-danger{% else %}uk-text-primary{% endif %}" href="{% url 'pca' %}/pcacapexebitda">{{irrprofitability_weighted_ebitda}}<span style="font-size: 12px">% EBITDA</span></a></h1>
 			</div>
 			<div>
 				<span class="uk-text-small"><span uk-icon="icon:star" class="uk-margin-small-right uk-text-primary"></span>Win Rate</span>
@@ -196,12 +196,12 @@
 	  data: {
 	    labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
 	    datasets: [{
-	      data: [{{total_psa_1}},{{total_psa_2}},{{total_psa_3}},{{total_psa_4}},{{total_psa_5}}],
+	      data: [{{total_psa_1}},{{total_psa_2}},{{total_psa_3}},{{total_psa_4}},{{total_psa_5}},{{total_psa_6}},{{total_psa_7}},{{total_psa_8}}],
 	      label: "PSA",
 	      borderColor: "#39f",
 	      fill: false
 	    }, {
-	      data: [{{total_pca_1}},{{total_pca_2}},{{total_pca_3}},{{total_pca_4}},{{total_pca_5}}],
+	      data: [{{total_pca_1}},{{total_pca_2}},{{total_pca_3}},{{total_pca_4}},{{total_pca_5}},{{total_pca_6}},{{total_pca_7}},{{total_pca_8}}],
 	      label: "PCA",
 	      borderColor: "#3cba9f",
 	      fill: false

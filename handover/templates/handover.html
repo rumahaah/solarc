@@ -19,7 +19,7 @@
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Submit Presales HO PMOIS Date</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Preproject Progress</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PMOIS Status</th>
-                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Problem Category</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Clean Project Category</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">TCV</th>
                 {% if request.user.is_staff %}<th class="noExl uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Edit</th>{% endif %}
             </tr>
@@ -29,8 +29,10 @@
                     <th class="uk-table-middle">{% render_field list.form.pca__psa__preproject__customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.pca__psa__preproject__project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
                     <th class="uk-table-middle">{% render_field list.form.pca__psa__preproject__sa_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
-                    <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle">{% render_field list.form.pca__psa__preproject__pss_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.pca__psa__preproject__sales_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <!-- <th class="uk-table-middle"></th> -->
+                    <!-- <th class="uk-table-middle"></th> -->
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
                     <th class="uk-table-middle"></th>
@@ -47,19 +49,24 @@
                       <option value="7" {%if request.GET.pmois_status == '7'%} selected {%endif%}>Presales Handover - Approved</option>
                       <option value="8" {%if request.GET.pmois_status == '8'%} selected {%endif%}>Presales Handover - Rejected</option>
                     </select></th>
-                    <th class="uk-table-middle"><select name="problem_category" class="uk-select uk-form-small" id="id_problem_category" style="width: 35px;font-size: 80%;">
-                      <option value=""></option>
-                      <option value="n-pr" {%if request.GET.problem_category == 'n-pr'%} selected {%endif%}>Fulfilled</option>
-                      <option value="e-sc" {%if request.GET.problem_category == 'e-sc'%} selected {%endif%}>E - Scope Change</option>
-                      <option value="e-rn" {%if request.GET.problem_category == 'e-rn'%} selected {%endif%}>E - Renewal Process</option>
-                      <option value="e-po" {%if request.GET.problem_category == 'e-po'%} selected {%endif%}>E - Conduct PSA After PO</option>
-                      <option value="e-pr" {%if request.GET.problem_category == 'e-pr'%} selected {%endif%}>E - Custom Product</option>
-                      <option value="i-pc" {%if request.GET.problem_category == 'i-pc'%} selected {%endif%}>I - PCA Form</option>
-                      <option value="i-de" {%if request.GET.problem_category == 'i-de'%} selected {%endif%}>I - Delay to HO</option>
-                    </select></th>
-                    <!-- <th class="uk-table-middle">{% render_field list.form.problem_category class="uk-select uk-form-width-xsmall uk-form-small" %}</th> -->
+                    <th class="uk-table-middle">
+                        <select name="clean_project_category" class="uk-select uk-form-small" id="id_clean_project_category" style="width: 35px;font-size: 80%;">
+                          <option value=""></option>
+                          <option value="n-pr" {%if request.GET.clean_project_category == 'n-pr'%} selected {%endif%}>Fulfilled</option>
+                          <option value="e-sc" {%if request.GET.clean_project_category == 'e-sc'%} selected {%endif%}>E - Scope Change</option>
+                          <option value="e-rn" {%if request.GET.clean_project_category == 'e-rn'%} selected {%endif%}>E - Renewal Process</option>
+                          <option value="e-po" {%if request.GET.clean_project_category == 'e-po'%} selected {%endif%}>E - Conduct PSA After PO</option>
+                          <option value="e-pb" {%if request.GET.clean_project_category == 'e-pb'%} selected {%endif%}>E - PO Backdate</option>
+                          <option value="e-pr" {%if request.GET.clean_project_category == 'e-pr'%} selected {%endif%}>E - Custom Product</option>
+                          <option value="i-pc" {%if request.GET.clean_project_category == 'i-pc'%} selected {%endif%}>I - PCA Form</option>
+                          <option value="i-de" {%if request.GET.clean_project_category == 'i-de'%} selected {%endif%}>I - Delay to HO</option>
+                        </select>
+                    </th>
+                    <!-- <th class="uk-table-middle">{% render_field list.form.clean_project_category class="uk-select uk-form-width-xsmall uk-form-small" %}</th> -->
+                    <!-- <th class="uk-table-middle"></th> -->
                     <th class="uk-table-middle"></th>
-                    <th class="uk-table-middle"></th>
+                    <!-- <th class="uk-table-middle"></th> -->
+                    <th class="uk-table-middle"><button type="submit" class="uk-form-small uk-button-primary uk-border-rounded">Filter</button></th>
                     <button type="submit" hidden="">Search</button>
                 </form>
             </tr>
@@ -78,13 +85,13 @@
                 <td>{{ho.submit_presales_handover_date|date:'d-M-y'}}</td> 
                 <td>{% if ho.pca.psa.preproject.progress == 'w' %}Close Won{% elif ho.pca.psa.preproject.progress == 'l' %}Close Lost{% elif ho.pca.psa.preproject.progress == 'p' %}Progress - Internal SA{% elif ho.pca.psa.preproject.progress == 's' %}Progress - Submited{% elif ho.pca.psa.preproject.progress == 'c' %}Cacncelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
                 <td>{% if ho.pmois_status == '1' %}Project Charter - Draft{% elif ho.pmois_status == '2' %}Project Charter - Waiting Approval Presales GM{% elif ho.pmois_status == '3' %}Project Charter - Waiting Approval Delivery GM{% elif ho.pmois_status == '4' %}Project Charter - Waiting Approval PM{% elif ho.pmois_status == '5' %}Presales Handover - Draft{% elif ho.pmois_status == '6' %}Presales Handover - Waiting Approval PM{% elif ho.pmois_status == '7' %}Presales Handover - Approved{% else %}Presales Handover - Rejected{% endif %}</td> 
-                <td>{% if ho.problem_category == 'n-pr' %}No Problem - Fulfilled{% elif ho.problem_category == 'e-sc'%}External - Scope Change{% elif ho.problem_category == 'e-rn'%}External - Renewal Process{% elif ho.problem_category == 'e-po'%}External - Conduct PSA After PO{% elif ho.problem_category == 'e-pr'%}External - Custom Product{% elif ho.problem_category == 'i-pc'%}Internal - PCA Form{% elif ho.problem_category == 'i-de'%}Internal - Delay to HO{% else %}TES{% endif %}</td>
+                <td>{% if ho.clean_project_category == 'n-pr' %}Clean - Fulfilled{% elif ho.clean_project_category == 'e-sc'%}External - Scope Change{% elif ho.clean_project_category == 'e-rn'%}External - Renewal Process{% elif ho.clean_project_category == 'e-po'%}External - Conduct PSA After PO{% elif ho.clean_project_category == 'e-pb'%}External - PO Backdate{% elif ho.clean_project_category == 'e-pr'%}External - Custom Product{% elif ho.clean_project_category == 'i-pc'%}Internal - PCA Form{% elif ho.clean_project_category == 'i-de'%}Internal - Delay to HO{% else %}TES{% endif %}</td>
                 <td>{% rupiah ho.pca.tcv %}</td>
                 {% if request.user.is_staff %}<td class="noExl"><a href="/admin/handover/handover/{{ho.id}}/change/" target="_blank" class="uk-link-reset" uk-icon="icon:file-edit; ratio:0.8"></a></td>{% endif %} 
             </tr>
         </tbody>{% endfor %}
     </table>
-    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary uk-border-rounded">Export to XLS</button>
 </div>
 {% endblock %}
 {% block scriptexportexcel %}filename: "Export Handover" + ".xls",{% endblock %}

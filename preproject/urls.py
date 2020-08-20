@@ -10,4 +10,6 @@ urlpatterns = [
     path('opptywon', views.opptywon, name='opptywon'),
     path('opptylost', views.opptylost, name='opptylost'),
     path('customer', views.customer_list, name='customer_list'),
+    path('customer/<slug:paramm>', views.customer_list),
+    path('customerdetail/<slug:paramm>', views.customer_list_detail),
 ]
