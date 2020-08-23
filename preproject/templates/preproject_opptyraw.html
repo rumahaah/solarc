@@ -1,0 +1,183 @@
+{% extends "base_psapca.html" %}{% load widget_tweaks %}{% load preproject_extras %}{% load humanize %}{% block title %}Preproject Oppty RAW | SolArc{% endblock %}{% block content %}
+<div class="uk-container">
+    <table class="table2excel uk-table uk-table-divider uk-table-hover uk-table-small" style="font-size: 65%;">
+    <!-- <table class="uk-table uk-text-small uk-table-small uk-table-divider"> -->
+    <!-- <caption>PSA {{ list.count }}</caption> -->
+        <thead>
+            <tr>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">No</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Oppty ID</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Name</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Segment</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Customer Criteria</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Project Name</th>
+                <!-- <th class="uk-table-middle">SA | PSS | Sales</th> -->
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">SA</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PSS</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">SALES</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Project Status</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Solution Criteria</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Progress</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Payment Type</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Product</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PSA Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PCA Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">BC Type</th>
+                <!-- <th class="uk-table-middle">MRC | OTC | Durations</th> -->
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Ebitda</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">IRR</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">MRC</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">OTC</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Dur</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">TCV</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PO Known Date</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PMOIS Status</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Clean Project Category</th>
+                {% if request.user.is_staff %}<th class="noExl uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Edit</th>{% endif %}
+            </tr>
+            <tr class="noExl">
+                <form method="get" class="">
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle">{% render_field list.form.customer__customer_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle">{% render_field list.form.project_name class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.sa_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.pss_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">{% render_field list.form.sales_lintasarta__initial class="uk-input uk-form-width-xsmall uk-form-small" %}</th>
+                    <th class="uk-table-middle">
+                        <select name="project_status" id="id_project_status" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value="" selected></option>
+                          <option value="c" {%if request.GET.project_status == 'c'%} selected {%endif%}>Create</option>
+                          <option value="o" {%if request.GET.project_status == 'o'%} selected {%endif%}>Open</option>
+                          <option value="b" {%if request.GET.project_status == 'b'%} selected {%endif%}>Break</option>
+                        </select>
+                    </th>
+                    <th class="uk-table-middle">
+                        <select name="solution_criteria" id="id_solution_criteria" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value="" selected></option>
+                          <option value="s" {%if request.GET.solution_criteria == 's'%} selected {%endif%}>Standard</option>
+                          <option value="m" {%if request.GET.solution_criteria == 'm'%} selected {%endif%}>Multiservice</option>
+                          <option value="cm" {%if request.GET.solution_criteria == 'cm'%} selected {%endif%}>Complex MRC &gt; 150JT</option>
+                          <option value="co" {%if request.GET.solution_criteria == 'co'%} selected {%endif%}>Complex OTC &gt; 5M</option>
+                          <option value="cn" {%if request.GET.solution_criteria == 'cn'%} selected {%endif%}>Complex Non Product</option>
+                          <option value="cc" {%if request.GET.solution_criteria == 'cc'%} selected {%endif%}>Complex Custom Product</option>
+                        </select>
+                    </th>
+                    <th class="uk-table-middle">
+                        <select name="progress" id="id_progress" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value="" selected></option>
+                          <option value="w" {%if request.GET.progress == 'w'%} selected {%endif%}>Close Won</option>
+                          <option value="l" {%if request.GET.progress == 'l'%} selected {%endif%}>Close Lost</option>
+                          <option value="p" {%if request.GET.progress == 'p'%} selected {%endif%}>Progress - Internal SA</option>
+                          <option value="s" {%if request.GET.progress == 's'%} selected {%endif%}>Progress - Submited</option>
+                          <option value="c" {%if request.GET.progress == 'c'%} selected {%endif%}>Cancelled</option>
+                          <option value="h" {%if request.GET.progress == 'h'%} selected {%endif%}>PSA Hold</option>
+                        </select>
+                    </th>
+                    <th class="uk-table-middle">
+                        <select name="payment" id="id_payment" class="uk-select uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value="" selected></option>
+                          <option value="m" {%if request.GET.payment == 'm'%} selected {%endif%}>MRC</option>
+                          <option value="o" {%if request.GET.payment == 'o'%} selected {%endif%}>OTC</option>
+                          <option value="a" {%if request.GET.payment == 'a'%} selected {%endif%}>OTC &amp; MRC</option>
+                        </select>
+                    </th>
+                    <!-- <th class="uk-table-middle">{% render_field list.form.taxsonomi %}</th> -->
+                    <th class="uk-table-middle">
+                        <select name="taxsonomi" id="id_taxsonomi" multiple style="font-size: 80%;">
+                          <option value="1">Datacom</option>
+                          <option value="2">Cloud</option>
+                          <option value="3">Data Center</option>
+                          <option value="4">Sec &amp; Col</option>
+                          <option value="5">ITO</option>
+                          <option value="6">Insol</option>
+                          <option value="7">Digital Ads</option>
+                        </select>
+                    </th>
+                    <!-- <th class="uk-table-middle"></th> -->
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <th class="uk-table-middle"></th>
+                    <!-- <th class="uk-table-middle">{% render_field list.form.sa_lintasarta__subbag class="uk-select uk-form-small uk-form-small" %}</th> -->
+                    <!-- <th class="uk-table-middle"></th> -->
+                    <th class="uk-table-middle">
+                        <select name="sa_lintasarta__subbag" id="id_sa_lintasarta__subbag" class="uk-select uk-form-small uk-form-small" style="width: 35px;font-size: 80%;">
+                          <option value="" selected></option>
+                          <option value="1" {%if request.GET.sa_lintasarta__subbag == '1'%} selected {%endif%}>SA 1</option>
+                          <option value="2" {%if request.GET.sa_lintasarta__subbag == '2'%} selected {%endif%}>SA 2</option>
+                        </select>
+                    </th>
+                    <th class="uk-table-middle"><button type="submit" class="uk-form-small uk-button-primary uk-border-rounded">Filter</button></th>
+                </form>
+            </tr>
+        </thead>
+
+        <tbody>{% for preproject in list.qs %}{% psa_data preproject.id as psa %}{% pca_data preproject.id as pca %}
+            <tr> 
+            	<td>{{ forloop.counter }}</td> 
+                <td>{{ preproject.oppty_id }}</td> 
+                <td>{% for customer in preproject.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
+                <td>{% for customer in preproject.customer.all %}{% if customer.customer_segment == '0' %}Banking 1{% elif customer.customer_segment == '1' %}Banking 2{% elif customer.customer_segment == '2' %}Finance Non-Bank{% elif customer.customer_segment == '3' %}Supply Chain{% elif customer.customer_segment == '4' %}Public Sector 1{% elif customer.customer_segment == '5' %}Public Sector 2{% elif customer.customer_segment == '6' %}Resources{% elif customer.customer_segment == '7' %}Telco{%else%}{% endif %}{% endfor %}</td>
+                <td>{% if customer.customer_criteria == '0' %}STRATEGIC KEY ACCOUNT{% elif customer.customer_criteria == '1' %}EMERGING ACCOUNT{% elif customer.customer_criteria == '2' %}KEY ACCOUNT{% else %}REGULAR ACCOUNT{% endif %}</td> 
+            	<td>{{preproject.project_name}}</td> 
+                <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td> 
+                <td>{% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %}</td> 
+                <td><span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td>
+
+                <td>{% if preproject.project_status == 'c' %}Create{% elif preproject.project_status == 'o' %}Open{% else %}Break{%endif%}</td> 
+                <td>{% if preproject.solution_criteria == 's' %}Standard{% elif preproject.solution_criteria == 'm' %}Multiservice{% elif preproject.solution_criteria == 'cm' %}Complex MRC > 150{% elif preproject.solution_criteria == 'co' %}Complex OTC > 5M{% elif preproject.solution_criteria == 'cn' %}Complex Non Product{% elif preproject.solution_criteria == 'cc' %}Complex Costum Product{% else %}-{%endif%}</td> 
+                <td>{% if preproject.progress == 'w' %}Close Won{% elif preproject.progress == 'l' %}Close Lost{% elif preproject.progress == 'p' %}Progress - Internal SA{% elif preproject.progress == 's' %}Progress - Submited{% elif preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
+                <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td> 
+                <td>{% for taxsonomi in preproject.taxsonomi.all %}{% if taxsonomi.product_name == '0' %}Datacom{% elif taxsonomi.product_name == '1' %}Cloud{% elif taxsonomi.product_name == '2' %}Data Center{% elif taxsonomi.product_name == '3' %}Sec & Col{% elif taxsonomi.product_name == '4' %}ITO{% elif taxsonomi.product_name == '5' %}InSol{% elif taxsonomi.product_name == '6' %}Digital Ads{% else %}|{% endif %}{% endfor %}</td> 
+                <!-- <td>{% for psa in preproject.psa_set.all %}{{ psa.psa_date|date:'d-M-y' }}{% endfor %}</td> -->
+                <td>{{psa.psa_date|date:'d-M-y'}}</td>
+                <td>{{pca.pca_date|date:'d-M-y'}}</td>
+                <td>{% if pca.bc_category == 'o' %}OpEx{% elif pca.bc_category == 'c' %}CapEx{% elif pca.bc_category == 'e' %}E{% else %}{% endif %}</td>
+                <td>{% if pca.ebitda %}{{pca.ebitda}}%{% else %}{% endif %}</td>
+                <td>{% if pca.irr %}{{pca.irr}}%{% else %}{% endif %}</td>
+                <td>{{pca.mrc|intcomma}}</td>
+                <td>{{pca.otc|intcomma}}</td>
+                <td>{{pca.duration|intcomma}}</td>
+                <td>{{pca.tcv|intcomma}}</td>
+                <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{% rupiah pca.tcv %}{% endif %}{% endfor %}{% endfor %}</td> -->
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date|date:'d-M-y'}}{% endfor %}{% endfor %}{% endfor %}</td>
+                <td>
+                    {% for psa in preproject.psa_set.all %}
+                        {% for pca in psa.pca_set.all %}
+                            {% if pca.bc_category != 'e' %}
+                                {% for ho in pca.handover_set.all %}
+                                    {% if ho.pmois_status == '1' %}Project Charter - Draft{% elif ho.pmois_status == '2' %}Project Charter - Waiting Approval Presales GM{% elif ho.pmois_status == '3' %}Project Charter - Waiting Approval Delivery GM{% elif ho.pmois_status == '4' %}Project Charter - Waiting Approval PM{% elif ho.pmois_status == '5' %}Presales Handover - Draft{% elif ho.pmois_status == '6' %}Presales Handover - Waiting Approval PM{% elif ho.pmois_status == '7' %}Presales Handover - Approved{% else %}Presales Handover - Rejected{% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for psa in preproject.psa_set.all %}
+                        {% for pca in psa.pca_set.all %}
+                            {% if pca.bc_category != 'e' %}
+                                {% for ho in pca.handover_set.all %}
+                                    {% if ho.clean_project_category == 'n-pr' %}Clean - Fulfilled{% elif ho.clean_project_category == 'e-sc'%}External - Scope Change{% elif ho.clean_project_category == 'e-rn'%}External - Renewal Process{% elif ho.clean_project_category == 'e-po'%}External - Conduct PSA After PO{% elif ho.clean_project_category == 'e-pb'%}External - PO Backdate{% elif ho.clean_project_category == 'e-pr'%}External - Custom Product{% elif ho.clean_project_category == 'i-pc'%}Internal - PCA Form{% elif ho.clean_project_category == 'i-de'%}Internal - Delay to HO{% else %}TES{% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Preproject</a> | {% for psa in preproject.psa_set.all %}<a href="/admin/psatopca/psa/{{psa.id}}/change/" target="_blank" class="">PSA</a>{% endfor %} | <a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a></td>{% endif %} 
+            </tr>
+        </tbody>{% endfor %}
+    </table>
+    <button class="exportToExcel uk-button uk-button-small uk-button-primary">Export to XLS</button>
+</div>
+{% endblock %}
+{% block scriptexportexcel %}filename: "Export Preproject Oppty Raw" + ".xls",{% endblock %}

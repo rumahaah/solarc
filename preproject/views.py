@@ -83,6 +83,15 @@ def preproject (request,paramm='all'):
 	})
 
 @login_required
+def opptyraw (request):
+	# v_preproject = Preproject.objects.all().filter(id=115)
+	v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.all())
+	# v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.all().filter(id=312))
+	return render(request, 'preproject_opptyraw.html',{
+		'list': v_preproject,
+	})
+
+@login_required
 def opptywon (request):
 	v_preproject = Preproject.objects.filter(progress='w')
 	return render(request, 'preproject_wonlost.html',{

@@ -19,6 +19,7 @@ class Preprojectfilter(django_filters.FilterSet):
                     'pss_lintasarta__initial',
                     'sales_lintasarta__initial',
                     'sa_lintasarta__initial',
+                    'sa_lintasarta__subbag',
                     'project_status',
                     'solution_criteria',
                     'progress',

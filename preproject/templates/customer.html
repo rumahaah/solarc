@@ -42,7 +42,7 @@
             	<!-- <td>{{customer.id}}</td>  -->
                 <td>{{ forloop.counter }}</td> 
             	<td><a class="uk-link-muted" href="/preproject/customerdetail/{{customer.id}}">{{customer.customer_name}}</a></td> 
-                <td>{% if customer.customer_segment == '0' %}BANKING 1{% elif customer.customer_segment == '1' %}BANKING 2{% elif customer.customer_segment == '2' %}FINANCE NON-BANK{% elif customer.customer_segment == '3' %}SUPPLY CHAIN{% elif customer.customer_segment == '4' %}PUBLIC SECTOR 1{% elif customer.customer_segment == '5' %}PUBLIC SECTOR 2{% elif customer.customer_segment == '6' %}RESOURCES{% elif customer.customer_segment == '7' %}TELCO{%else%}N/A{% endif %}</td> 
+                <td>{% if customer.customer_segment == '0' %}BANKING 1{% elif customer.customer_segment == '1' %}BANKING 2{% elif customer.customer_segment == '2' %}FINANCE NON-BANK{% elif customer.customer_segment == '3' %}SUPPLY CHAIN{% elif customer.customer_segment == '4' %}PUBLIC SECTOR 1{% elif customer.customer_segment == '5' %}PUBLIC SECTOR 2{% elif customer.customer_segment == '6' %}RESOURCES{% elif customer.customer_segment == '7' %}TELCO{%else%}{% endif %}</td> 
                 <td>{% if customer.customer_criteria == '0' %}STRATEGIC KEY ACCOUNT{% elif customer.customer_criteria == '1' %}EMERGING ACCOUNT{% elif customer.customer_criteria == '2' %}KEY ACCOUNT{% else %}REGULAR ACCOUNT{% endif %}</td> 
                 <td>{{customer.num_oppty}}</td> 
                 <td>{% psacount customer.id %}</td> 

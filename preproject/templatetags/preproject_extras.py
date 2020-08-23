@@ -1,5 +1,6 @@
 from django import template
 from django.contrib.humanize.templatetags.humanize import intcomma
+from django.db.models.functions import Lower
 from datetime import datetime
 from psatopca.models import Psa, Pca, Preproject
 
@@ -8,7 +9,7 @@ register = template.Library()
 @register.simple_tag
 def rupiah(rupiah, *args, **kwargs):
 	if rupiah:
-		rupiah = round(float(rupiah), 2)
+		# rupiah = round(float(rupiah), 2)
 		return "%s%s" % (intcomma(int(rupiah)), ("%0.2f" % rupiah)[-3:])
 	else:
 		return 0
@@ -192,3 +193,34 @@ def woncount(preprojectid, *args, **kwargs):
 def lostcount(preprojectid, *args, **kwargs):
 	count = Preproject.objects.filter(customer__id=preprojectid).filter(progress='l').count()
 	return count
+
+# @register.simple_tag
+# def pcadate(pcaid, *args, **kwargs):
+# 	# pcadate = Pca.objects.get(id=pcaid).pca_date
+# 	# pcadate = Pca.objects.filter(id=pcaid).latest('pca_date').pca_date
+# 	# pcadate = Pca.objects.filter(id=pcaid).latest('pca_date', '-pca_date').pca_date
+# 	# pcadate = Pca.objects.filter(id=pcaid).order_by('pca_date').last().pca_date
+# 	pcadate = Pca.objects.filter(id=pcaid).order_by('-pca_date')[0].pca_date
+# 	# pcas = Pca.objects.filter(id=pcaid).order_by(Lower('pca_date').desc())
+# 	# pcas = Pca.objects.filter(id=pcaid).latest('pca_date')
+# 	# pcas = Pca.objects.filter(id=pcaid)
+# 	# for pca in pcas:
+# 		# pcadate = pca.pca_date
+# 	return pcadate
+
+@register.simple_tag
+def psa_data(preprojectid):
+	try:
+		psa_data = Psa.objects.filter(preproject__id=preprojectid).latest('psa_date')
+	except:
+		psa_data = ''
+	return psa_data
+
+@register.simple_tag
+def pca_data(preprojectid):
+	# pca_data = Pca.objects.filter(psa__preproject__id=preprojectid).latest('pca_date')
+	try:
+		pca_data = Pca.objects.filter(psa__preproject__id=preprojectid).latest('pca_date')
+	except:
+		pca_data = ''
+	return pca_data
