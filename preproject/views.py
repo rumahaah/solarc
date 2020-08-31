@@ -86,7 +86,7 @@ def preproject (request,paramm='all'):
 def opptyraw (request):
 	# v_preproject = Preproject.objects.all().filter(id=115)
 	v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.all())
-	# v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.all().filter(id=312))
+	# v_preproject = Preprojectfilter(request.GET, queryset=Preproject.objects.all().filter(id=42))
 	return render(request, 'preproject_opptyraw.html',{
 		'list': v_preproject,
 	})

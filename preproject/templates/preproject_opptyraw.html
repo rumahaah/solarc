@@ -19,7 +19,8 @@
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Solution Criteria</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Progress</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Payment Type</th>
-                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Product</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Product L1</th>
+                <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">Product L2</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PSA Date</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">PCA Date</th>
                 <th class="uk-table-middle" style="font-size: 100%; color: #404040; font-weight: bold;">BC Type</th>
@@ -85,6 +86,7 @@
                         </select>
                     </th>
                     <!-- <th class="uk-table-middle">{% render_field list.form.taxsonomi %}</th> -->
+                    <th class="uk-table-middle"></th>
                     <th class="uk-table-middle">
                         <select name="taxsonomi" id="id_taxsonomi" multiple style="font-size: 80%;">
                           <option value="1">Datacom</option>
@@ -122,34 +124,41 @@
             </tr>
         </thead>
 
-        <tbody>{% for preproject in list.qs %}{% psa_data preproject.id as psa %}{% pca_data preproject.id as pca %}
+        <tbody>{% for preproject in list.qs %}{% psa_data preproject.id as psa %}
             <tr> 
             	<td>{{ forloop.counter }}</td> 
                 <td>{{ preproject.oppty_id }}</td> 
                 <td>{% for customer in preproject.customer.all %}{{ customer.customer_name }}{% endfor %}</td> 
                 <td>{% for customer in preproject.customer.all %}{% if customer.customer_segment == '0' %}Banking 1{% elif customer.customer_segment == '1' %}Banking 2{% elif customer.customer_segment == '2' %}Finance Non-Bank{% elif customer.customer_segment == '3' %}Supply Chain{% elif customer.customer_segment == '4' %}Public Sector 1{% elif customer.customer_segment == '5' %}Public Sector 2{% elif customer.customer_segment == '6' %}Resources{% elif customer.customer_segment == '7' %}Telco{%else%}{% endif %}{% endfor %}</td>
-                <td>{% if customer.customer_criteria == '0' %}STRATEGIC KEY ACCOUNT{% elif customer.customer_criteria == '1' %}EMERGING ACCOUNT{% elif customer.customer_criteria == '2' %}KEY ACCOUNT{% else %}REGULAR ACCOUNT{% endif %}</td> 
+                <td>{% for customer in preproject.customer.all %}{% if customer.customer_criteria == '0' %}STRATEGIC KEY ACCOUNT{% elif customer.customer_criteria == '1' %}EMERGING ACCOUNT{% elif customer.customer_criteria == '2' %}KEY ACCOUNT{% else %}REGULAR ACCOUNT{% endif %}{% endfor %}</td> 
             	<td>{{preproject.project_name}}</td> 
                 <td>{% for sa in preproject.sa_lintasarta.all %}<span uk-tooltip="title:{{sa.name}}; delay:250">{{sa.initial}}</span>{% endfor %}</td> 
                 <td>{% for pss in preproject.pss_lintasarta.all %}<span uk-tooltip="title:{{pss.name}}; delay:250">{{ pss.initial }}</span>{% endfor %}</td> 
                 <td><span uk-tooltip="title:{{preproject.sales_lintasarta.name}}; delay:250">{{preproject.sales_lintasarta.initial}}</span></td>
 
                 <td>{% if preproject.project_status == 'c' %}Create{% elif preproject.project_status == 'o' %}Open{% else %}Break{%endif%}</td> 
-                <td>{% if preproject.solution_criteria == 's' %}Standard{% elif preproject.solution_criteria == 'm' %}Multiservice{% elif preproject.solution_criteria == 'cm' %}Complex MRC > 150{% elif preproject.solution_criteria == 'co' %}Complex OTC > 5M{% elif preproject.solution_criteria == 'cn' %}Complex Non Product{% elif preproject.solution_criteria == 'cc' %}Complex Costum Product{% else %}-{%endif%}</td> 
+                <td>{% if preproject.solution_criteria == 's' %}Standard{% elif preproject.solution_criteria == 'm' %}Multiservice{% elif preproject.solution_criteria == 'cm' %}Complex MRC > 150{% elif preproject.solution_criteria == 'co' %}Complex OTC > 5M{% elif preproject.solution_criteria == 'cn' %}Complex Non Product{% elif preproject.solution_criteria == 'cc' %}Complex Custom Product{% else %}-{%endif%}</td> 
                 <td>{% if preproject.progress == 'w' %}Close Won{% elif preproject.progress == 'l' %}Close Lost{% elif preproject.progress == 'p' %}Progress - Internal SA{% elif preproject.progress == 's' %}Progress - Submited{% elif preproject.progress == 'c' %}Cancelled{% else %}PSA NOTGO/HOLD{%endif%}</td> 
                 <td>{% if preproject.payment == 'm' %}MRC{% else %}OTC{% endif %}</td> 
-                <td>{% for taxsonomi in preproject.taxsonomi.all %}{% if taxsonomi.product_name == '0' %}Datacom{% elif taxsonomi.product_name == '1' %}Cloud{% elif taxsonomi.product_name == '2' %}Data Center{% elif taxsonomi.product_name == '3' %}Sec & Col{% elif taxsonomi.product_name == '4' %}ITO{% elif taxsonomi.product_name == '5' %}InSol{% elif taxsonomi.product_name == '6' %}Digital Ads{% else %}|{% endif %}{% endfor %}</td> 
+                <td>{% if preproject.product == 'c' %}Connectivity{% elif preproject.product == 'i' %}ITS{% else %}{% endif %}</td> 
+                <td>{% for taxsonomi in preproject.taxsonomi.all %}{% if taxsonomi.product_name == '0' %}Datacom, {% elif taxsonomi.product_name == '1' %}Cloud, {% elif taxsonomi.product_name == '2' %}Data Center, {% elif taxsonomi.product_name == '3' %}Sec & Col, {% elif taxsonomi.product_name == '4' %}ITO, {% elif taxsonomi.product_name == '5' %}InSol, {% elif taxsonomi.product_name == '6' %}Digital Ads, {% else %}|{% endif %}{% endfor %}</td> 
                 <!-- <td>{% for psa in preproject.psa_set.all %}{{ psa.psa_date|date:'d-M-y' }}{% endfor %}</td> -->
                 <td>{{psa.psa_date|date:'d-M-y'}}</td>
-                <td>{{pca.pca_date|date:'d-M-y'}}</td>
-                <td>{% if pca.bc_category == 'o' %}OpEx{% elif pca.bc_category == 'c' %}CapEx{% elif pca.bc_category == 'e' %}E{% else %}{% endif %}</td>
-                <td>{% if pca.ebitda %}{{pca.ebitda}}%{% else %}{% endif %}</td>
-                <td>{% if pca.irr %}{{pca.irr}}%{% else %}{% endif %}</td>
-                <td>{{pca.mrc|intcomma}}</td>
-                <td>{{pca.otc|intcomma}}</td>
-                <td>{{pca.duration|intcomma}}</td>
-                <td>{{pca.tcv|intcomma}}</td>
-                <!-- <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{% rupiah pca.tcv %}{% endif %}{% endfor %}{% endfor %}</td> -->
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{{pca.pca_date|date:'d-M-y'}}{% endif %}{% endfor %}{% endfor %}</td>
+                <!-- <td>{% if pca.bc_category == 'o' %}OpEx{% elif pca.bc_category == 'c' %}CapEx{% elif pca.bc_category == 'e' %}Exclude{% else %}{% endif %}</td> -->
+                <!-- <td>{% if pca.ebitda %}{{pca.ebitda}}%{% else %}{% endif %}</td> -->
+                <!-- <td>{% if pca.irr %}{{pca.irr}}%{% else %}{% endif %}</td> -->
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{% if pca.bc_category == 'o' %}OpEx{% elif pca.bc_category == 'c' %}CapEx{% elif pca.bc_category == 'e' %}Exclude{% else %}{% endif %}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{% if pca.ebitda %}{{pca.ebitda}}%{% else %}{% endif %}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{% if pca.irr %}{{pca.irr}}%{% else %}{% endif %}{% endif %}{% endfor %}{% endfor %}</td>
+                <!-- <td>{{pca.mrc|intcomma}}</td> -->
+                <!-- <td>{{pca.otc|intcomma}}</td> -->
+                <!-- <td>{{pca.duration|intcomma}}</td> -->
+                <!-- <td>{{pca.tcv|intcomma}}</td> -->
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{{pca.mrc|intcomma}}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{{pca.otc|intcomma}}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{{pca.duration}}{% endif %}{% endfor %}{% endfor %}</td>
+                <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}{{pca.tcv|intcomma}}{% endif %}{% endfor %}{% endfor %}</td>
                 <td>{% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% for ho in pca.handover_set.all %}{{ho.po_known_date|date:'d-M-y'}}{% endfor %}{% endfor %}{% endfor %}</td>
                 <td>
                     {% for psa in preproject.psa_set.all %}
@@ -173,7 +182,7 @@
                         {% endfor %}
                     {% endfor %}
                 </td>
-                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Preproject</a> | {% for psa in preproject.psa_set.all %}<a href="/admin/psatopca/psa/{{psa.id}}/change/" target="_blank" class="">PSA</a>{% endfor %} | <a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a></td>{% endif %} 
+                {% if request.user.is_staff %}<td class="noExl"><a href="/admin/preproject/preproject/{{preproject.id}}/change/" target="_blank" class="">Preproject</a> | <a href="/admin/psatopca/psa/{{psa.id}}/change/" target="_blank" class="">PSA</a> | {% for psa in preproject.psa_set.all %}{% for pca in psa.pca_set.all %}{% if pca.bc_category != 'e' %}<a href="/admin/psatopca/pca/{{pca.id}}/change/" target="_blank" class="">PCA</a>{% endif %}{% endfor %}{% endfor %}</td>{% endif %} 
             </tr>
         </tbody>{% endfor %}
     </table>
